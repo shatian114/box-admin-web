@@ -1,7 +1,7 @@
 const path = require('path');
 var SERVICE_URL = 'http://124.232.150.3:8082';
 export default {
-  outputPath: 'boxweb',
+  outputPath: 'commonweb',
 
   entry: 'src/index.js',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
@@ -20,9 +20,9 @@ export default {
       changeOrigin: true,
       secure: false,
     },*/
-    '/box': {
+    '/common': {
       target: SERVICE_URL,
-      pathRewrite: { '^/box': '' },
+      pathRewrite: { '^/common': '' },
       changeOrigin: true,
       secure: false,
     },
@@ -33,6 +33,6 @@ export default {
     template: './src/index.ejs',
   },
   disableDynamicImport: true,
-  publicPath: '/boxweb/',
+  publicPath: '/commonweb/',
   hash: true,
 };
