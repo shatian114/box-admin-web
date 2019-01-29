@@ -6,7 +6,7 @@ import { stringify } from 'qs';
 import store from '../index';
 import { getToken } from '../utils/authority';
 
-const SERVER_ADDR = '/box';
+const SERVER_ADDR = '/common';
 
 const codeMessage = {
   // 200: '服务器成功返回请求的数据。',
