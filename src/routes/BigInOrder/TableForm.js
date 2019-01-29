@@ -186,14 +186,14 @@ export default class TableForm extends PureComponent {
     const listConfig =
       orderStatus === 'new'
         ? {
-            url: '/box/api/query/queryWmsTmpOrder2codeList', // 必填,请求url
+            url: '/api/query/queryWmsTmpOrder2codeList', // 必填,请求url
             scroll: { x: 1100, y: this.state.scrollY }, // 可选配置,同antd table
             rowKey: 'record_id', // 必填,行key
             columns, // 必填,行配置
             queryMap: { order_code: this.props.orderCode || 'nth' },
           }
         : {
-            url: '/box/api/query/queryWmsCoderecordList', // 必填,请求url
+            url: '/api/query/queryWmsCoderecordList', // 必填,请求url
             scroll: { x: 1100, y: this.state.scrollY }, // 可选配置,同antd table
             rowKey: 'record_id', // 必填,行key
             columns, // 必填,行配置

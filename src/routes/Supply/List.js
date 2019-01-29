@@ -177,7 +177,7 @@ export default class SupplyList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/querySupplyList', // 必填,请求url
+      url: '/api/query/querySupplyList', // 必填,请求url
       scroll: { x: 1500, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'supply_code', // 必填,行key
       columns, // 必填,行配置

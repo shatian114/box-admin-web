@@ -278,7 +278,7 @@ export default class WmsloteList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/queryWmsLotList', // 必填,请求url
+      url: '/api/query/queryWmsLotList', // 必填,请求url
       scroll: { x: 2000, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'lot_id', // 必填,行key
       columns, // 必填,行配置

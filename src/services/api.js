@@ -3,7 +3,7 @@ import md5 from 'js-md5';
 
 import { request, requestModels, download } from '../utils/request';
 
-var SERVER_ADDR="/box";
+var SERVER_ADDR="";
 
 export async function getVerificationCode() {
   return request(`${SERVER_ADDR}/auth/getGuestUid`);

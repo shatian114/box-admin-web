@@ -324,7 +324,7 @@ export default class WmsCoderecordList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/queryWmsCoderecordList', // 必填,请求url
+      url: '/api/query/queryWmsCoderecordList', // 必填,请求url
       scroll: { x: 3000, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'record_id', // 必填,行key
       columns, // 必填,行配置

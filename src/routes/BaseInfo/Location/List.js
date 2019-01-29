@@ -181,7 +181,7 @@ export default class MyList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/queryTDicList', // 必填,请求url
+      url: '/api/query/queryTDicList', // 必填,请求url
       scroll: { x: 1000, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'dic_id', // 必填,行key
       columns, // 必填,行配置

@@ -135,7 +135,7 @@ export default class CodeprintInfo extends Component {
         }
       }
       if (len) {
-        requestModels('/box/api/codeprint/getBegCode', {
+        requestModels('/api/codeprint/getBegCode', {
           body: { prefix: prefix },
           method: 'POST',
         }).then(function(res) {

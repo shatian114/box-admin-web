@@ -179,7 +179,7 @@ export default class SubwareList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/querySubwareList', // 必填,请求url
+      url: '/api/query/querySubwareList', // 必填,请求url
       scroll: { x: 1500, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'subware_code', // 必填,行key
       columns, // 必填,行配置

@@ -6,6 +6,8 @@ import { stringify } from 'qs';
 import store from '../index';
 import { getToken } from '../utils/authority';
 
+const SERVER_ADDR = '/box';
+
 const codeMessage = {
   // 200: '服务器成功返回请求的数据。',
   // 201: '新建或修改数据成功。',
@@ -61,6 +63,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export function request(url, options) {
+  url = SERVER_ADDR + url;
   const defaultOptions = {
     credentials: 'include',
     headers: getToken() ? { token: getToken() } : {},
@@ -116,6 +119,7 @@ export function request(url, options) {
 }
 
 export function requestModels(url, options) {
+  url = SERVER_ADDR + url;
   const defaultOptions = {
     credentials: 'include',
     headers: getToken() ? { token: getToken() } : {},

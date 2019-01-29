@@ -1,7 +1,7 @@
 import { request, requestModels } from '../utils/request';
 import db from '../utils/db';
 
-var SERVER_ADDR="/box";
+var SERVER_ADDR="";
 
 export async function query() {
   return request('/api/users');

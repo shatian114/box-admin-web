@@ -307,7 +307,7 @@ export default class WmscodeList extends Component {
     ];
 
     const listConfig = {
-      url: '/box/api/query/queryWmsCodeList', // 必填,请求url
+      url: '/api/query/queryWmsCodeList', // 必填,请求url
       scroll: { x: 2400, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey: 'code_code', // 必填,行key
       columns, // 必填,行配置
