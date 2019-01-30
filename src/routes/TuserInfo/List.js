@@ -40,9 +40,9 @@ export default class TuserList extends Component {
         type: 'roleId',
       },
     });
-    dispatch({
+    /*dispatch({
       type: 'base/querySubwareList',
-    });
+    });*/
     window.addEventListener('resize', this.resize);
   }
   componentWillUnmount() {
@@ -288,7 +288,7 @@ export default class TuserList extends Component {
             </Row>
           </Form>
         </Card>
-        <List {...listConfig} />
+        {/*<List {...listConfig} />*/}
       </div>
     );
   }

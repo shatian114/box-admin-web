@@ -13,10 +13,10 @@ const isactive = [<Badge status="error" text="异常" />, <Badge status="success
 @connect(({ user, loading }) => ({ user, loading: loading.effects['user/info'] }))
 export default class UserInfo extends React.PureComponent {
   componentDidMount() {
-    const { dispatch } = this.props;
+    /*const { dispatch } = this.props;
     dispatch({
       type: 'user/info',
-    });
+    });*/
   }
 
   render() {

@@ -53,19 +53,19 @@ class LoadingPage extends PureComponent {
           loading: false,
         }),
     });
-    dispatch({
+    /*dispatch({
       type: 'base/querySubwareList',
-    });
+    });*/
 
     dispatch({
       type: 'base/queryAllDic',
     });
-    dispatch({
+   /* dispatch({
       type: 'user/info',
     });
     dispatch({
       type: 'base/supplylist',
-    });
+    });*/
     const urlParams = new URL(window.location.href);
     const settingString = urlParams.searchParams.get('setting');
     if (settingString) {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+  <title>运输</title>
+  <link rel="stylesheet" href="/noreact/css/bmap.css"/>
+  <link rel="stylesheet" href="/noreact/bower_components/iview/dist/styles/iview.css"/>
+  <link rel="stylesheet" href="/noreact/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<div id="app" class="mainContainer">
+  <!-- <div class="row mapContainer"> -->
+  <!-- <div class="col-sm-24 col-md-6">
+  </div> -->
+  <!-- <div class="col-sm-24 col-md-18"> -->
+  <div id="bmap"></div>
+  <!-- </div> -->
+  <!-- </div> -->
+  <div id="infocard" style="display: none;">
+    <template>
+      <div>
+        <Tag :color="USERTYPECOLOR[cp.usertype]">{{USERTYPE[cp.usertype]}}</Tag>
+        <span style="font-weight: bold;">{{cp.realname}}</span>
+      </div>
+      <div v-if="(cp.usertype == 'farmer' ||  cp.usertype == 'market') && cp.phone">
+        <span style="font-weight: bold;">联系电话：</span>
+        {{cp.phone}}
+      </div>
+      <div v-if="cp.usertype == 'farmer' && cp.product">
+        <span style="font-weight: bold;">主营农作物：</span>
+        {{cp.product}}
+      </div>
+      <div v-if="cp.box_count && cp.box_count > 0">
+        <span style="font-weight: bold;">当前载具数量：</span>
+        {{cp.box_count}}
+      </div>
+      <div>
+        <span style="font-weight: bold;">地址：</span>
+        {{cp.address}}
+      </div>
+
+    </template>
+
+  </div>
+  <div id="tranInfoCard" style="display: none;">
+    <template>
+      <div>
+        <span style="font-weight: bold;">起始点：</span>
+        {{cp.fromname}}
+      </div>
+      <div >
+        <span style="font-weight: bold;">终点：</span>
+        {{cp.subware_name}}
+      </div>
+      <div>
+        <span style="font-weight: bold;">运输载具数量：</span>
+        {{cp.fcount}}
+      </div>
+
+    </template>
+
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=fGFzvHEPZKIKDegc6krGoYgCx0DIK27Q"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/vue/dist/vue.min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/iview/dist/iview.min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/noreact/scripts/bmapTrans.js"></script>
+
+</html>

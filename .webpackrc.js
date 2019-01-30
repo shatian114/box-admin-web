@@ -1,5 +1,5 @@
 const path = require('path');
-var SERVICE_URL = 'http://124.232.150.3:8082';
+var SERVICE_URL = 'http://124.232.150.3:8084';
 export default {
   outputPath: 'commonweb',
 
