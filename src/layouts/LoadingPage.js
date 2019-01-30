@@ -36,6 +36,7 @@ class LoadingPage extends PureComponent {
   };
 
   componentDidMount() {
+    console.log('loading page');
     const { dispatch } = this.props;
 
     this.enquireHandler = enquireScreen(mobile => {

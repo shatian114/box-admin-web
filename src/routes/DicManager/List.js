@@ -202,16 +202,14 @@ export default class DicManagerList extends Component {
                   <Button icon="sync" style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                     重置
                   </Button>
-                  <Operate operateName="NEW">
-                    <Button
+                  <Button
                       icon="plus"
                       type="primary"
                       style={{ marginLeft: 8 }}
                       onClick={() => this.props.dispatch(routerRedux.push(`${routerUrl}/info`))}
                     >
-                      新建
-                    </Button>
-                  </Operate>
+                      新建1
+                  </Button>
                 </span>
               </Col>
             </Row>

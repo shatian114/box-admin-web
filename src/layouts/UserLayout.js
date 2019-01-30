@@ -15,6 +15,7 @@ const copyright = (
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
+    console.log('userlayout');
     const { routerData, location } = this.props;
     const { pathname } = location;
     let title = '拓恒物联供应链管理系统';

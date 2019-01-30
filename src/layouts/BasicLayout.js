@@ -81,6 +81,7 @@ class BasicLayout extends React.PureComponent {
   }
 
   getPageTitle() {
+    console.log('basiclayout');
     const { location } = this.props;
     const { routerData } = this.state;
     const { pathname } = location;
