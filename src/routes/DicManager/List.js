@@ -208,7 +208,7 @@ export default class DicManagerList extends Component {
                       style={{ marginLeft: 8 }}
                       onClick={() => this.props.dispatch(routerRedux.push(`${routerUrl}/info`))}
                     >
-                      新建1
+                      新建
                   </Button>
                 </span>
               </Col>
