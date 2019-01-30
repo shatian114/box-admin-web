@@ -23,6 +23,7 @@ var app = new Vue({
     },
     doQuery: function() {
       console.log(config.SERVER_ADDR);
+      
       $.ajax({
         url: config.SERVER_ADDR + '/api/query/querySqlDebugList',
         method: 'POST',

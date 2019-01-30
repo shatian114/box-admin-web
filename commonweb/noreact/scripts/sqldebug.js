@@ -20,8 +20,10 @@ var app = new Vue({
       this.doQuery();
     },
     doQuery: function() {
+      console.log(config.SERVER_ADDR);
+      
       $.ajax({
-        url: '/api/query/querySqlDebugList',
+        url: '/common/api/query/querySqlDebugList',
         method: 'POST',
         // contentType: 'application/json; charset=utf-8',
         dataType: 'json',

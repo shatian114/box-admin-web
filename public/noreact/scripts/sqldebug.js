@@ -1,6 +1,7 @@
 var app = new Vue({
   el: '#app',
   data: {
+    SERVER_ADDR: '/common',
     list: [],
     token: localStorage.getItem('token'),
     queryOption: {
@@ -21,7 +22,7 @@ var app = new Vue({
     },
     doQuery: function() {
       $.ajax({
-        url: '/api/query/querySqlDebugList',
+        url: this.SERVER_ADDR + '/api/query/querySqlDebugList',
         method: 'POST',
         // contentType: 'application/json; charset=utf-8',
         dataType: 'json',
@@ -42,7 +43,7 @@ var app = new Vue({
             this.list = res.list;
             this.total = res.totalitem;
           } else {
-            his.list = [];
+            this.list = [];
             this.total = 0;
           }
         },
@@ -53,7 +54,7 @@ var app = new Vue({
         content: '执行中',
       });
       $.ajax({
-        url: '/api/sqldebug/excute',
+        url: this.SERVER_ADDR + '/api/sqldebug/excute',
         method: 'POST',
         dataType: 'json',
         data: {
