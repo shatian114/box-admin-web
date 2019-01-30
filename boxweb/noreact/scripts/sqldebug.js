@@ -1,3 +1,5 @@
+import {config} from './config/config';
+
 var app = new Vue({
   el: '#app',
   data: {
@@ -20,8 +22,9 @@ var app = new Vue({
       this.doQuery();
     },
     doQuery: function() {
+      console.log(config.SERVER_ADDR);
       $.ajax({
-        url: '/api/query/querySqlDebugList',
+        url: config.SERVER_ADDR + '/api/query/querySqlDebugList',
         method: 'POST',
         // contentType: 'application/json; charset=utf-8',
         dataType: 'json',
