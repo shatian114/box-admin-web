@@ -47,6 +47,42 @@ const commonroute = (app, dynamicWrapper) => ({
   '/usertype/info': {
     component: dynamicWrapper(app, [], () => import('../routes/BaseInfo/UserType/Info')),
   },
+  '/T1wuyeyezhu': {
+    component: dynamicWrapper(app, [], () => import('../routes/T1wuyeyezhu')),
+  },
+  '/T1wuyeyezhu/list': {
+    component: dynamicWrapper(app, [], () => import('../routes/T1wuyeyezhu/List')),
+  },
+  '/T1wuyeyezhu/info': {
+    component: dynamicWrapper(app, [], () => import('../routes/T1wuyeyezhu/Info')),
+  },
+  '/TArroundshopandservice': {
+    component: dynamicWrapper(app, [], () => import('../routes/TArroundshopandservice')),
+  },
+  '/TArroundshopandservice/list': {
+    component: dynamicWrapper(app, [], () => import('../routes/TArroundshopandservice/List')),
+  },
+  '/TArroundshopandservice/info': {
+    component: dynamicWrapper(app, [], () => import('../routes/TArroundshopandservice/Info')),
+  },
+  '/TProduct': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProduct')),
+  },
+  '/TProduct/list': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProduct/List')),
+  },
+  '/TProduct/info': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProduct/Info')),
+  },
+  '/TProducttype': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProducttype')),
+  },
+  '/TProducttype/list': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProducttype/List')),
+  },
+  '/TProducttype/info': {
+    component: dynamicWrapper(app, [], () => import('../routes/TProducttype/Info')),
+  },
 });
 
 export default commonroute;
