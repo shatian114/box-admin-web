@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.T1wuyeyezhu;
+//const routerUrl = cache.keysMenu.T1wuyeyezhu;
+const routerUrl = '/T1wuyeyezhu';
 const url = 'T1wuyeyezhu';
 const rowKey = 't_1wuyeyezhu_id';
 const DateFormat = 'YYYY-MM-DD';

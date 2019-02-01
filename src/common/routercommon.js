@@ -20,15 +20,6 @@ const commonroute = (app, dynamicWrapper) => ({
   '/sysFnc/oprLog/info': {
     component: dynamicWrapper(app, [], () => import('../routes/OprLog/Info')),
   },
-  '/tuserInfo': {
-    component: dynamicWrapper(app, [], () => import('../routes/TuserInfo')),
-  },
-  '/tuserInfo/list': {
-    component: dynamicWrapper(app, [], () => import('../routes/TuserInfo/List')),
-  },
-  '/tuserInfo/info': {
-    component: dynamicWrapper(app, ['tuserInfo'], () => import('../routes/TuserInfo/Info')),
-  },
   '/changePassword': {
     component: dynamicWrapper(app, [], () => import('../routes/User/ChangePassword')),
   },
@@ -55,6 +46,16 @@ const commonroute = (app, dynamicWrapper) => ({
   },
   '/T1wuyeyezhu/info': {
     component: dynamicWrapper(app, [], () => import('../routes/T1wuyeyezhu/Info')),
+  },
+
+  '/tuserInfo': {
+    component: dynamicWrapper(app, [], () => import('../routes/TuserInfo')),
+  },
+  '/tuserInfo/list': {
+    component: dynamicWrapper(app, [], () => import('../routes/TuserInfo/List')),
+  },
+  '/tuserInfo/info': {
+    component: dynamicWrapper(app, ['tuserInfo'], () => import('../routes/TuserInfo/Info')),
   },
   '/TArroundshopandservice': {
     component: dynamicWrapper(app, [], () => import('../routes/TArroundshopandservice')),

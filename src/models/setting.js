@@ -26,6 +26,37 @@ export default {
     *getMenuData({ callback }, { call, put }) {
       const response = yield call(getMenuData);
       if (response) {
+        //自定义添加的路由，后续服务端返回正常后可去掉
+        let localMentData = [
+          {
+            menuname: '基本信息',
+            type: 'ZJ',
+            url: '/TBase',
+            menuid: '1000',
+            moduleCode: 'JBXX',
+            iconOrder: '',
+            isMenu: true,
+            menuIcon: '',
+            args: { moduleCode: 'JBXX' },
+            menus: [
+              {
+                PID: '10001',
+                args: { moduleCode: 'YZGL' },
+                iconOrder: '',
+                isMenu: true,
+                menuIcon: '',
+                type: 'ZJ',
+                children: [],
+                menuid: '1000101',
+                moduleCode: 'YZGL',
+                menuname: '业主管理',
+                url: '/T1wuyeyezhu',
+              },
+            ],
+          },
+        ];
+        response.data = response.data.concat(localMentData);
+
         let menuData = [];
         const clear = () => {
           finish.splice(0, finish.length);
@@ -85,6 +116,7 @@ export default {
           db.menusFlat = keysMenu;
           db.kv = kv;
         }
+
         setMenuData(menuData);
         yield put({
           type: 'save',
