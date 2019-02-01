@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,8 +78,7 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
+        let temp = {};
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -87,7 +86,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -98,7 +97,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -111,69 +110,72 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-    
-  const { info, newInfo } = base;
+
+    const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tTmpId', {
- initialValue: info.tTmpId || newInfo.tTmpId,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },
-  ],
- })(<Input disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('text', {
- initialValue: info.text ||  newInfo.text,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 2000,message: '必须小于2000位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('videourl', {
- initialValue: info.videourl ||  newInfo.videourl,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 600,message: '必须小于600位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('rotate', {
- initialValue: info.rotate ||  newInfo.rotate,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 255,message: '必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('videpic', {
- initialValue: info.videpic ||  newInfo.videpic,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 500,message: '必须小于500位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('tTmpId', {
+              initialValue: info.tTmpId || newInfo.tTmpId,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+              ],
+            })(<Input disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('text', {
+              initialValue: info.text || newInfo.text,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { max: 2000, message: '必须小于2000位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('videourl', {
+              initialValue: info.videourl || newInfo.videourl,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { max: 600, message: '必须小于600位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('rotate', {
+              initialValue: info.rotate || newInfo.rotate,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { max: 255, message: '必须小于255位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('videpic', {
+              initialValue: info.videpic || newInfo.videpic,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { max: 500, message: '必须小于500位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
 
-          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {

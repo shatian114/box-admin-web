@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,8 +78,7 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
+        let temp = {};
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -87,7 +86,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -98,7 +97,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -111,102 +110,106 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-    
-  const { info, newInfo } = base;
+
+    const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tWuyechangerecordId', {
- initialValue: info.tWuyechangerecordId || newInfo.tWuyechangerecordId,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },
-  ],
- })(<Input disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="原因">
-{getFieldDecorator('reason', {
- initialValue: info.reason ||  newInfo.reason,
-  rules: [
-    {
-      required: true,
-      message: '原因不能缺失!',
-    },{ max: 100,message: '原因必须小于100位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="数量">
-{getFieldDecorator('num', {
- initialValue: info.num ||  newInfo.num,
-  rules: [
-    {
-      required: true,
-      message: '数量不能缺失!',
-    },
-  ],
- })()}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="1增加 2 减少">
-{getFieldDecorator('type', {
- initialValue: info.type ||  newInfo.type,
-  rules: [
-    {
-      required: true,
-      message: '1增加 2 减少不能缺失!',
-    },{ required: true,message: '1增加 2 减少不能缺失!', },
-  ],
- })(<InputNumber min={0} disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="用户id">
-{getFieldDecorator('userid', {
- initialValue: info.userid ||  newInfo.userid,
-  rules: [
-    {
-      required: true,
-      message: '用户id不能缺失!',
-    },{ max: 200,message: '用户id必须小于200位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="余额">
-{getFieldDecorator('leftamount', {
- initialValue: info.leftamount ||  newInfo.leftamount,
-  rules: [
-    {
-      required: true,
-      message: '余额不能缺失!',
-    },
-  ],
- })()}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('roomid', {
- initialValue: info.roomid ||  newInfo.roomid,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ required: true,message: '不能缺失!', },
-  ],
- })(<InputNumber min={0} disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('phone', {
- initialValue: info.phone ||  newInfo.phone,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 255,message: '必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('tWuyechangerecordId', {
+              initialValue: info.tWuyechangerecordId || newInfo.tWuyechangerecordId,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+              ],
+            })(<Input disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="原因">
+            {getFieldDecorator('reason', {
+              initialValue: info.reason || newInfo.reason,
+              rules: [
+                {
+                  required: true,
+                  message: '原因不能缺失!',
+                },
+                { max: 100, message: '原因必须小于100位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="数量">
+            {getFieldDecorator('num', {
+              initialValue: info.num || newInfo.num,
+              rules: [
+                {
+                  required: true,
+                  message: '数量不能缺失!',
+                },
+              ],
+            })()}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="1增加 2 减少">
+            {getFieldDecorator('type', {
+              initialValue: info.type || newInfo.type,
+              rules: [
+                {
+                  required: true,
+                  message: '1增加 2 减少不能缺失!',
+                },
+                { required: true, message: '1增加 2 减少不能缺失!' },
+              ],
+            })(<InputNumber min={0} disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="用户id">
+            {getFieldDecorator('userid', {
+              initialValue: info.userid || newInfo.userid,
+              rules: [
+                {
+                  required: true,
+                  message: '用户id不能缺失!',
+                },
+                { max: 200, message: '用户id必须小于200位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="余额">
+            {getFieldDecorator('leftamount', {
+              initialValue: info.leftamount || newInfo.leftamount,
+              rules: [
+                {
+                  required: true,
+                  message: '余额不能缺失!',
+                },
+              ],
+            })()}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('roomid', {
+              initialValue: info.roomid || newInfo.roomid,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { required: true, message: '不能缺失!' },
+              ],
+            })(<InputNumber min={0} disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('phone', {
+              initialValue: info.phone || newInfo.phone,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { max: 255, message: '必须小于255位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
 
-          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {

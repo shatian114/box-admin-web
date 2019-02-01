@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,8 +78,7 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
+        let temp = {};
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -87,7 +86,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -98,7 +97,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -111,58 +110,60 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-    
-  const { info, newInfo } = base;
+
+    const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tWhocarewhoId', {
- initialValue: info.tWhocarewhoId || newInfo.tWhocarewhoId,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },
-  ],
- })(<Input disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="谁">
-{getFieldDecorator('fromuserid', {
- initialValue: info.fromuserid ||  newInfo.fromuserid,
-  rules: [
-    {
-      required: true,
-      message: '谁不能缺失!',
-    },{ max: 200,message: '谁必须小于200位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="关注了谁">
-{getFieldDecorator('touserid', {
- initialValue: info.touserid ||  newInfo.touserid,
-  rules: [
-    {
-      required: true,
-      message: '关注了谁不能缺失!',
-    },{ max: 200,message: '关注了谁必须小于200位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('timevalue', {
- initialValue: info.timevalue ||  newInfo.timevalue,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ required: true,message: '不能缺失!', },
-  ],
- })(<InputNumber min={0} disabled />)}
- </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('tWhocarewhoId', {
+              initialValue: info.tWhocarewhoId || newInfo.tWhocarewhoId,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+              ],
+            })(<Input disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="谁">
+            {getFieldDecorator('fromuserid', {
+              initialValue: info.fromuserid || newInfo.fromuserid,
+              rules: [
+                {
+                  required: true,
+                  message: '谁不能缺失!',
+                },
+                { max: 200, message: '谁必须小于200位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="关注了谁">
+            {getFieldDecorator('touserid', {
+              initialValue: info.touserid || newInfo.touserid,
+              rules: [
+                {
+                  required: true,
+                  message: '关注了谁不能缺失!',
+                },
+                { max: 200, message: '关注了谁必须小于200位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('timevalue', {
+              initialValue: info.timevalue || newInfo.timevalue,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+                { required: true, message: '不能缺失!' },
+              ],
+            })(<InputNumber min={0} disabled />)}
+          </FormItem>
 
-          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {

@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,8 +78,7 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
+        let temp = {};
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -87,7 +86,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -98,7 +97,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -111,91 +110,95 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-    
-  const { info, newInfo } = base;
+
+    const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tVirtualtradeId', {
- initialValue: info.tVirtualtradeId || newInfo.tVirtualtradeId,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },
-  ],
- })(<Input disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="商品编号">
-{getFieldDecorator('productid', {
- initialValue: info.productid ||  newInfo.productid,
-  rules: [
-    {
-      required: true,
-      message: '商品编号不能缺失!',
-    },{ max: 40,message: '商品编号必须小于40位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="购买价格">
-{getFieldDecorator('price', {
- initialValue: info.price ||  newInfo.price,
-  rules: [
-    {
-      required: true,
-      message: '购买价格不能缺失!',
-    },
-  ],
- })()}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="用户账户">
-{getFieldDecorator('userid', {
- initialValue: info.userid ||  newInfo.userid,
-  rules: [
-    {
-      required: true,
-      message: '用户账户不能缺失!',
-    },{ max: 255,message: '用户账户必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="购买时间">
-{getFieldDecorator('buytime', {
- initialValue: info.buytime ||  newInfo.buytime,
-  rules: [
-    {
-      required: true,
-      message: '购买时间不能缺失!',
-    },{ max: 255,message: '购买时间必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否支付">
-{getFieldDecorator('ispaid', {
- initialValue: info.ispaid ||  newInfo.ispaid,
-  rules: [
-    {
-      required: true,
-      message: '是否支付不能缺失!',
-    },{ required: true,message: '是否支付不能缺失!', },
-  ],
- })(<InputNumber min={0} disabled />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="订单号">
-{getFieldDecorator('seq', {
- initialValue: info.seq ||  newInfo.seq,
-  rules: [
-    {
-      required: true,
-      message: '订单号不能缺失!',
-    },{ max: 100,message: '订单号必须小于100位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="">
+            {getFieldDecorator('tVirtualtradeId', {
+              initialValue: info.tVirtualtradeId || newInfo.tVirtualtradeId,
+              rules: [
+                {
+                  required: true,
+                  message: '不能缺失!',
+                },
+              ],
+            })(<Input disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="商品编号">
+            {getFieldDecorator('productid', {
+              initialValue: info.productid || newInfo.productid,
+              rules: [
+                {
+                  required: true,
+                  message: '商品编号不能缺失!',
+                },
+                { max: 40, message: '商品编号必须小于40位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="购买价格">
+            {getFieldDecorator('price', {
+              initialValue: info.price || newInfo.price,
+              rules: [
+                {
+                  required: true,
+                  message: '购买价格不能缺失!',
+                },
+              ],
+            })()}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="用户账户">
+            {getFieldDecorator('userid', {
+              initialValue: info.userid || newInfo.userid,
+              rules: [
+                {
+                  required: true,
+                  message: '用户账户不能缺失!',
+                },
+                { max: 255, message: '用户账户必须小于255位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="购买时间">
+            {getFieldDecorator('buytime', {
+              initialValue: info.buytime || newInfo.buytime,
+              rules: [
+                {
+                  required: true,
+                  message: '购买时间不能缺失!',
+                },
+                { max: 255, message: '购买时间必须小于255位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="是否支付">
+            {getFieldDecorator('ispaid', {
+              initialValue: info.ispaid || newInfo.ispaid,
+              rules: [
+                {
+                  required: true,
+                  message: '是否支付不能缺失!',
+                },
+                { required: true, message: '是否支付不能缺失!' },
+              ],
+            })(<InputNumber min={0} disabled />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="订单号">
+            {getFieldDecorator('seq', {
+              initialValue: info.seq || newInfo.seq,
+              rules: [
+                {
+                  required: true,
+                  message: '订单号不能缺失!',
+                },
+                { max: 100, message: '订单号必须小于100位!' },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
 
-          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {
