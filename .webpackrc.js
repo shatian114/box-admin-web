@@ -1,7 +1,7 @@
 const path = require('path');
-var SERVICE_URL = 'http://124.232.150.3:8084';
+var SERVICE_URL = 'http://124.232.150.3:8086';
 export default {
-  outputPath: 'commonweb',
+  outputPath: 'cpzhsqweb',
 
   entry: 'src/index.js',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
@@ -20,9 +20,9 @@ export default {
       changeOrigin: true,
       secure: false,
     },*/
-    '/common': {
+    '/cpzhsq': {
       target: SERVICE_URL,
-      pathRewrite: { '^/common': '' },
+      pathRewrite: { '^/cpzhsq': '' },
       changeOrigin: true,
       secure: false,
     },
@@ -33,6 +33,6 @@ export default {
     template: './src/index.ejs',
   },
   disableDynamicImport: true,
-  publicPath: '/commonweb/',
+  publicPath: '/cpzhsqweb/',
   hash: true,
 };

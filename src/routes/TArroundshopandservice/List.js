@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TArroundshopandservice;
+//const routerUrl = cache.keysMenu.TArroundshopandservice;
+const routerUrl = '/TArroundshopandservice/';
 const url = 'TArroundshopandservice';
 const rowKey = 't_arroundshopandservice_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -175,7 +176,8 @@ export default class TArroundshopandserviceList extends Component {
       scroll: { x: 1500, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
-    };
+		};
+		
 
     return (
       <div className={styles.tableListForm}>
