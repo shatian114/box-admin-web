@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TSharetotal;
+//const routerUrl = cache.keysMenu.TSharetotal;
+const routerUrl ='/TSharetotal';
 const url = 'TSharetotal';
 const rowKey = 't_sharetotal_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -59,22 +60,24 @@ export default class TSharetotalList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-        temp = {
-          ...temp,
-          start_create_date: values.start_create_date.format(DateFormat),
-        };
-      if (!isEmpty(values.end_create_date))
-        temp = {
-          ...temp,
-          end_create_date: values.end_create_date.format(DateFormat),
-        };
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -103,7 +106,8 @@ export default class TSharetotalList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -152,11 +156,12 @@ export default class TSharetotalList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 't_sharetotal_id', width: 150, sorter: false },
-      { title: '', dataIndex: 'userid', width: 150, sorter: false },
-      { title: '', dataIndex: 'nickname', width: 150, sorter: false },
-      { title: '', dataIndex: 'numlxm', width: 150, sorter: false },
-      { title: '创建时间', dataIndex: 'create_date', width: 150, sorter: false },
+       {  title: '',   dataIndex: 't_sharetotal_id',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'userid',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'nickname',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'numlxm',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -171,71 +176,17 @@ export default class TSharetotalList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('t_sharetotal_id', {
-                    initialValue: this.props.list.queryMap.t_sharetotal_id,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('userid', { initialValue: this.props.list.queryMap.userid })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('nickname', {
-                    initialValue: this.props.list.queryMap.nickname,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(起始)">
-                  {getFieldDecorator('start_numlxm', {
-                    initialValue: this.props.list.queryMap.start_numlxm
-                      ? moment(this.props.list.queryMap.start_numlxm)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(结束)">
-                  {getFieldDecorator('end_numlxm', {
-                    initialValue: this.props.list.queryMap.end_numlxm
-                      ? moment(this.props.list.queryMap.end_numlxm)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(起始)">
-                  {getFieldDecorator('start_create_date', {
-                    initialValue: this.props.list.queryMap.start_create_date
-                      ? moment(this.props.list.queryMap.start_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(结束)">
-                  {getFieldDecorator('end_create_date', {
-                    initialValue: this.props.list.queryMap.end_create_date
-                      ? moment(this.props.list.queryMap.end_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_sharetotal_id',{initialValue: this.props.list.queryMap.t_sharetotal_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('nickname',{initialValue: this.props.list.queryMap.nickname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(起始)'>{getFieldDecorator('start_numlxm',{initialValue: this.props.list.queryMap.start_numlxm  ? moment(this.props.list.queryMap.start_numlxm): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(结束)'>{getFieldDecorator('end_numlxm',{initialValue: this.props.list.queryMap.end_numlxm  ? moment(this.props.list.queryMap.end_numlxm): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

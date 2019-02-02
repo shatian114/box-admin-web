@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TWuyechangerecord;
+//const routerUrl = cache.keysMenu.TWuyechangerecord;
+const routerUrl ='/TWuyechangerecord';
 const url = 'TWuyechangerecord';
 const rowKey = 't_wuyechangerecord_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -59,22 +60,24 @@ export default class TWuyechangerecordList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-        temp = {
-          ...temp,
-          start_create_date: values.start_create_date.format(DateFormat),
-        };
-      if (!isEmpty(values.end_create_date))
-        temp = {
-          ...temp,
-          end_create_date: values.end_create_date.format(DateFormat),
-        };
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -103,7 +106,8 @@ export default class TWuyechangerecordList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -152,15 +156,16 @@ export default class TWuyechangerecordList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 't_wuyechangerecord_id', width: 150, sorter: false },
-      { title: '原因', dataIndex: 'reason', width: 150, sorter: false },
-      { title: '数量', dataIndex: 'num', width: 150, sorter: false },
-      { title: '1增加 2 减少', dataIndex: 'type', width: 150, sorter: false },
-      { title: '用户id', dataIndex: 'userid', width: 150, sorter: false },
-      { title: '余额', dataIndex: 'leftamount', width: 150, sorter: false },
-      { title: '', dataIndex: 'roomid', width: 150, sorter: false },
-      { title: '', dataIndex: 'phone', width: 150, sorter: false },
-      { title: '创建时间', dataIndex: 'create_date', width: 150, sorter: false },
+       {  title: '',   dataIndex: 't_wuyechangerecord_id',     width: 150,     sorter: false,      },
+ {  title: '原因',   dataIndex: 'reason',     width: 150,     sorter: false,      },
+ {  title: '数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
+ {  title: '1增加 2 减少',   dataIndex: 'type',     width: 150,     sorter: false,      },
+ {  title: '用户id',   dataIndex: 'userid',     width: 150,     sorter: false,      },
+ {  title: '余额',   dataIndex: 'leftamount',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'roomid',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'phone',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -175,99 +180,22 @@ export default class TWuyechangerecordList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('t_wuyechangerecord_id', {
-                    initialValue: this.props.list.queryMap.t_wuyechangerecord_id,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="原因">
-                  {getFieldDecorator('reason', { initialValue: this.props.list.queryMap.reason })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="1增加 2 减少(起始)">
-                  {getFieldDecorator('start_type', {
-                    initialValue: this.props.list.queryMap.start_type
-                      ? moment(this.props.list.queryMap.start_type)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="1增加 2 减少(结束)">
-                  {getFieldDecorator('end_type', {
-                    initialValue: this.props.list.queryMap.end_type
-                      ? moment(this.props.list.queryMap.end_type)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="用户id">
-                  {getFieldDecorator('userid', { initialValue: this.props.list.queryMap.userid })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(起始)">
-                  {getFieldDecorator('start_roomid', {
-                    initialValue: this.props.list.queryMap.start_roomid
-                      ? moment(this.props.list.queryMap.start_roomid)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(结束)">
-                  {getFieldDecorator('end_roomid', {
-                    initialValue: this.props.list.queryMap.end_roomid
-                      ? moment(this.props.list.queryMap.end_roomid)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('phone', { initialValue: this.props.list.queryMap.phone })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(起始)">
-                  {getFieldDecorator('start_create_date', {
-                    initialValue: this.props.list.queryMap.start_create_date
-                      ? moment(this.props.list.queryMap.start_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(结束)">
-                  {getFieldDecorator('end_create_date', {
-                    initialValue: this.props.list.queryMap.end_create_date
-                      ? moment(this.props.list.queryMap.end_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_wuyechangerecord_id',{initialValue: this.props.list.queryMap.t_wuyechangerecord_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='原因'>{getFieldDecorator('reason',{initialValue: this.props.list.queryMap.reason, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='1增加 2 减少(起始)'>{getFieldDecorator('start_type',{initialValue: this.props.list.queryMap.start_type  ? moment(this.props.list.queryMap.start_type): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='1增加 2 减少(结束)'>{getFieldDecorator('end_type',{initialValue: this.props.list.queryMap.end_type  ? moment(this.props.list.queryMap.end_type): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户id'>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(起始)'>{getFieldDecorator('start_roomid',{initialValue: this.props.list.queryMap.start_roomid  ? moment(this.props.list.queryMap.start_roomid): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(结束)'>{getFieldDecorator('end_roomid',{initialValue: this.props.list.queryMap.end_roomid  ? moment(this.props.list.queryMap.end_roomid): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('phone',{initialValue: this.props.list.queryMap.phone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

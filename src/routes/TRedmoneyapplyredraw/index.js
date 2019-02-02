@@ -6,7 +6,8 @@ import { getRoutes } from '../../utils/utils';
 import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
 
-const routerUrl = cache.keysMenu.TRedmoneyapplyredraw;
+//const routerUrl = cache.keysMenu.TRedmoneyapplyredraw;
+const routerUrl ='/TRedmoneyapplyredraw';
 
 @connect()
 @Operate.create('TRedmoneyapplyredraw')

@@ -7,7 +7,7 @@ import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
 
 //const routerUrl = cache.keysMenu.TArroundshopandservice;
-const routerUrl = '/TArroundshopandservice';
+const routerUrl ='/TArroundshopandservice';
 
 @connect()
 @Operate.create('TArroundshopandservice')

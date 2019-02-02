@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TRedmoneyapplyredraw;
+//const routerUrl = cache.keysMenu.TRedmoneyapplyredraw;
+const routerUrl ='/TRedmoneyapplyredraw';
 const url = 'TRedmoneyapplyredraw';
 const rowKey = 't_redmoneyapplyredraw_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -59,22 +60,24 @@ export default class TRedmoneyapplyredrawList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-        temp = {
-          ...temp,
-          start_create_date: values.start_create_date.format(DateFormat),
-        };
-      if (!isEmpty(values.end_create_date))
-        temp = {
-          ...temp,
-          end_create_date: values.end_create_date.format(DateFormat),
-        };
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -103,7 +106,8 @@ export default class TRedmoneyapplyredrawList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -152,16 +156,17 @@ export default class TRedmoneyapplyredrawList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 't_redmoneyapplyredraw_id', width: 150, sorter: false },
-      { title: '数量', dataIndex: 'num', width: 150, sorter: false },
-      { title: '是否已经处理', dataIndex: 'handle', width: 150, sorter: false },
-      { title: '描述', dataIndex: 'msg', width: 150, sorter: false },
-      { title: '用户id', dataIndex: 'userid', width: 150, sorter: false },
-      { title: '真实姓名', dataIndex: 'realname', width: 150, sorter: false },
-      { title: '支付宝或者银行卡等信息', dataIndex: 'bankinfo', width: 150, sorter: false },
-      { title: '申请时间', dataIndex: 'applytime', width: 150, sorter: false },
-      { title: '处理时间', dataIndex: 'handletime', width: 150, sorter: false },
-      { title: '创建时间', dataIndex: 'create_date', width: 150, sorter: false },
+       {  title: '',   dataIndex: 't_redmoneyapplyredraw_id',     width: 150,     sorter: false,      },
+ {  title: '数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
+ {  title: '是否已经处理',   dataIndex: 'handle',     width: 150,     sorter: false,      },
+ {  title: '描述',   dataIndex: 'msg',     width: 150,     sorter: false,      },
+ {  title: '用户id',   dataIndex: 'userid',     width: 150,     sorter: false,      },
+ {  title: '真实姓名',   dataIndex: 'realname',     width: 150,     sorter: false,      },
+ {  title: '支付宝或者银行卡等信息',   dataIndex: 'bankinfo',     width: 150,     sorter: false,      },
+ {  title: '申请时间',   dataIndex: 'applytime',     width: 150,     sorter: false,      },
+ {  title: '处理时间',   dataIndex: 'handletime',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -176,123 +181,25 @@ export default class TRedmoneyapplyredrawList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('t_redmoneyapplyredraw_id', {
-                    initialValue: this.props.list.queryMap.t_redmoneyapplyredraw_id,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="数量(起始)">
-                  {getFieldDecorator('start_num', {
-                    initialValue: this.props.list.queryMap.start_num
-                      ? moment(this.props.list.queryMap.start_num)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="数量(结束)">
-                  {getFieldDecorator('end_num', {
-                    initialValue: this.props.list.queryMap.end_num
-                      ? moment(this.props.list.queryMap.end_num)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="是否已经处理(起始)">
-                  {getFieldDecorator('start_handle', {
-                    initialValue: this.props.list.queryMap.start_handle
-                      ? moment(this.props.list.queryMap.start_handle)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="是否已经处理(结束)">
-                  {getFieldDecorator('end_handle', {
-                    initialValue: this.props.list.queryMap.end_handle
-                      ? moment(this.props.list.queryMap.end_handle)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="描述">
-                  {getFieldDecorator('msg', { initialValue: this.props.list.queryMap.msg })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="用户id">
-                  {getFieldDecorator('userid', { initialValue: this.props.list.queryMap.userid })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="真实姓名">
-                  {getFieldDecorator('realname', {
-                    initialValue: this.props.list.queryMap.realname,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="支付宝或者银行卡等信息">
-                  {getFieldDecorator('bankinfo', {
-                    initialValue: this.props.list.queryMap.bankinfo,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="申请时间">
-                  {getFieldDecorator('applytime', {
-                    initialValue: this.props.list.queryMap.applytime,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="处理时间">
-                  {getFieldDecorator('handletime', {
-                    initialValue: this.props.list.queryMap.handletime,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(起始)">
-                  {getFieldDecorator('start_create_date', {
-                    initialValue: this.props.list.queryMap.start_create_date
-                      ? moment(this.props.list.queryMap.start_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(结束)">
-                  {getFieldDecorator('end_create_date', {
-                    initialValue: this.props.list.queryMap.end_create_date
-                      ? moment(this.props.list.queryMap.end_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_redmoneyapplyredraw_id',{initialValue: this.props.list.queryMap.t_redmoneyapplyredraw_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否已经处理(起始)'>{getFieldDecorator('start_handle',{initialValue: this.props.list.queryMap.start_handle  ? moment(this.props.list.queryMap.start_handle): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否已经处理(结束)'>{getFieldDecorator('end_handle',{initialValue: this.props.list.queryMap.end_handle  ? moment(this.props.list.queryMap.end_handle): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='描述'>{getFieldDecorator('msg',{initialValue: this.props.list.queryMap.msg, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户id'>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='真实姓名'>{getFieldDecorator('realname',{initialValue: this.props.list.queryMap.realname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='支付宝或者银行卡等信息'>{getFieldDecorator('bankinfo',{initialValue: this.props.list.queryMap.bankinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='申请时间'>{getFieldDecorator('applytime',{initialValue: this.props.list.queryMap.applytime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='处理时间'>{getFieldDecorator('handletime',{initialValue: this.props.list.queryMap.handletime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

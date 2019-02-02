@@ -4,12 +4,14 @@ import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
-import logo from '../assets/logo.svg';
+//import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 import { getRoutes } from '../utils/utils';
+import {webConfig} from '../utils/Constant';
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 南京全高出品
+    Copyright <Icon type="copyright" /> 2018 {webConfig.companyName}出品
   </Fragment>
 );
 
@@ -18,9 +20,9 @@ class UserLayout extends React.PureComponent {
     console.log('userlayout');
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '拓恒物联供应链管理系统';
+    let title = `${webConfig.webName}管理系统`;
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 拓恒物联供应链管理系统`;
+      title = `${routerData[pathname].name} - ${title}`;
     }
     return title;
   }
@@ -34,10 +36,10 @@ class UserLayout extends React.PureComponent {
               <img alt="logo" className={styles.logo} src={logo} />
               <div className={styles.header}>
                 <Link to="/">
-                  <span className={styles.title}>拓恒物联供应链管理系统</span>
+                  <span className={styles.title}>{webConfig.webName}管理系统</span>
                 </Link>
               </div>
-              <div className={styles.desc}>上海拓恒物联网科技有限公司</div>
+              <div className={styles.desc}>{webConfig.companyName}科技有限公司</div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item => (

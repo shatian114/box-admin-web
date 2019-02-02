@@ -11,9 +11,11 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-import logo from '../assets/logo.svg';
+//import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 import { getRouterData } from '../common/router';
 import { app } from '../index';
+import {webConfig} from  '../utils/Constant';
 
 const { Content, Header } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -85,9 +87,9 @@ class BasicLayout extends React.PureComponent {
     const { location } = this.props;
     const { routerData } = this.state;
     const { pathname } = location;
-    let title = '拓恒物联供应链管理系统';
+    let title = `${webConfig.webName}管理系统`;
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 拓恒物联供应链管理系统`;
+      title = `${routerData[pathname].name} - ${title}`;
     }
     return title;
   }

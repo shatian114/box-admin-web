@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TWuyeroominfo;
+//const routerUrl = cache.keysMenu.TWuyeroominfo;
+const routerUrl ='/TWuyeroominfo';
 const url = 'TWuyeroominfo';
 const rowKey = 't_wuyeroominfo_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -59,22 +60,24 @@ export default class TWuyeroominfoList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-        temp = {
-          ...temp,
-          start_create_date: values.start_create_date.format(DateFormat),
-        };
-      if (!isEmpty(values.end_create_date))
-        temp = {
-          ...temp,
-          end_create_date: values.end_create_date.format(DateFormat),
-        };
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -103,7 +106,8 @@ export default class TWuyeroominfoList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -152,23 +156,24 @@ export default class TWuyeroominfoList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 't_wuyeroominfo_id', width: 150, sorter: false },
-      { title: '', dataIndex: 'sqbh', width: 150, sorter: false },
-      { title: '', dataIndex: 'sqmc', width: 150, sorter: false },
-      { title: '', dataIndex: 'ld', width: 150, sorter: false },
-      { title: '', dataIndex: 'cfh', width: 150, sorter: false },
-      { title: '', dataIndex: 'zt', width: 150, sorter: false },
-      { title: '', dataIndex: 'xingming', width: 150, sorter: false },
-      { title: '', dataIndex: 'wyf', width: 150, sorter: false },
-      { title: '', dataIndex: 'sf', width: 150, sorter: false },
-      { title: '', dataIndex: 'df', width: 150, sorter: false },
-      { title: '', dataIndex: 'tcf', width: 150, sorter: false },
-      { title: '', dataIndex: 'total', width: 150, sorter: false },
-      { title: '', dataIndex: 'leftamount', width: 150, sorter: false },
-      { title: '', dataIndex: 'desclxm', width: 150, sorter: false },
-      { title: '', dataIndex: 'relativephone', width: 150, sorter: false },
-      { title: '', dataIndex: 'piclink', width: 150, sorter: false },
-      { title: '创建时间', dataIndex: 'create_date', width: 150, sorter: false },
+       {  title: '',   dataIndex: 't_wuyeroominfo_id',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'sqbh',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'sqmc',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'ld',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'cfh',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'zt',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'xingming',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'wyf',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'sf',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'df',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'tcf',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'total',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'leftamount',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'desclxm',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'relativephone',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'piclink',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -183,107 +188,20 @@ export default class TWuyeroominfoList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('t_wuyeroominfo_id', {
-                    initialValue: this.props.list.queryMap.t_wuyeroominfo_id,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('sqbh', { initialValue: this.props.list.queryMap.sqbh })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('sqmc', { initialValue: this.props.list.queryMap.sqmc })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('ld', { initialValue: this.props.list.queryMap.ld })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('cfh', { initialValue: this.props.list.queryMap.cfh })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('zt', { initialValue: this.props.list.queryMap.zt })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('xingming', {
-                    initialValue: this.props.list.queryMap.xingming,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('desclxm', { initialValue: this.props.list.queryMap.desclxm })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('relativephone', {
-                    initialValue: this.props.list.queryMap.relativephone,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('piclink', { initialValue: this.props.list.queryMap.piclink })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(起始)">
-                  {getFieldDecorator('start_create_date', {
-                    initialValue: this.props.list.queryMap.start_create_date
-                      ? moment(this.props.list.queryMap.start_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(结束)">
-                  {getFieldDecorator('end_create_date', {
-                    initialValue: this.props.list.queryMap.end_create_date
-                      ? moment(this.props.list.queryMap.end_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_wuyeroominfo_id',{initialValue: this.props.list.queryMap.t_wuyeroominfo_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('sqbh',{initialValue: this.props.list.queryMap.sqbh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('sqmc',{initialValue: this.props.list.queryMap.sqmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('ld',{initialValue: this.props.list.queryMap.ld, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('cfh',{initialValue: this.props.list.queryMap.cfh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('zt',{initialValue: this.props.list.queryMap.zt, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('xingming',{initialValue: this.props.list.queryMap.xingming, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('desclxm',{initialValue: this.props.list.queryMap.desclxm, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('relativephone',{initialValue: this.props.list.queryMap.relativephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

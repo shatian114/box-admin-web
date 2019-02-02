@@ -6,7 +6,8 @@ import { getRoutes } from '../../utils/utils';
 import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
 
-const routerUrl = cache.keysMenu.TCommonskill;
+//const routerUrl = cache.keysMenu.TCommonskill;
+const routerUrl ='/TCommonskill';
 
 @connect()
 @Operate.create('TCommonskill')

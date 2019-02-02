@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TProducttype;
+//const routerUrl = cache.keysMenu.TProducttype;
+const routerUrl ='/TProducttype';
 const url = 'TProducttype';
 const rowKey = 't_producttype_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -59,22 +60,24 @@ export default class TProducttypeList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-        temp = {
-          ...temp,
-          start_create_date: values.start_create_date.format(DateFormat),
-        };
-      if (!isEmpty(values.end_create_date))
-        temp = {
-          ...temp,
-          end_create_date: values.end_create_date.format(DateFormat),
-        };
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -103,7 +106,8 @@ export default class TProducttypeList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -152,10 +156,11 @@ export default class TProducttypeList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 't_producttype_id', width: 150, sorter: false },
-      { title: '产品类型id', dataIndex: 'producttypeid', width: 150, sorter: false },
-      { title: '产品类型名称', dataIndex: 'producttypename', width: 150, sorter: false },
-      { title: '创建时间', dataIndex: 'create_date', width: 150, sorter: false },
+       {  title: '',   dataIndex: 't_producttype_id',     width: 150,     sorter: false,      },
+ {  title: '产品类型id',   dataIndex: 'producttypeid',     width: 150,     sorter: false,      },
+ {  title: '产品类型名称',   dataIndex: 'producttypename',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -170,63 +175,16 @@ export default class TProducttypeList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('t_producttype_id', {
-                    initialValue: this.props.list.queryMap.t_producttype_id,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="产品类型id(起始)">
-                  {getFieldDecorator('start_producttypeid', {
-                    initialValue: this.props.list.queryMap.start_producttypeid
-                      ? moment(this.props.list.queryMap.start_producttypeid)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="产品类型id(结束)">
-                  {getFieldDecorator('end_producttypeid', {
-                    initialValue: this.props.list.queryMap.end_producttypeid
-                      ? moment(this.props.list.queryMap.end_producttypeid)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="产品类型名称">
-                  {getFieldDecorator('producttypename', {
-                    initialValue: this.props.list.queryMap.producttypename,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(起始)">
-                  {getFieldDecorator('start_create_date', {
-                    initialValue: this.props.list.queryMap.start_create_date
-                      ? moment(this.props.list.queryMap.start_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="创建时间(结束)">
-                  {getFieldDecorator('end_create_date', {
-                    initialValue: this.props.list.queryMap.end_create_date
-                      ? moment(this.props.list.queryMap.end_create_date)
-                      : null,
-                  })(<DatePicker format={DateFormat} placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_producttype_id',{initialValue: this.props.list.queryMap.t_producttype_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型id(起始)'>{getFieldDecorator('start_producttypeid',{initialValue: this.props.list.queryMap.start_producttypeid  ? moment(this.props.list.queryMap.start_producttypeid): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型id(结束)'>{getFieldDecorator('end_producttypeid',{initialValue: this.props.list.queryMap.end_producttypeid  ? moment(this.props.list.queryMap.end_producttypeid): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型名称'>{getFieldDecorator('producttypename',{initialValue: this.props.list.queryMap.producttypename, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

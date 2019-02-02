@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,7 +78,8 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let temp = {};
+         let temp = {};
+        
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -86,7 +87,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -97,7 +98,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -110,60 +111,58 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-
-    const { info, newInfo } = base;
+    
+  const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} hasFeedback label="">
-            {getFieldDecorator('tSharetotalId', {
-              initialValue: info.tSharetotalId || newInfo.tSharetotalId,
-              rules: [
-                {
-                  required: true,
-                  message: '不能缺失!',
-                },
-              ],
-            })(<Input disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="">
-            {getFieldDecorator('userid', {
-              initialValue: info.userid || newInfo.userid,
-              rules: [
-                {
-                  required: true,
-                  message: '不能缺失!',
-                },
-                { max: 80, message: '必须小于80位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="">
-            {getFieldDecorator('nickname', {
-              initialValue: info.nickname || newInfo.nickname,
-              rules: [
-                {
-                  required: true,
-                  message: '不能缺失!',
-                },
-                { max: 50, message: '必须小于50位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="">
-            {getFieldDecorator('numlxm', {
-              initialValue: info.numlxm || newInfo.numlxm,
-              rules: [
-                {
-                  required: true,
-                  message: '不能缺失!',
-                },
-                { required: true, message: '不能缺失!' },
-              ],
-            })(<InputNumber min={0} disabled />)}
-          </FormItem>
+           <FormItem {...formItemLayout} hasFeedback label="">
+{getFieldDecorator('tSharetotalId', {
+ initialValue: info.tSharetotalId || newInfo.tSharetotalId,
+  rules: [
+    {
+      required: true,
+      message: '不能缺失!',
+    },
+  ],
+ })(<Input disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="">
+{getFieldDecorator('userid', {
+ initialValue: info.userid ||  newInfo.userid,
+  rules: [
+    {
+      required: true,
+      message: '不能缺失!',
+    },{ max: 80,message: '必须小于80位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="">
+{getFieldDecorator('nickname', {
+ initialValue: info.nickname ||  newInfo.nickname,
+  rules: [
+    {
+      required: true,
+      message: '不能缺失!',
+    },{ max: 50,message: '必须小于50位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="">
+{getFieldDecorator('numlxm', {
+ initialValue: info.numlxm ||  newInfo.numlxm,
+  rules: [
+    {
+      required: true,
+      message: '不能缺失!',
+    },{ required: true,message: '不能缺失!', },
+  ],
+ })(<InputNumber min={0} disabled />)}
+ </FormItem>
 
+          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {

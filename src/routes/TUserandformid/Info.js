@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,7 +78,8 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let temp = {};
+         let temp = {};
+        
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -86,7 +87,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -97,7 +98,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -110,60 +111,58 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-
-    const { info, newInfo } = base;
+    
+  const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} hasFeedback label="">
-            {getFieldDecorator('tUserandformidId', {
-              initialValue: info.tUserandformidId || newInfo.tUserandformidId,
-              rules: [
-                {
-                  required: true,
-                  message: '不能缺失!',
-                },
-              ],
-            })(<Input disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="用户openid">
-            {getFieldDecorator('userid', {
-              initialValue: info.userid || newInfo.userid,
-              rules: [
-                {
-                  required: true,
-                  message: '用户openid不能缺失!',
-                },
-                { max: 200, message: '用户openid必须小于200位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="表单id">
-            {getFieldDecorator('formid', {
-              initialValue: info.formid || newInfo.formid,
-              rules: [
-                {
-                  required: true,
-                  message: '表单id不能缺失!',
-                },
-                { max: 100, message: '表单id必须小于100位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="时间戳">
-            {getFieldDecorator('timestamprecord', {
-              initialValue: info.timestamprecord || newInfo.timestamprecord,
-              rules: [
-                {
-                  required: true,
-                  message: '时间戳不能缺失!',
-                },
-                { max: 50, message: '时间戳必须小于50位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
+           <FormItem {...formItemLayout} hasFeedback label="">
+{getFieldDecorator('tUserandformidId', {
+ initialValue: info.tUserandformidId || newInfo.tUserandformidId,
+  rules: [
+    {
+      required: true,
+      message: '不能缺失!',
+    },
+  ],
+ })(<Input disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="用户openid">
+{getFieldDecorator('userid', {
+ initialValue: info.userid ||  newInfo.userid,
+  rules: [
+    {
+      required: true,
+      message: '用户openid不能缺失!',
+    },{ max: 200,message: '用户openid必须小于200位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="表单id">
+{getFieldDecorator('formid', {
+ initialValue: info.formid ||  newInfo.formid,
+  rules: [
+    {
+      required: true,
+      message: '表单id不能缺失!',
+    },{ max: 100,message: '表单id必须小于100位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="时间戳">
+{getFieldDecorator('timestamprecord', {
+ initialValue: info.timestamprecord ||  newInfo.timestamprecord,
+  rules: [
+    {
+      required: true,
+      message: '时间戳不能缺失!',
+    },{ max: 50,message: '时间戳必须小于50位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
 
+          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {

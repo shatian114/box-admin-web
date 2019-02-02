@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -23,7 +23,8 @@ import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const routerUrl = cache.keysMenu.TUserwx;
+//const routerUrl = cache.keysMenu.TUserwx;
+const routerUrl ='/TUserwx';
 const url = 'TUserwx';
 const rowKey = 'ID';
 const DateFormat = 'YYYY-MM-DD';
@@ -58,13 +59,15 @@ export default class TUserwxList extends Component {
     const { setList } = list;
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
-
+      
+      
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
       });
     });
   };
+
 
   handleFormReset = () => {
     const { form, list } = this.props;
@@ -93,7 +96,8 @@ export default class TUserwxList extends Component {
 
   render() {
     const { form, base } = this.props;
-
+    
+    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -142,47 +146,33 @@ export default class TUserwxList extends Component {
           </Row>
         ),
       },
-      { title: '', dataIndex: 'ID', width: 150, sorter: false },
-      { title: '账户', dataIndex: 'userid', width: 150, sorter: false },
-      { title: '昵称', dataIndex: 'nickname', width: 150, sorter: false },
-      { title: '头像', dataIndex: 'piclink', width: 150, sorter: false },
-      { title: '版本号', dataIndex: 'ver', width: 150, sorter: false },
-      { title: '系统时间戳,,无用', dataIndex: 't_timeinfo', width: 150, sorter: false },
-      { title: '客户端ip', dataIndex: 'ip', width: 150, sorter: false },
-      { title: '所在区域', dataIndex: 'zone', width: 150, sorter: false },
-      { title: '真实姓名', dataIndex: 'realname', width: 150, sorter: false },
-      { title: '手机号', dataIndex: 'mobilephone', width: 150, sorter: false },
-      { title: '邮箱', dataIndex: 'email', width: 150, sorter: false },
-      { title: '收货地址', dataIndex: 'address', width: 150, sorter: false },
-      { title: '红包余额', dataIndex: 'leftmoney', width: 150, sorter: false },
-      {
-        title: '收款方式，银行卡或者支付宝之类，红包提现用',
-        dataIndex: 'bankaccount',
-        width: 150,
-        sorter: false,
-      },
-      { title: '微信', dataIndex: 'weixin', width: 150, sorter: false },
-      {
-        title: '是否开放联系方式 0永不 1直接开放  2 根据红包决定',
-        dataIndex: 'ishowcontactduetoredmoney',
-        width: 150,
-        sorter: false,
-      },
-      {
-        title: '收到某人至少多少红包才对他开放联系方式',
-        dataIndex: 'atleasthowmuchredmoney',
-        width: 150,
-        sorter: false,
-      },
-      { title: 'QQ', dataIndex: 'qq', width: 150, sorter: false },
-      { title: '固定区域', dataIndex: 'fixedzone', width: 150, sorter: false },
-      { title: '第一次登陆时间', dataIndex: 'regtime', width: 150, sorter: false },
-      { title: '最后一次登录时间', dataIndex: 'logontime', width: 150, sorter: false },
-      { title: '经度', dataIndex: 'lng', width: 150, sorter: false },
-      { title: '纬度', dataIndex: 'lat', width: 150, sorter: false },
-      { title: '详细位置', dataIndex: 'addressdetail', width: 150, sorter: false },
-      { title: '', dataIndex: 'lasttimeinfo', width: 150, sorter: false },
-      { title: '', dataIndex: 'videosecond', width: 150, sorter: false },
+       {  title: '',   dataIndex: 'ID',     width: 150,     sorter: false,      },
+ {  title: '账户',   dataIndex: 'userid',     width: 150,     sorter: false,      },
+ {  title: '昵称',   dataIndex: 'nickname',     width: 150,     sorter: false,      },
+ {  title: '头像',   dataIndex: 'piclink',     width: 150,     sorter: false,      },
+ {  title: '版本号',   dataIndex: 'ver',     width: 150,     sorter: false,      },
+ {  title: '系统时间戳,,无用',   dataIndex: 't_timeinfo',     width: 150,     sorter: false,      },
+ {  title: '客户端ip',   dataIndex: 'ip',     width: 150,     sorter: false,      },
+ {  title: '所在区域',   dataIndex: 'zone',     width: 150,     sorter: false,      },
+ {  title: '真实姓名',   dataIndex: 'realname',     width: 150,     sorter: false,      },
+ {  title: '手机号',   dataIndex: 'mobilephone',     width: 150,     sorter: false,      },
+ {  title: '邮箱',   dataIndex: 'email',     width: 150,     sorter: false,      },
+ {  title: '收货地址',   dataIndex: 'address',     width: 150,     sorter: false,      },
+ {  title: '红包余额',   dataIndex: 'leftmoney',     width: 150,     sorter: false,      },
+ {  title: '收款方式，银行卡或者支付宝之类，红包提现用',   dataIndex: 'bankaccount',     width: 150,     sorter: false,      },
+ {  title: '微信',   dataIndex: 'weixin',     width: 150,     sorter: false,      },
+ {  title: '是否开放联系方式 0永不 1直接开放  2 根据红包决定',   dataIndex: 'ishowcontactduetoredmoney',     width: 150,     sorter: false,      },
+ {  title: '收到某人至少多少红包才对他开放联系方式',   dataIndex: 'atleasthowmuchredmoney',     width: 150,     sorter: false,      },
+ {  title: 'QQ',   dataIndex: 'qq',     width: 150,     sorter: false,      },
+ {  title: '固定区域',   dataIndex: 'fixedzone',     width: 150,     sorter: false,      },
+ {  title: '第一次登陆时间',   dataIndex: 'regtime',     width: 150,     sorter: false,      },
+ {  title: '最后一次登录时间',   dataIndex: 'logontime',     width: 150,     sorter: false,      },
+ {  title: '经度',   dataIndex: 'lng',     width: 150,     sorter: false,      },
+ {  title: '纬度',   dataIndex: 'lat',     width: 150,     sorter: false,      },
+ {  title: '详细位置',   dataIndex: 'addressdetail',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'lasttimeinfo',     width: 150,     sorter: false,      },
+ {  title: '',   dataIndex: 'videosecond',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
@@ -197,273 +187,48 @@ export default class TUserwxList extends Component {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(起始)">
-                  {getFieldDecorator('start_ID', {
-                    initialValue: this.props.list.queryMap.start_ID
-                      ? moment(this.props.list.queryMap.start_ID)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(结束)">
-                  {getFieldDecorator('end_ID', {
-                    initialValue: this.props.list.queryMap.end_ID
-                      ? moment(this.props.list.queryMap.end_ID)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="账户">
-                  {getFieldDecorator('userid', { initialValue: this.props.list.queryMap.userid })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="昵称">
-                  {getFieldDecorator('nickname', {
-                    initialValue: this.props.list.queryMap.nickname,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="头像">
-                  {getFieldDecorator('piclink', { initialValue: this.props.list.queryMap.piclink })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="版本号">
-                  {getFieldDecorator('ver', { initialValue: this.props.list.queryMap.ver })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="客户端ip">
-                  {getFieldDecorator('ip', { initialValue: this.props.list.queryMap.ip })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="所在区域">
-                  {getFieldDecorator('zone', { initialValue: this.props.list.queryMap.zone })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="真实姓名">
-                  {getFieldDecorator('realname', {
-                    initialValue: this.props.list.queryMap.realname,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="手机号">
-                  {getFieldDecorator('mobilephone', {
-                    initialValue: this.props.list.queryMap.mobilephone,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="邮箱">
-                  {getFieldDecorator('email', { initialValue: this.props.list.queryMap.email })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="收货地址">
-                  {getFieldDecorator('address', { initialValue: this.props.list.queryMap.address })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="红包余额(起始)">
-                  {getFieldDecorator('start_leftmoney', {
-                    initialValue: this.props.list.queryMap.start_leftmoney
-                      ? moment(this.props.list.queryMap.start_leftmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="红包余额(结束)">
-                  {getFieldDecorator('end_leftmoney', {
-                    initialValue: this.props.list.queryMap.end_leftmoney
-                      ? moment(this.props.list.queryMap.end_leftmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="收款方式，银行卡或者支付宝之类，红包提现用">
-                  {getFieldDecorator('bankaccount', {
-                    initialValue: this.props.list.queryMap.bankaccount,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="微信">
-                  {getFieldDecorator('weixin', { initialValue: this.props.list.queryMap.weixin })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem
-                  {...formItemLayout}
-                  label="是否开放联系方式 0永不 1直接开放  2 根据红包决定(起始)"
-                >
-                  {getFieldDecorator('start_ishowcontactduetoredmoney', {
-                    initialValue: this.props.list.queryMap.start_ishowcontactduetoredmoney
-                      ? moment(this.props.list.queryMap.start_ishowcontactduetoredmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem
-                  {...formItemLayout}
-                  label="是否开放联系方式 0永不 1直接开放  2 根据红包决定(结束)"
-                >
-                  {getFieldDecorator('end_ishowcontactduetoredmoney', {
-                    initialValue: this.props.list.queryMap.end_ishowcontactduetoredmoney
-                      ? moment(this.props.list.queryMap.end_ishowcontactduetoredmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="收到某人至少多少红包才对他开放联系方式(起始)">
-                  {getFieldDecorator('start_atleasthowmuchredmoney', {
-                    initialValue: this.props.list.queryMap.start_atleasthowmuchredmoney
-                      ? moment(this.props.list.queryMap.start_atleasthowmuchredmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="收到某人至少多少红包才对他开放联系方式(结束)">
-                  {getFieldDecorator('end_atleasthowmuchredmoney', {
-                    initialValue: this.props.list.queryMap.end_atleasthowmuchredmoney
-                      ? moment(this.props.list.queryMap.end_atleasthowmuchredmoney)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="QQ">
-                  {getFieldDecorator('qq', { initialValue: this.props.list.queryMap.qq })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="固定区域">
-                  {getFieldDecorator('fixedzone', {
-                    initialValue: this.props.list.queryMap.fixedzone,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="第一次登陆时间">
-                  {getFieldDecorator('regtime', { initialValue: this.props.list.queryMap.regtime })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="最后一次登录时间">
-                  {getFieldDecorator('logontime', {
-                    initialValue: this.props.list.queryMap.logontime,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="经度">
-                  {getFieldDecorator('lng', { initialValue: this.props.list.queryMap.lng })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="纬度">
-                  {getFieldDecorator('lat', { initialValue: this.props.list.queryMap.lat })(
-                    <Input placeholder="请输入" />
-                  )}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="详细位置">
-                  {getFieldDecorator('addressdetail', {
-                    initialValue: this.props.list.queryMap.addressdetail,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="">
-                  {getFieldDecorator('lasttimeinfo', {
-                    initialValue: this.props.list.queryMap.lasttimeinfo,
-                  })(<Input placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(起始)">
-                  {getFieldDecorator('start_videosecond', {
-                    initialValue: this.props.list.queryMap.start_videosecond
-                      ? moment(this.props.list.queryMap.start_videosecond)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
-              <Col {...formItemGrid}>
-                {' '}
-                <FormItem {...formItemLayout} label="(结束)">
-                  {getFieldDecorator('end_videosecond', {
-                    initialValue: this.props.list.queryMap.end_videosecond
-                      ? moment(this.props.list.queryMap.end_videosecond)
-                      : null,
-                  })(<InputNumber placeholder="请输入" />)}{' '}
-                </FormItem>{' '}
-              </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(起始)'>{getFieldDecorator('start_ID',{initialValue: this.props.list.queryMap.start_ID  ? moment(this.props.list.queryMap.start_ID): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(结束)'>{getFieldDecorator('end_ID',{initialValue: this.props.list.queryMap.end_ID  ? moment(this.props.list.queryMap.end_ID): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='账户'>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='昵称'>{getFieldDecorator('nickname',{initialValue: this.props.list.queryMap.nickname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='头像'>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='版本号'>{getFieldDecorator('ver',{initialValue: this.props.list.queryMap.ver, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='客户端ip'>{getFieldDecorator('ip',{initialValue: this.props.list.queryMap.ip, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='所在区域'>{getFieldDecorator('zone',{initialValue: this.props.list.queryMap.zone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='真实姓名'>{getFieldDecorator('realname',{initialValue: this.props.list.queryMap.realname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='手机号'>{getFieldDecorator('mobilephone',{initialValue: this.props.list.queryMap.mobilephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='邮箱'>{getFieldDecorator('email',{initialValue: this.props.list.queryMap.email, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='收货地址'>{getFieldDecorator('address',{initialValue: this.props.list.queryMap.address, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='红包余额(起始)'>{getFieldDecorator('start_leftmoney',{initialValue: this.props.list.queryMap.start_leftmoney  ? moment(this.props.list.queryMap.start_leftmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='红包余额(结束)'>{getFieldDecorator('end_leftmoney',{initialValue: this.props.list.queryMap.end_leftmoney  ? moment(this.props.list.queryMap.end_leftmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='收款方式，银行卡或者支付宝之类，红包提现用'>{getFieldDecorator('bankaccount',{initialValue: this.props.list.queryMap.bankaccount, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='微信'>{getFieldDecorator('weixin',{initialValue: this.props.list.queryMap.weixin, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否开放联系方式 0永不 1直接开放  2 根据红包决定(起始)'>{getFieldDecorator('start_ishowcontactduetoredmoney',{initialValue: this.props.list.queryMap.start_ishowcontactduetoredmoney  ? moment(this.props.list.queryMap.start_ishowcontactduetoredmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否开放联系方式 0永不 1直接开放  2 根据红包决定(结束)'>{getFieldDecorator('end_ishowcontactduetoredmoney',{initialValue: this.props.list.queryMap.end_ishowcontactduetoredmoney  ? moment(this.props.list.queryMap.end_ishowcontactduetoredmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='收到某人至少多少红包才对他开放联系方式(起始)'>{getFieldDecorator('start_atleasthowmuchredmoney',{initialValue: this.props.list.queryMap.start_atleasthowmuchredmoney  ? moment(this.props.list.queryMap.start_atleasthowmuchredmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='收到某人至少多少红包才对他开放联系方式(结束)'>{getFieldDecorator('end_atleasthowmuchredmoney',{initialValue: this.props.list.queryMap.end_atleasthowmuchredmoney  ? moment(this.props.list.queryMap.end_atleasthowmuchredmoney): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='QQ'>{getFieldDecorator('qq',{initialValue: this.props.list.queryMap.qq, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='固定区域'>{getFieldDecorator('fixedzone',{initialValue: this.props.list.queryMap.fixedzone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='第一次登陆时间'>{getFieldDecorator('regtime',{initialValue: this.props.list.queryMap.regtime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='最后一次登录时间'>{getFieldDecorator('logontime',{initialValue: this.props.list.queryMap.logontime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='经度'>{getFieldDecorator('lng',{initialValue: this.props.list.queryMap.lng, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='纬度'>{getFieldDecorator('lat',{initialValue: this.props.list.queryMap.lat, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='详细位置'>{getFieldDecorator('addressdetail',{initialValue: this.props.list.queryMap.addressdetail, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('lasttimeinfo',{initialValue: this.props.list.queryMap.lasttimeinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(起始)'>{getFieldDecorator('start_videosecond',{initialValue: this.props.list.queryMap.start_videosecond  ? moment(this.props.list.queryMap.start_videosecond): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='(结束)'>{getFieldDecorator('end_videosecond',{initialValue: this.props.list.queryMap.end_videosecond  ? moment(this.props.list.queryMap.end_videosecond): null, })
+ (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 
+              
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">

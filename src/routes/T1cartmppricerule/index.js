@@ -6,7 +6,8 @@ import { getRoutes } from '../../utils/utils';
 import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
 
-const routerUrl = cache.keysMenu.T1cartmppricerule;
+//const routerUrl = cache.keysMenu.T1cartmppricerule;
+const routerUrl ='/T1cartmppricerule';
 
 @connect()
 @Operate.create('T1cartmppricerule')

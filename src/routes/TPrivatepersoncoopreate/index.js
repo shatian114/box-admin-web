@@ -6,7 +6,8 @@ import { getRoutes } from '../../utils/utils';
 import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
 
-const routerUrl = cache.keysMenu.TPrivatepersoncoopreate;
+//const routerUrl = cache.keysMenu.TPrivatepersoncoopreate;
+const routerUrl ='/TPrivatepersoncoopreate';
 
 @connect()
 @Operate.create('TPrivatepersoncoopreate')

@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select, DatePicker } from 'antd';
+import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -78,7 +78,8 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let temp = {};
+         let temp = {};
+        
 
         const { dispatch } = this.props;
         if (this.props.base.info.id) {
@@ -86,7 +87,7 @@ export default class DicManagerInfo extends Component {
             type: 'base/fetch',
             payload: {
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -97,7 +98,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-              ...temp,
+                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -110,143 +111,135 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-
-    const { info, newInfo } = base;
+    
+  const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} hasFeedback label="业主id">
-            {getFieldDecorator('t1wuyeyezhuId', {
-              initialValue: info.t1wuyeyezhuId || newInfo.t1wuyeyezhuId,
-              rules: [
-                {
-                  required: true,
-                  message: '业主id不能缺失!',
-                },
-              ],
-            })(<Input disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="小区id">
-            {getFieldDecorator('xiaoquid', {
-              initialValue: info.xiaoquid || newInfo.xiaoquid,
-              rules: [
-                {
-                  required: true,
-                  message: '小区id不能缺失!',
-                },
-                { required: true, message: '小区id不能缺失!' },
-              ],
-            })(<InputNumber min={0} disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="业主编号">
-            {getFieldDecorator('yzbh', {
-              initialValue: info.yzbh || newInfo.yzbh,
-              rules: [
-                {
-                  required: true,
-                  message: '业主编号不能缺失!',
-                },
-                { max: 255, message: '业主编号必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="楼房编号">
-            {getFieldDecorator('lfbh', {
-              initialValue: info.lfbh || newInfo.lfbh,
-              rules: [
-                {
-                  required: true,
-                  message: '楼房编号不能缺失!',
-                },
-                { max: 255, message: '楼房编号必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="楼房面积">
-            {getFieldDecorator('lfmj', {
-              initialValue: info.lfmj || newInfo.lfmj,
-              rules: [
-                {
-                  required: true,
-                  message: '楼房面积不能缺失!',
-                },
-                { max: 255, message: '楼房面积必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="业主联系方式">
-            {getFieldDecorator('yzsj', {
-              initialValue: info.yzsj || newInfo.yzsj,
-              rules: [
-                {
-                  required: true,
-                  message: '业主联系方式不能缺失!',
-                },
-                { max: 255, message: '业主联系方式必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="业主描述">
-            {getFieldDecorator('yzms', {
-              initialValue: info.yzms || newInfo.yzms,
-              rules: [
-                {
-                  required: true,
-                  message: '业主描述不能缺失!',
-                },
-                { max: 255, message: '业主描述必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="账户余额">
-            {getFieldDecorator('leftamount', {
-              initialValue: info.leftamount || newInfo.leftamount,
-              rules: [
-                {
-                  required: true,
-                  message: '账户余额不能缺失!',
-                },
-              ],
-            })()}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="是否正常">
-            {getFieldDecorator('isnormal', {
-              initialValue: info.isnormal || newInfo.isnormal,
-              rules: [
-                {
-                  required: true,
-                  message: '是否正常不能缺失!',
-                },
-                { required: true, message: '是否正常不能缺失!' },
-              ],
-            })(<InputNumber min={0} disabled />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="欠费描述">
-            {getFieldDecorator('qianfeinum', {
-              initialValue: info.qianfeinum || newInfo.qianfeinum,
-              rules: [
-                {
-                  required: true,
-                  message: '欠费描述不能缺失!',
-                },
-                { max: 300, message: '欠费描述必须小于300位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="车闸系统远程链接前缀">
-            {getFieldDecorator('carstoplink', {
-              initialValue: info.carstoplink || newInfo.carstoplink,
-              rules: [
-                {
-                  required: true,
-                  message: '车闸系统远程链接前缀不能缺失!',
-                },
-                { max: 255, message: '车闸系统远程链接前缀必须小于255位!' },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
+           <FormItem {...formItemLayout} hasFeedback label="业主id">
+{getFieldDecorator('t1wuyeyezhuId', {
+ initialValue: info.t1wuyeyezhuId || newInfo.t1wuyeyezhuId,
+  rules: [
+    {
+      required: true,
+      message: '业主id不能缺失!',
+    },
+  ],
+ })(<Input disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="小区id">
+{getFieldDecorator('xiaoquid', {
+ initialValue: info.xiaoquid ||  newInfo.xiaoquid,
+  rules: [
+    {
+      required: true,
+      message: '小区id不能缺失!',
+    },{ required: true,message: '小区id不能缺失!', },
+  ],
+ })(<InputNumber min={0} disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="业主编号">
+{getFieldDecorator('yzbh', {
+ initialValue: info.yzbh ||  newInfo.yzbh,
+  rules: [
+    {
+      required: true,
+      message: '业主编号不能缺失!',
+    },{ max: 255,message: '业主编号必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="楼房编号">
+{getFieldDecorator('lfbh', {
+ initialValue: info.lfbh ||  newInfo.lfbh,
+  rules: [
+    {
+      required: true,
+      message: '楼房编号不能缺失!',
+    },{ max: 255,message: '楼房编号必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="楼房面积">
+{getFieldDecorator('lfmj', {
+ initialValue: info.lfmj ||  newInfo.lfmj,
+  rules: [
+    {
+      required: true,
+      message: '楼房面积不能缺失!',
+    },{ max: 255,message: '楼房面积必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="业主联系方式">
+{getFieldDecorator('yzsj', {
+ initialValue: info.yzsj ||  newInfo.yzsj,
+  rules: [
+    {
+      required: true,
+      message: '业主联系方式不能缺失!',
+    },{ max: 255,message: '业主联系方式必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="业主描述">
+{getFieldDecorator('yzms', {
+ initialValue: info.yzms ||  newInfo.yzms,
+  rules: [
+    {
+      required: true,
+      message: '业主描述不能缺失!',
+    },{ max: 255,message: '业主描述必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="账户余额">
+{getFieldDecorator('leftamount', {
+ initialValue: info.leftamount ||  newInfo.leftamount,
+  rules: [
+    {
+      required: true,
+      message: '账户余额不能缺失!',
+    },
+  ],
+ })()}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="是否正常">
+{getFieldDecorator('isnormal', {
+ initialValue: info.isnormal ||  newInfo.isnormal,
+  rules: [
+    {
+      required: true,
+      message: '是否正常不能缺失!',
+    },{ required: true,message: '是否正常不能缺失!', },
+  ],
+ })(<InputNumber min={0} disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="欠费描述">
+{getFieldDecorator('qianfeinum', {
+ initialValue: info.qianfeinum ||  newInfo.qianfeinum,
+  rules: [
+    {
+      required: true,
+      message: '欠费描述不能缺失!',
+    },{ max: 300,message: '欠费描述必须小于300位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="车闸系统远程链接前缀">
+{getFieldDecorator('carstoplink', {
+ initialValue: info.carstoplink ||  newInfo.carstoplink,
+  rules: [
+    {
+      required: true,
+      message: '车闸系统远程链接前缀不能缺失!',
+    },{ max: 255,message: '车闸系统远程链接前缀必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
 
+          
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
               onClick={() => {
