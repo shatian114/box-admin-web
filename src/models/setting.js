@@ -26,89 +26,6 @@ export default {
     *getMenuData({ callback }, { call, put }) {
       const response = yield call(getMenuData);
       if (response) {
-        //自定义添加的路由，后续服务端返回正常后可去掉
-        let localMentData = [
-          {
-            menuname: '基本信息',
-            type: 'ZJ',
-            url: '/TBase',
-            menuid: '1000',
-            moduleCode: 'JBXX',
-            iconOrder: '',
-            isMenu: true,
-            menuIcon: '',
-            args: { moduleCode: 'JBXX' },
-            menus: [
-              {
-                PID: '10001',
-                args: { moduleCode: 'YZGL' },
-                iconOrder: '',
-                isMenu: true,
-                menuIcon: '',
-                type: 'ZJ',
-                children: [],
-                menuid: '1000101',
-                moduleCode: 'YZGL',
-                menuname: '业主管理',
-                url: '/T1wuyeyezhu',
-              },
-            ],
-					},
-					{
-            menuname: '商圈管理',
-            type: 'ZJ',
-            url: '/Tproduct',
-            menuid: '1001',
-            moduleCode: 'SQGL',
-            iconOrder: '',
-            isMenu: true,
-            menuIcon: '',
-            args: { moduleCode: 'SQGL' },
-            menus: [
-              {
-                PID: '10011',
-                args: { moduleCode: 'ZBSDFW' },
-                iconOrder: '',
-                isMenu: true,
-                menuIcon: '',
-                type: 'ZJ',
-                children: [],
-                menuid: '1001101',
-                moduleCode: 'ZBSDFW',
-                menuname: '周边商店服务',
-                url: '/TArroundshopandservice',
-							},
-							{
-                PID: '10012',
-                args: { moduleCode: 'SPLX' },
-                iconOrder: '',
-                isMenu: true,
-                menuIcon: '',
-                type: 'ZJ',
-                children: [],
-                menuid: '1001102',
-                moduleCode: 'SPLX',
-                menuname: '商品类型',
-                url: '/TProducttype',
-							},
-							{
-                PID: '10013',
-                args: { moduleCode: 'SP' },
-                iconOrder: '',
-                isMenu: true,
-                menuIcon: '',
-                type: 'ZJ',
-                children: [],
-                menuid: '1001103',
-                moduleCode: 'SP',
-                menuname: '商品',
-                url: '/TProduct',
-              },
-            ],
-          },
-        ];
-        response.data = response.data.concat(localMentData);
-
         let menuData = [];
         const clear = () => {
           finish.splice(0, finish.length);
@@ -183,6 +100,7 @@ export default {
       }
     },
     *getOprs({ payload }, { call, put }) {
+			console.log('payload', payload);
       const response = yield call(getOprs, {
         moduleCode: payload.moduleCode,
       });
