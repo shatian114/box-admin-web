@@ -37,11 +37,10 @@ export default {
       };
       const response = yield call(queryList, temp);
       if (response) {
-
-				//之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
-				for(let k in response.data){
-					response[k] = response.data[k];
-				}
+        //之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
+        for (let k in response.data) {
+          response[k] = response.data[k];
+        }
 
         yield put({
           type: 'save',
@@ -66,7 +65,6 @@ export default {
 
   reducers: {
     save(state, { payload }) {
-			console.log('payload', payload);
       return {
         ...state,
         ...payload,

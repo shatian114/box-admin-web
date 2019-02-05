@@ -15,7 +15,7 @@ import Authorized from '../utils/Authorized';
 import logo from '../assets/logo.png';
 import { getRouterData } from '../common/router';
 import { app } from '../index';
-import {webConfig} from  '../utils/Constant';
+import { webConfig } from '../utils/Constant';
 
 const { Content, Header } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -83,7 +83,6 @@ class BasicLayout extends React.PureComponent {
   }
 
   getPageTitle() {
-    console.log('basiclayout');
     const { location } = this.props;
     const { routerData } = this.state;
     const { pathname } = location;

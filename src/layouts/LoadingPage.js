@@ -36,7 +36,6 @@ class LoadingPage extends PureComponent {
   };
 
   componentDidMount() {
-    console.log('loading page');
     const { dispatch } = this.props;
 
     this.enquireHandler = enquireScreen(mobile => {
@@ -61,7 +60,7 @@ class LoadingPage extends PureComponent {
     dispatch({
       type: 'base/queryAllDic',
     });
-   /* dispatch({
+    /* dispatch({
       type: 'user/info',
     });
     dispatch({

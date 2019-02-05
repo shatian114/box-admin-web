@@ -100,7 +100,6 @@ export default {
       }
     },
     *getOprs({ payload }, { call, put }) {
-			console.log('payload', payload);
       const response = yield call(getOprs, {
         moduleCode: payload.moduleCode,
       });
