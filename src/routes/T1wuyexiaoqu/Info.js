@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -126,7 +126,7 @@ export default class DicManagerInfo extends Component {
       message: '小区ID不能缺失!',
     },
   ],
- })(<Input disabled />)}
+ })(<Input />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="物业id">
 {getFieldDecorator('wyid', {
@@ -137,7 +137,7 @@ export default class DicManagerInfo extends Component {
       message: '物业id不能缺失!',
     },{ required: true,message: '物业id不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<InputNumber min={0} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="小区编号">
 {getFieldDecorator('xqbh', {
