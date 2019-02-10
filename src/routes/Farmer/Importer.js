@@ -29,7 +29,7 @@ export default class Importer extends Component {
     return (
       <Fragment>
         <Upload
-          action="/api/storage/f"
+          action="/box/api/storage/f"
           name="famerImpoter"
           showUploadList={false}
           beforeUpload={() => {

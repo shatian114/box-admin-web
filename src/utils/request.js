@@ -172,6 +172,7 @@ export function requestModels(url, options) {
     });
 }
 export function download(url, options) {
+	url = SERVER_ADDR + url;
   const defaultOptions = {
     credentials: 'include',
     headers: getToken() ? { token: getToken() } : {},
@@ -197,11 +198,15 @@ export function download(url, options) {
     .then(checkStatus)
     .then(res =>
       res.blob().then(blob => {
-        const a = document.createElement('a');
+				const a = document.createElement('a');
         const turl = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
         a.href = turl;
-        a.download = options.body.filename;
-        a.click();
+				a.download = options.body.filename;
+				a.innerText = '下载xls';
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				console.log(a);
         window.URL.revokeObjectURL(turl);
       })
     )
