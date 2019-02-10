@@ -19,6 +19,8 @@ import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {handleExportXls} from '../../utils/utils';
+import Importer from '../../components/Importer';
 import cache from '../../utils/cache';
 
 const FormItem = Form.Item;
@@ -102,7 +104,7 @@ temp = {
       url,
       callback: () => setList(),
     });
-  };
+	};
 
   render() {
     const { form, base } = this.props;
@@ -173,14 +175,14 @@ temp = {
  {  title: '电费价格',   dataIndex: 'df',     width: 150,     sorter: false,      },
  {  title: '地库车价格',   dataIndex: 'dkc',     width: 150,     sorter: false,      },
  {  title: '地面车价格',   dataIndex: 'dmc',     width: 150,     sorter: false,      },
- {  title: '小区图片',   dataIndex: 'piclink',     width: 150,     sorter: false,      },
+ {  title: '小区图片',   dataIndex: 'piclink',     width: 250,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];
 
     const listConfig = {
       url: '/api/T1wuyexiaoqu/queryT1wuyexiaoquList', // 必填,请求url
-      scroll: { x: 1500, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: true, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -231,6 +233,27 @@ temp = {
                       onClick={() => this.props.dispatch(routerRedux.push(`${routerUrl}/info`))}
                     >
                       新建
+                    </Button>
+                  </Operate>
+									<Operate operateName="import">
+                    <Importer
+                      style={{
+                        marginLeft: 8,
+                        color: '#fff',
+                        backgroundColor: '#f0ad4e',
+                        borderColor: '#eea236',
+                      }}
+                      reload={this.handleSearch}
+                    />
+                  </Operate>
+									<Operate operateName="export">
+                    <Button
+                      icon="export"
+                      type="primary"
+                      style={{ marginLeft: 8 }}
+                      onClick={handleExportXls.bind(this, this.props, '小区数据.xls', url)}
+                    >
+                      导出
                     </Button>
                   </Operate>
                 </span>

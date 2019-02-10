@@ -240,3 +240,21 @@ export function findItem(code, arr, attr) {
 export function isEmpty(item) {
   return item === null || item === undefined || item === '';
 }
+
+export function handleExportXls(props, xlsName, url) {
+	//e.preventDefault();
+  const { dispatch, form } = props;
+  form.validateFieldsAndScroll((err, values) => {
+    const date = {};
+    if (values.startDate) date.startDate = values.startDate.format(DateFormat);
+    if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    dispatch({
+      type: `list/exportExcel`,
+      payload: {
+        filename: xlsName,
+        queryMap: { ...values, ...date } || {},
+      },
+      url,
+    });
+  });
+}

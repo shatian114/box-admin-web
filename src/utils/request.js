@@ -172,6 +172,7 @@ export function requestModels(url, options) {
     });
 }
 export function download(url, options) {
+	url = SERVER_ADDR + url;
   const defaultOptions = {
     credentials: 'include',
     headers: getToken() ? { token: getToken() } : {},
