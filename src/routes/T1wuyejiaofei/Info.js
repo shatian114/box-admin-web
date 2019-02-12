@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 

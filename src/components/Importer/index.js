@@ -64,7 +64,7 @@ export default class Importer extends Component {
                             }
                           );
                         },
-                        url: 'farmer',
+                        url: 'T1wuyexiaoqu',
                       });
                     }
                   );

@@ -19,9 +19,8 @@ import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
-import {handleExportXls} from '../../utils/utils';
-import Importer from '../../components/Importer';
 import cache from '../../utils/cache';
+import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -56,7 +55,7 @@ export default class T1wuyexiaoquList extends Component {
   }
 
   handleSearch = e => {
-    e.preventDefault();
+    if(e) e.preventDefault();
     const { form, list } = this.props;
     const { setList } = list;
     form.validateFieldsAndScroll((err, values) => {
@@ -104,7 +103,26 @@ temp = {
       url,
       callback: () => setList(),
     });
-	};
+  };
+
+  handleExport = e => {
+    e.preventDefault();
+    const { dispatch, form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+    const date = {};
+    if (values.startDate) date.startDate = values.startDate.format(DateFormat);
+    if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    dispatch({
+        type: `list/exportExcel`,
+        payload: {
+        filename: '小区.xls',
+        queryMap: { ...values, ...date } || {},
+        },
+        url,
+        });
+    });
+  };
+
 
   render() {
     const { form, base } = this.props;
@@ -155,6 +173,8 @@ temp = {
                 删除
               </Button>
             </Operate>
+        
+
           </Row>
         ),
       },
@@ -175,14 +195,16 @@ temp = {
  {  title: '电费价格',   dataIndex: 'df',     width: 150,     sorter: false,      },
  {  title: '地库车价格',   dataIndex: 'dkc',     width: 150,     sorter: false,      },
  {  title: '地面车价格',   dataIndex: 'dmc',     width: 150,     sorter: false,      },
- {  title: '小区图片',   dataIndex: 'piclink',     width: 250,     sorter: false,      },
+ {  title: '小区图片',   dataIndex: 'piclink',     width: 150,     sorter: false,  render: (val, record, index) => (
+	<img src={val} width={80} height={80} alt="暂无图片" />
+)    },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];
 
     const listConfig = {
       url: '/api/T1wuyexiaoqu/queryT1wuyexiaoquList', // 必填,请求url
-      scroll: { x: true, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 2850, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -235,27 +257,28 @@ temp = {
                       新建
                     </Button>
                   </Operate>
-									<Operate operateName="import">
-                    <Importer
-                      style={{
-                        marginLeft: 8,
-                        color: '#fff',
-                        backgroundColor: '#f0ad4e',
-                        borderColor: '#eea236',
-                      }}
-                      reload={this.handleSearch}
-                    />
-                  </Operate>
-									<Operate operateName="export">
-                    <Button
-                      icon="export"
-                      type="primary"
+                      <Operate operateName="import">
+              <Importer
+              style={{
+              marginLeft: 8,
+              color: '#fff',
+              backgroundColor: '#f0ad4e',
+              borderColor: '#eea236',
+              }}
+              reload={this.handleSearch}
+              />
+            </Operate>
+                  <Operate operateName="export">
+              <Button
+              icon="export"
+              type="primary"
                       style={{ marginLeft: 8 }}
-                      onClick={handleExportXls.bind(this, this.props, '小区数据.xls', url)}
-                    >
-                      导出
-                    </Button>
-                  </Operate>
+                      loading={this.props.base.exporting}
+                      onClick={this.handleExport}
+              >
+              导出
+              </Button>
+              </Operate>
                 </span>
               </Col>
             </Row>

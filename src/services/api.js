@@ -197,7 +197,7 @@ export async function printCode(params) {
   });
 }
 export async function exportExcel(params, url) {
-  return download(`${SERVER_ADDR}/api/query/${url}/exportExcel`, {
+  return download(`${SERVER_ADDR}/api/${url}/exportExcel`, {
     method: 'POST',
     body: params,
   });

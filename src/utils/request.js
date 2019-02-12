@@ -201,8 +201,10 @@ export function download(url, options) {
         const a = document.createElement('a');
         const turl = window.URL.createObjectURL(blob); // 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
         a.href = turl;
-        a.download = options.body.filename;
-        a.click();
+				a.download = options.body.filename;
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
         window.URL.revokeObjectURL(turl);
       })
     )

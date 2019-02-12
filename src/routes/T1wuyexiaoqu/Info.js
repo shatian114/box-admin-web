@@ -81,9 +81,8 @@ export default class DicManagerInfo extends Component {
          let temp = {};
         
 
-				const { dispatch } = this.props;
-				console.log(this.props.base.info);
-        if (this.props.base.info.t1wuyexiaoquId) {
+        const { dispatch } = this.props;
+        if (this.props.base.info.id) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -127,7 +126,7 @@ export default class DicManagerInfo extends Component {
       message: '小区ID不能缺失!',
     },
   ],
- })(<Input />)}
+ })(<Input disabled />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="物业id">
 {getFieldDecorator('wyid', {
@@ -138,7 +137,7 @@ export default class DicManagerInfo extends Component {
       message: '物业id不能缺失!',
     },{ required: true,message: '物业id不能缺失!', },
   ],
- })(<InputNumber min={0} />)}
+ })(<InputNumber min={0} disabled />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="小区编号">
 {getFieldDecorator('xqbh', {

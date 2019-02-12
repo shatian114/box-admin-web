@@ -10,7 +10,7 @@ import cache from '../../utils/cache';
 const routerUrl ='/T1wuyexiaoqu';
 
 @connect()
-@Operate.create(routerUrl)
+@Operate.create('T1wuyexiaoqu')
 export default class T1wuyexiaoqu extends PureComponent {
   componentWillUnmount() {
     this.props.dispatch({

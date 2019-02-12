@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+const DateFormat = 'YYYY-MM-DD';
+
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
@@ -241,20 +243,57 @@ export function isEmpty(item) {
   return item === null || item === undefined || item === '';
 }
 
-export function handleExportXls(props, xlsName, url) {
-	//e.preventDefault();
-  const { dispatch, form } = props;
+export function handleExportXls(props, xlsName, url, columns) {
+	const { dispatch, form } = props;
+	dispatch({
+		type: `base/save`,
+		payload: {
+			exporting: true,
+		}
+	});
   form.validateFieldsAndScroll((err, values) => {
     const date = {};
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
-    if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+		if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+		
+		let temp = {};
+		if (!isEmpty(values.start_create_date)){
+			temp = {
+				...temp,
+				start_create_date: values.start_create_date.format(DateFormat),
+			};
+		}
+		if (!isEmpty(values.end_create_date)){
+			temp = {
+				...temp,
+				end_create_date: values.end_create_date.format(DateFormat),
+			};
+		}
+		let queryMap = { ...values, ...temp };
+
     dispatch({
       type: `list/exportExcel`,
       payload: {
         filename: xlsName,
-        queryMap: { ...values, ...date } || {},
+				queryMap: { ...values, ...date } || {},
+				queryMap: queryMap,
+				url: url,
+				columns: columns,
+				dispatch: dispatch,
       },
-      url,
-    });
-  });
+		});
+	});
+}
+
+export function s2ab(s) {
+	if (typeof ArrayBuffer !== 'undefined') {
+			var buf = new ArrayBuffer(s.length)
+			var view = new Uint8Array(buf)
+			for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+			return buf
+	} else {
+			var buf = new Array(s.length);
+			for (var i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
+			return buf;
+	}
 }

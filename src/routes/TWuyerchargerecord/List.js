@@ -20,6 +20,7 @@ import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
+import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -54,7 +55,7 @@ export default class TWuyerchargerecordList extends Component {
   }
 
   handleSearch = e => {
-    e.preventDefault();
+    if(e) e.preventDefault();
     const { form, list } = this.props;
     const { setList } = list;
     form.validateFieldsAndScroll((err, values) => {
@@ -103,6 +104,25 @@ temp = {
       callback: () => setList(),
     });
   };
+
+  handleExport = e => {
+    e.preventDefault();
+    const { dispatch, form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+    const date = {};
+    if (values.startDate) date.startDate = values.startDate.format(DateFormat);
+    if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    dispatch({
+        type: `list/exportExcel`,
+        payload: {
+        filename: '业务物业费充值记录.xls',
+        queryMap: { ...values, ...date } || {},
+        },
+        url,
+        });
+    });
+  };
+
 
   render() {
     const { form, base } = this.props;
@@ -153,6 +173,8 @@ temp = {
                 删除
               </Button>
             </Operate>
+        
+
           </Row>
         ),
       },
@@ -168,7 +190,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TWuyerchargerecord/queryTWuyerchargerecordList', // 必填,请求url
-      scroll: { x: 1500, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 1050, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -211,6 +233,28 @@ temp = {
                       新建
                     </Button>
                   </Operate>
+                      <Operate operateName="import">
+              <Importer
+              style={{
+              marginLeft: 8,
+              color: '#fff',
+              backgroundColor: '#f0ad4e',
+              borderColor: '#eea236',
+              }}
+              reload={this.handleSearch}
+              />
+            </Operate>
+                  <Operate operateName="export">
+              <Button
+              icon="export"
+              type="primary"
+                      style={{ marginLeft: 8 }}
+                      loading={this.props.base.exporting}
+                      onClick={this.handleExport}
+              >
+              导出
+              </Button>
+              </Operate>
                 </span>
               </Col>
             </Row>
