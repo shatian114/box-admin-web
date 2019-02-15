@@ -12,15 +12,14 @@ import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import moment from 'moment';
-
 import styles from '../../styles/list.less';
-
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
+import {shengShiQu} from '../../utils/shengShiQu';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -39,7 +38,14 @@ export default class T1wuyexiaoquList extends Component {
   };
 
   componentDidMount() {
-    window.addEventListener('resize', this.resize);
+		window.addEventListener('resize', this.resize);
+		this.props.dispatch({
+			type: 'base/save',
+			payload: {
+				shengCode: '',
+				shiCode: ''
+			}
+		})
   }
 
   componentWillUnmount() {
@@ -61,17 +67,15 @@ export default class T1wuyexiaoquList extends Component {
     form.validateFieldsAndScroll((err, values) => {
       let temp = {};
       if (!isEmpty(values.start_create_date))
-temp = {
-  ...temp,
-  start_create_date: values.start_create_date.format(DateFormat),
- };
-if (!isEmpty(values.end_create_date))
-temp = {
-  ...temp,
-  end_create_date: values.end_create_date.format(DateFormat),
- };
-
-      
+				temp = {
+				  ...temp,
+				  start_create_date: values.start_create_date.format(DateFormat),
+				};
+			if (!isEmpty(values.end_create_date))
+				temp = {
+				  ...temp,
+				  end_create_date: values.end_create_date.format(DateFormat),
+				};
       setList({
         current: 1,
         queryMap: { ...values, ...temp },
@@ -123,11 +127,59 @@ temp = {
     });
   };
 
+	changeSheng = (v, v2) => {
+		if(v2 != undefined){
+			this.props.dispatch({
+				type: 'base/save', 
+				payload: 
+					{shengCode: v2.key}
+				}
+			);
+			this.props.form.setFields({
+				shi: {value: ''}
+			});
+		}else{
+			this.props.dispatch({
+				type: 'base/save', 
+				payload: 
+					{shengCode: ''}
+				}
+			);
+			this.props.form.setFields({
+				shi: {value: ''}
+			});
+		}
+		let v3 = {};
+		v3.key = '';
+		this.changeShi(undefined, v3);
+	}
+
+	changeShi = (v, v2) => {
+		if(v2 != undefined){
+			this.props.dispatch({
+				type: 'base/save', 
+				payload: 
+					{shiCode: v2.key}
+				}
+			);
+			this.props.form.setFields({
+				qu: {value: ''}
+			});
+		}else{
+			this.props.dispatch({
+				type: 'base/save', 
+				payload: 
+					{shiCode: ''}
+				}
+			);
+			this.props.form.setFields({
+				qu: {value: ''}
+			});
+		}
+	}
 
   render() {
     const { form, base } = this.props;
-    
-    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -173,33 +225,30 @@ temp = {
                 删除
               </Button>
             </Operate>
-        
-
           </Row>
         ),
       },
-       {  title: '小区ID',   dataIndex: 't_1wuyexiaoqu_id',     width: 150,     sorter: false,      },
- {  title: '物业id',   dataIndex: 'wyid',     width: 150,     sorter: false,      },
- {  title: '小区编号',   dataIndex: 'xqbh',     width: 150,     sorter: false,      },
- {  title: '小区名称',   dataIndex: 'xqmc',     width: 150,     sorter: false,      },
- {  title: '省',   dataIndex: 'sheng',     width: 150,     sorter: false,      },
- {  title: '市',   dataIndex: 'shi',     width: 150,     sorter: false,      },
- {  title: '区',   dataIndex: 'qu',     width: 150,     sorter: false,      },
- {  title: '楼栋数',   dataIndex: 'lds',     width: 150,     sorter: false,      },
- {  title: '户型数',   dataIndex: 'hxs',     width: 150,     sorter: false,      },
- {  title: '固定车数量',   dataIndex: 'gdc',     width: 150,     sorter: false,      },
- {  title: '临时车数量',   dataIndex: 'lsc',     width: 150,     sorter: false,      },
- {  title: '路段',   dataIndex: 'ld',     width: 150,     sorter: false,      },
- {  title: '物业费价格',   dataIndex: 'wyf',     width: 150,     sorter: false,      },
- {  title: '水费价格',   dataIndex: 'sf',     width: 150,     sorter: false,      },
- {  title: '电费价格',   dataIndex: 'df',     width: 150,     sorter: false,      },
- {  title: '地库车价格',   dataIndex: 'dkc',     width: 150,     sorter: false,      },
- {  title: '地面车价格',   dataIndex: 'dmc',     width: 150,     sorter: false,      },
- {  title: '小区图片',   dataIndex: 'piclink',     width: 150,     sorter: false,  render: (val, record, index) => (
-	<img src={val} width={80} height={80} alt="暂无图片" />
-)    },
- {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
-
+      {  title: '小区ID',   dataIndex: 't_1wuyexiaoqu_id',     width: 150,     sorter: false,      },
+			{  title: '物业id',   dataIndex: 'wyid',     width: 150,     sorter: false,      },
+			{  title: '小区编号',   dataIndex: 'xqbh',     width: 150,     sorter: false,      },
+			{  title: '小区名称',   dataIndex: 'xqmc',     width: 150,     sorter: false,      },
+			{  title: '省',   dataIndex: 'sheng',     width: 150,     sorter: false,      },
+			{  title: '市',   dataIndex: 'shi',     width: 150,     sorter: false,      },
+			{  title: '区',   dataIndex: 'qu',     width: 150,     sorter: false,      },
+			{  title: '楼栋数',   dataIndex: 'lds',     width: 150,     sorter: false,      },
+			{  title: '户型数',   dataIndex: 'hxs',     width: 150,     sorter: false,      },
+			{  title: '固定车数量',   dataIndex: 'gdc',     width: 150,     sorter: false,      },
+			{  title: '临时车数量',   dataIndex: 'lsc',     width: 150,     sorter: false,      },
+			{  title: '路段',   dataIndex: 'ld',     width: 150,     sorter: false,      },
+			{  title: '物业费价格',   dataIndex: 'wyf',     width: 150,     sorter: false,      },
+			{  title: '水费价格',   dataIndex: 'sf',     width: 150,     sorter: false,      },
+			{  title: '电费价格',   dataIndex: 'df',     width: 150,     sorter: false,      },
+			{  title: '地库车价格',   dataIndex: 'dkc',     width: 150,     sorter: false,      },
+			{  title: '地面车价格',   dataIndex: 'dmc',     width: 150,     sorter: false,      },
+			{  title: '小区图片',   dataIndex: 'piclink',     width: 150,     sorter: false,  render: (val, record, index) => (
+				<img src={val} width={80} height={80} alt="暂无图片" />
+					)    },
+			{  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
     ];
 
     const listConfig = {
@@ -215,31 +264,56 @@ temp = {
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区ID'>{getFieldDecorator('t_1wuyexiaoqu_id',{initialValue: this.props.list.queryMap.t_1wuyexiaoqu_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业id(起始)'>{getFieldDecorator('start_wyid',{initialValue: this.props.list.queryMap.start_wyid  ? moment(this.props.list.queryMap.start_wyid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业id(结束)'>{getFieldDecorator('end_wyid',{initialValue: this.props.list.queryMap.end_wyid  ? moment(this.props.list.queryMap.end_wyid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区编号'>{getFieldDecorator('xqbh',{initialValue: this.props.list.queryMap.xqbh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区名称'>{getFieldDecorator('xqmc',{initialValue: this.props.list.queryMap.xqmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='省'>{getFieldDecorator('sheng',{initialValue: this.props.list.queryMap.sheng, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='楼栋数'>{getFieldDecorator('lds',{initialValue: this.props.list.queryMap.lds, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='户型数'>{getFieldDecorator('hxs',{initialValue: this.props.list.queryMap.hxs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='固定车数量'>{getFieldDecorator('gdc',{initialValue: this.props.list.queryMap.gdc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='临时车数量'>{getFieldDecorator('lsc',{initialValue: this.props.list.queryMap.lsc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='路段'>{getFieldDecorator('ld',{initialValue: this.props.list.queryMap.ld, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业费价格'>{getFieldDecorator('wyf',{initialValue: this.props.list.queryMap.wyf, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='水费价格'>{getFieldDecorator('sf',{initialValue: this.props.list.queryMap.sf, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='电费价格'>{getFieldDecorator('df',{initialValue: this.props.list.queryMap.df, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地库车价格'>{getFieldDecorator('dkc',{initialValue: this.props.list.queryMap.dkc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地面车价格'>{getFieldDecorator('dmc',{initialValue: this.props.list.queryMap.dmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区图片'>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-
-              
-              <Col md={12} sm={24}>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业id(起始)'>{getFieldDecorator('start_wyid',{initialValue: this.props.list.queryMap.start_wyid  ? moment(this.props.list.queryMap.start_wyid): null, })
+							 (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业id(结束)'>{getFieldDecorator('end_wyid',{initialValue: this.props.list.queryMap.end_wyid  ? moment(this.props.list.queryMap.end_wyid): null, })
+							 (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>
+								<FormItem {...formItemLayout} label='省'>{getFieldDecorator('sheng',{initialValue: this.props.list.queryMap.sheng, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeSheng} allowClear>
+						 				{
+										 shengShiQu['86'].map(v => (
+											<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+										 ))
+										}
+						 			</Select>)}
+								</FormItem>
+							</Col>
+							<Col {...formItemGrid}>
+								<FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeShi} allowClear>
+										{
+											shengShiQu[this.props.base.shengCode] ? shengShiQu[this.props.base.shengCode].map(v => (
+												<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+											 )) : ''
+										}
+									</Select>)}
+								</FormItem>
+							</Col>
+							<Col {...formItemGrid}>
+								<FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Select dropdownMatchSelectWidth={true} allowClear>
+										{
+											shengShiQu[this.props.base.shiCode] ? shengShiQu[this.props.base.shiCode].map(v => (
+												<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+											 )) : ''
+										}
+									</Select>)}
+								</FormItem>
+							</Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区编号'>{getFieldDecorator('xqbh',{initialValue: this.props.list.queryMap.xqbh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区名称'>{getFieldDecorator('xqmc',{initialValue: this.props.list.queryMap.xqmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='楼栋数'>{getFieldDecorator('lds',{initialValue: this.props.list.queryMap.lds, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='户型数'>{getFieldDecorator('hxs',{initialValue: this.props.list.queryMap.hxs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='固定车数量'>{getFieldDecorator('gdc',{initialValue: this.props.list.queryMap.gdc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='临时车数量'>{getFieldDecorator('lsc',{initialValue: this.props.list.queryMap.lsc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='路段'>{getFieldDecorator('ld',{initialValue: this.props.list.queryMap.ld, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业费价格'>{getFieldDecorator('wyf',{initialValue: this.props.list.queryMap.wyf, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='水费价格'>{getFieldDecorator('sf',{initialValue: this.props.list.queryMap.sf, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='电费价格'>{getFieldDecorator('df',{initialValue: this.props.list.queryMap.df, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地库车价格'>{getFieldDecorator('dkc',{initialValue: this.props.list.queryMap.dkc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地面车价格'>{getFieldDecorator('dmc',{initialValue: this.props.list.queryMap.dmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区图片'>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+							<Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">
                     查询
@@ -257,28 +331,30 @@ temp = {
                       新建
                     </Button>
                   </Operate>
-                      <Operate operateName="import">
-              <Importer
-              style={{
-              marginLeft: 8,
-              color: '#fff',
-              backgroundColor: '#f0ad4e',
-              borderColor: '#eea236',
-              }}
-              reload={this.handleSearch}
-              />
-            </Operate>
+                  <Operate operateName="import">
+            			  <Importer
+            			  	style={{
+            			  		marginLeft: 8,
+            			  		color: '#fff',
+            			  		backgroundColor: '#f0ad4e',
+            			  		borderColor: '#eea236',
+											}}
+											uploadName={`${url}Impoter`}
+											uploadUrl={url}
+            			  	reload={this.handleSearch}
+            			  />
+            			</Operate>
                   <Operate operateName="export">
-              <Button
-              icon="export"
-              type="primary"
-                      style={{ marginLeft: 8 }}
-                      loading={this.props.base.exporting}
-                      onClick={this.handleExport}
-              >
-              导出
-              </Button>
-              </Operate>
+              			<Button
+              				icon="export"
+              				type="primary"
+              				style={{ marginLeft: 8 }}
+              				loading={this.props.base.exporting}
+              				onClick={this.handleExport}
+              			>
+              				导出
+              			</Button>
+              		</Operate>
                 </span>
               </Col>
             </Row>

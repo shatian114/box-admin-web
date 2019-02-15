@@ -265,3 +265,10 @@ export async function getChartData(params, url) {
     body: params,
   });
 }
+
+export async function getCosSigner(params) {
+  return request(`${SERVER_ADDR}/api/getCosSigner`, {
+    method: 'POST',
+    body: params,
+  });
+}

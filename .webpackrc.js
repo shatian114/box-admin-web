@@ -15,11 +15,6 @@ export default {
   },
 
   proxy: {
-    /*'/box/api/**': {
-      target: SERVICE_URL,
-      changeOrigin: true,
-      secure: false,
-    },*/
     '/cpzhsq': {
       target: SERVICE_URL,
       pathRewrite: { '^/cpzhsq': '' },

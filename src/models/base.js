@@ -5,7 +5,7 @@
  * @Last Modified time: 2018-06-11 10:49:38
  * @Description: 字典表管理model
  */
-import { Message } from 'antd';
+import { Message, message } from 'antd';
 import {
   updateobj,
   addobj,
@@ -33,13 +33,18 @@ import {
   queryLocation,
   queryAllDic,
 } from '../services/api';
+import { queryList } from '../services/list';
 import { isEmpty } from '../utils/utils';
 
 export default {
   namespace: 'base',
 
   state: {
+		shengCode: '130000',
+		shiCode: '130100',
+		isEdit: true,
 		exporting: false,
+		upperId: [],
     newInfo: {},
     info: {},
     otherInfo: {},
@@ -78,6 +83,24 @@ export default {
       } else {
         Message.error('系统繁忙');
       }
+		},
+		*getUpperId({ payload, url }, { call, put }) {
+      const temp = {
+        page: 1,
+        len: 100000,
+        queryMap: {},
+        url: url,
+        columnProp: undefined,
+        columnOrder: undefined,
+			};
+			
+			const response = yield call(queryList, temp);
+			if(response){
+				let list = response.data.list;
+				
+			}else{
+				message.error('获取上级id失败');
+			}
     },
     *fetchAdd({ payload, callback, url, silent, success, error }, { call, put }) {
       const response = yield call(addobj, payload, url);

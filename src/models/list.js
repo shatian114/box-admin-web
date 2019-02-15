@@ -8,7 +8,8 @@ export default {
   namespace: 'list',
 
   state: {
-    list: [],
+		test: 'this is a test',
+		list: [],
     total: 0,
     queryMap: {},
     pagination: {
@@ -43,7 +44,7 @@ export default {
         //之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
         for (let k in response.data) {
           response[k] = response.data[k];
-        }
+				}
 
         yield put({
           type: 'save',

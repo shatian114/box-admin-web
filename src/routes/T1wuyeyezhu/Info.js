@@ -42,7 +42,8 @@ const submitFormLayout = {
   },
 };
 
-@connect(({ base, loading }) => ({
+@connect(({ list, base, loading }) => ({
+	list,
   base,
   submitting: loading.effects['base/fetch'] || loading.effects['base/fetchAdd'],
   loading: loading.effects['base/info'] || loading.effects['base/new'] || false,
@@ -50,8 +51,17 @@ const submitFormLayout = {
 @Form.create()
 export default class DicManagerInfo extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
+		const { dispatch } = this.props;
+		let isEdit = this.props.base.isEdit;
+		dispatch({
+			type: 'list/list',
+			payload: {
+				url: '/api/T1wuyewuye/queryT1wuyewuyeList'
+			},
+			
+		});
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+			isEdit = true;
       dispatch({
         type: 'base/info',
         payload: {
@@ -60,17 +70,27 @@ export default class DicManagerInfo extends Component {
         url,
       });
     } else {
+			isEdit = false;
       dispatch({
         type: 'base/new',
         url,
       });
     }
+		dispatch({
+			type: 'base/save',
+			payload: {
+				isEdit
+			}
+		});
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'base/clear',
+		});
+		dispatch({
+      type: 'list/clear',
     });
   }
 
@@ -117,7 +137,7 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="业主id">
+           <FormItem {...formItemLayout} hasFeedback label="业主id" style={{display: 'none'}}>
 {getFieldDecorator('t1wuyeyezhuId', {
  initialValue: info.t1wuyeyezhuId || newInfo.t1wuyeyezhuId,
   rules: [
@@ -137,7 +157,13 @@ export default class DicManagerInfo extends Component {
       message: '小区id不能缺失!',
     },{ required: true,message: '小区id不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
+	{
+		this.props.list.list.map(v => (
+			<Option key={v.t_1wuyexiaoqu_id} value={v.t_1wuyewuye_id}>{v.t_1wuyewuye_id}</Option>
+		))
+	}
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="业主编号">
 {getFieldDecorator('yzbh', {
@@ -203,7 +229,7 @@ export default class DicManagerInfo extends Component {
       message: '账户余额不能缺失!',
     },
   ],
- })()}
+ })(<InputNumber placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否正常">
 {getFieldDecorator('isnormal', {
@@ -214,7 +240,10 @@ export default class DicManagerInfo extends Component {
       message: '是否正常不能缺失!',
     },{ required: true,message: '是否正常不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+	 	<Option value="1">是</Option>
+		<Option value="0">否</Option>
+	 </Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="欠费描述">
 {getFieldDecorator('qianfeinum', {

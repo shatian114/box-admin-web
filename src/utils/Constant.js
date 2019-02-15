@@ -17,5 +17,8 @@ export const formItemGrid = {
 export const webConfig = {
 	webName: '智慧社区',
 	webPreName: 'cpzhsq',
-	companyName: '南京修为'
+	companyName: '南京修为',
+	Bucket: 'pet-1252596634',
+  Region: 'ap-chengdu',
+  tpUriPre: 'http://pet-1252596634.cos.ap-chengdu.myqcloud.com/',
 }

@@ -22,7 +22,7 @@ const { Option } = Select;
 
 const { TextArea } = Input;
 const DateFormat = 'YYYY-MM-DD';
-const url = 'T1wuyewuye';
+const url = 'dic';
 
 const formItemLayout = {
   labelCol: {
@@ -51,9 +51,7 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
   componentDidMount() {
 		const { dispatch } = this.props;
-		let isEdit = this.props.base.isEdit;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
-			isEdit = true;
       dispatch({
         type: 'base/info',
         payload: {
@@ -62,18 +60,11 @@ export default class DicManagerInfo extends Component {
         url,
       });
     } else {
-			isEdit = false;
       dispatch({
         type: 'base/new',
         url,
       });
     }
-		dispatch({
-			type: 'base/save',
-			payload: {
-				isEdit
-			}
-		});
   }
 
   componentWillUnmount() {
@@ -88,9 +79,10 @@ export default class DicManagerInfo extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
-				const { dispatch } = this.props;
-				console.log(this.props.base.info);
-        if (this.props.base.info.t1wuyewuyeId) {
+        
+
+        const { dispatch } = this.props;
+        if (this.props.base.info.id) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -119,56 +111,79 @@ export default class DicManagerInfo extends Component {
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
-    const { info, newInfo } = base;
+    
+  const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="物业ID" style={{display: 'none'}}>
-						{getFieldDecorator('t1wuyewuyeId', {
-						 initialValue: info.t1wuyewuyeId || newInfo.t1wuyewuyeId,
-						  rules: [
-						    {
-						      required: true,
-						      message: '物业ID不能缺失!',
-						    },
-						  ],
-						 })(<Input disabled />)}
-						</FormItem>
-						 <FormItem {...formItemLayout} hasFeedback label="物业编号">
-						{getFieldDecorator('wybh', {
-						 initialValue: info.wybh ||  newInfo.wybh,
-						  rules: [
-						    {
-						      required: true,
-						      message: '物业编号不能缺失!',
-						    },{ max: 255,message: '物业编号必须小于255位!',   },
-						  ],
-						 })(<Input placeholder="请输入" disabled={this.props.base.isEdit} />)}
-						 </FormItem>
-						 <FormItem {...formItemLayout} hasFeedback label="物业名称">
-						{getFieldDecorator('wymc', {
-						 initialValue: info.wymc ||  newInfo.wymc,
-						  rules: [
-						    {
-						      required: true,
-						      message: '物业名称不能缺失!',
-						    },{ max: 255,message: '物业名称必须小于255位!',   },
-						  ],
-						 })(<Input placeholder="请输入" />)}
-						 </FormItem>
-						 <FormItem {...formItemLayout} hasFeedback label="物业描述">
-						{getFieldDecorator('wyms', {
-						 initialValue: info.wyms ||  newInfo.wyms,
-						  rules: [
-						    {
-						      required: true,
-						      message: '物业描述不能缺失!',
-						    },{ max: 255,message: '物业描述必须小于255位!',   },
-						  ],
-						 })(<Input placeholder="请输入" />)}
-						 </FormItem>
-
+				<FormItem {...formItemLayout} hasFeedback label="字典编码">
+            {getFieldDecorator('dicCode', {
+              initialValue: info.dicCode,
+              rules: [
+                {
+                  required: true,
+                  message: '必须输入字典编码!',
+                },
+                {
+                  max: 64,
+                  message: '字典编码必须小于64位!',
+                },
+              ],
+            })(<Input disabled={info.dicId !== undefined} placeholder="请输入字典编码" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="字典名称">
+            {getFieldDecorator('dicName', {
+              initialValue: info.dicName,
+              rules: [
+                {
+                  required: true,
+                  message: '必须输入字典名称',
+                },
+                {
+                  max: 64,
+                  message: '字典名称必须小于64位!',
+                },
+              ],
+            })(<Input placeholder="请输入字典名称" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="字典描述">
+            {getFieldDecorator('dicDesc', {
+              initialValue: info.dicDesc,
+              rules: [
+                {
+                  max: 255,
+                  message: '字典描述必须小于255位!',
+                },
+              ],
+            })(<TextArea placeholder="请输入文本描述" autosize={{ minRows: 2, maxRows: 6 }} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="数据集类型">
+            {getFieldDecorator('dicData1', {
+              initialValue: info.dicData1,
+              rules: [
+                {
+                  required: true,
+                  message: '必须输入字典描述',
+                },
+                {
+                  max: 64,
+                  message: '数据集类型必须小于64位!',
+                },
+              ],
+            })(<Input placeholder="请输入数据集类型" />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="数据集参数">
+            {getFieldDecorator('dicData2', {
+              initialValue: info.dicData2,
+              rules: [
+                {
+                  max: 64,
+                  message: '数据集类型必须小于64位!',
+                },
+              ],
+            })(<Input placeholder="请输入数据集参数" />)}
+          </FormItem>
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button

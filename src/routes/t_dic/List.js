@@ -24,16 +24,16 @@ import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-//const routerUrl = cache.keysMenu.T1wuyewuye;
-const routerUrl ='/T1wuyewuye';
-const url = 'T1wuyewuye';
-const rowKey = 't_1wuyewuye_id';
+//const routerUrl = cache.keysMenu.T1wuyexiaoqu;
+const routerUrl ='/t_dic';
+const url = 'dic';
+const rowKey = 'dic_id';
 const DateFormat = 'YYYY-MM-DD';
 
 @connect(({ base }) => ({ base }))
 @Form.create()
 @List.create()
-export default class T1wuyewuyeList extends Component {
+export default class T1wuyexiaoquList extends Component {
   state = {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
@@ -115,7 +115,7 @@ temp = {
     dispatch({
         type: `list/exportExcel`,
         payload: {
-        filename: '物业公司.xls',
+        filename: '数据字典.xls',
         queryMap: { ...values, ...date } || {},
         },
         url,
@@ -173,22 +173,46 @@ temp = {
                 删除
               </Button>
             </Operate>
-        
-
           </Row>
         ),
       },
-       {  title: '物业ID',   dataIndex: 't_1wuyewuye_id',     width: 150,     sorter: false,      },
- {  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
- {  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
- {  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
- {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+			{
+        title: '字典编码',
+        dataIndex: 'dic_code',
+        width: 130,
+        sorter: true,
+      },
+      {
+        title: '字典名称',
+        dataIndex: 'dic_name',
+        width: 130,
+        sorter: true,
+      },
+      {
+        title: '字典类型',
+        dataIndex: 'dic_type',
+        width: 200,
+      },
 
+      {
+        title: '数据集类型',
+        dataIndex: 'dic_data1',
+        width: 130,
+      },
+      {
+        title: '数据集参数',
+        dataIndex: 'dic_data2',
+        width: 130,
+      },
+      {
+        title: '字典描述',
+        dataIndex: 'dic_desc',
+      },
     ];
 
     const listConfig = {
-      url: '/api/T1wuyewuye/queryT1wuyewuyeList', // 必填,请求url
-      scroll: { x: 750, y: this.state.scrollY }, // 可选配置,同antd table
+      url: '/api/query/queryTDicList', // 必填,请求url
+      scroll: { x: 880, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -198,13 +222,20 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业ID'>{getFieldDecorator('t_1wuyewuye_id',{initialValue: this.props.list.queryMap.t_1wuyewuye_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业编号'>{getFieldDecorator('wybh',{initialValue: this.props.list.queryMap.wybh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业名称'>{getFieldDecorator('wymc',{initialValue: this.props.list.queryMap.wymc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-
+							<Col md={8} sm={24}>
+                <FormItem label="字典编码">
+                  {getFieldDecorator('dicCode', {
+                    initialValue: this.props.list.queryMap.dicCode,
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem label="字典名称">
+                  {getFieldDecorator('dicName', {
+                    initialValue: this.props.list.queryMap.dicName,
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+              </Col>
               
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
@@ -224,30 +255,28 @@ temp = {
                       新建
                     </Button>
                   </Operate>
-                  <Operate operateName="import">
-            			  <Importer
-            			  	style={{
-            			  	marginLeft: 8,
-            			  	color: '#fff',
-            			  	backgroundColor: '#f0ad4e',
-            			  	borderColor: '#eea236',
-											}}
-											uploadName={`${url}Impoter`}
-											uploadUrl={url}
-            			  	reload={this.handleSearch}
-            			  />
-            			</Operate>
+                      <Operate operateName="import">
+              <Importer
+              style={{
+              marginLeft: 8,
+              color: '#fff',
+              backgroundColor: '#f0ad4e',
+              borderColor: '#eea236',
+              }}
+              reload={this.handleSearch}
+              />
+            </Operate>
                   <Operate operateName="export">
-              			<Button
-              				icon="export"
-              				type="primary"
-              				style={{ marginLeft: 8 }}
-              				loading={this.props.base.exporting}
-              				onClick={this.handleExport}
-              				>
-              				导出
-              			</Button>
-              		</Operate>
+              <Button
+              icon="export"
+              type="primary"
+                      style={{ marginLeft: 8 }}
+                      loading={this.props.base.exporting}
+                      onClick={this.handleExport}
+              >
+              导出
+              </Button>
+              </Operate>
                 </span>
               </Col>
             </Row>

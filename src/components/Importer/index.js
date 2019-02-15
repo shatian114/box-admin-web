@@ -31,7 +31,7 @@ export default class Importer extends Component {
       <Fragment>
         <Upload
           action={'/' + webConfig.webPreName + "/api/storage/f"}
-          name="T1wuyexiaoquImpoter"
+          name={this.props.uploadName}
           showUploadList={false}
           beforeUpload={() => {
             this.setState({
@@ -64,7 +64,7 @@ export default class Importer extends Component {
                             }
                           );
                         },
-                        url: 'T1wuyexiaoqu',
+                        url: this.props.uploadUrl,
                       });
                     }
                   );
@@ -129,7 +129,7 @@ export default class Importer extends Component {
             )
           ) : (
             <div>
-              <Icon type="check" style={{ color: 'green' }} />导出成功
+              <Icon type="check" style={{ color: 'green' }} />导入成功
             </div>
           )}
         </Modal>

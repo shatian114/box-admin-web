@@ -245,7 +245,9 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/TWuyeroominfo':{  component: dynamicWrapper(app, [], () => import('../routes/TWuyeroominfo')),  },
 	'/TWuyeroominfo/list': {  component: dynamicWrapper(app, [], () => import('../routes/TWuyeroominfo/List')),  },
 	'/TWuyeroominfo/info': {  component: dynamicWrapper(app, [], () => import('../routes/TWuyeroominfo/Info')),  },
- 
+	'/t_dic':{  component: dynamicWrapper(app, [], () => import('../routes/t_dic')),  },
+	'/t_dic/list': {  component: dynamicWrapper(app, [], () => import('../routes/t_dic/List')),  },
+	'/t_dic/info': {  component: dynamicWrapper(app, [], () => import('../routes/t_dic/Info')),  },
 });
 
 export default commonroute;

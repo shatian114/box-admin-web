@@ -5,15 +5,13 @@ import NotFound from '../Exception/404';
 import { getRoutes } from '../../utils/utils';
 import Operate from '../../components/Oprs';
 import cache from '../../utils/cache';
-import {shengShiQu} from '../../utils/shengShiQu';
 
 //const routerUrl = cache.keysMenu.T1wuyexiaoqu;
-const routerUrl ='/T1wuyexiaoqu';
+const routerUrl ='/t_dic';
 
 @connect()
 @Operate.create('T1wuyexiaoqu')
 export default class T1wuyexiaoqu extends PureComponent {
-
   componentWillUnmount() {
     this.props.dispatch({
       type: 'list/clear',
