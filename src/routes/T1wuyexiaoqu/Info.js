@@ -98,11 +98,10 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
-
-        const { dispatch } = this.props;
-        if (this.props.base.info.id) {
+        let temp = {};
+				const { dispatch } = this.props;
+				console.log(this.props.base.info);
+        if (this.props.base.info.t1wuyexiaoquId) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -159,7 +158,6 @@ export default class DicManagerInfo extends Component {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
 		const { info, newInfo } = base;
-		let shengCode = '130000', shiCode = '130100';
 
     return (
       <Spin size="large" spinning={loading}>
@@ -187,7 +185,7 @@ export default class DicManagerInfo extends Component {
 						 })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
 							 {
 								 this.props.list.list.map(v => (
-									 <Option key={v.t_1wuyewuye_id} value={v.t_1wuyewuye_id}>{v.t_1wuyewuye_id}</Option>
+									 <Option key={v.t_1wuyewuye_id} value={v.t_1wuyewuye_id}>{`${v.wymc}---${v.t_1wuyewuye_id}`}</Option>
 								 ))
 							 }
 						 </Select>)}
@@ -376,7 +374,7 @@ export default class DicManagerInfo extends Component {
 						 })(<Input placeholder="请输入" />)}
 					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="小区图片">
-						{/*getFieldDecorator('piclink', {
+						{getFieldDecorator('piclink', {
 						 initialValue: info.piclink ||  newInfo.piclink,
 						  rules: [
 						    {
@@ -384,7 +382,7 @@ export default class DicManagerInfo extends Component {
 						      message: '小区图片不能缺失!',
 						    },{ max: 1000,message: '小区图片必须小于1000位!',   },
 						  ],
-						 })(<Input placeholder="请输入" />)*/}
+						 })(<Input placeholder="请输入" />)}
 						 
 						 {info.piclink ? <DelImg goDel={() => {info.piclink=undefined}} imgUrl={info.piclink + '?' + Math.random()} /> : ''}
 						 

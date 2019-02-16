@@ -341,7 +341,8 @@ export default class T1wuyexiaoquList extends Component {
 											}}
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
-            			  	reload={this.handleSearch}
+											reload={this.handleSearch}
+											importResTitleArr={['小区ID', '物业ID', '小区编号', '小区名称']}
             			  />
             			</Operate>
                   <Operate operateName="export">

@@ -17,16 +17,27 @@ import { METHODS } from 'http';
 import { cancel } from 'redux-saga/effects';
 import { webConfig } from '../../utils/Constant';
 import styles from './index.less';
+let importResTitleArr = [];
+let colNum = 0;
 @connect(({ base }) => ({
   base,
 }))
+
 export default class Importer extends Component {
   state = {
     uploadState: 'none',
     uid: '',
     list: [],
-  };
+	};
+
+	componentDidMount = () => {
+		importResTitleArr = this.props.importResTitleArr;
+		importResTitleArr.push('导入结果');
+		colNum = parseInt(24/importResTitleArr.length);
+	}
+
   render() {
+		
     return (
       <Fragment>
         <Upload
@@ -79,6 +90,7 @@ export default class Importer extends Component {
           </Button>
         </Upload>
         <Modal
+					width={document.body.clientWidth}
           visible={this.state.uploadState === 'uploaded'}
           onCancel={() => {
             this.setState({
@@ -96,32 +108,42 @@ export default class Importer extends Component {
             ) : (
               <div className={styles.content}>
                 <Row className={`${styles.header} ${styles.row}`}>
-                  <Col sm={8} md={8}>
-                    农户姓名
-                  </Col>
-                  <Col sm={8} md={8}>
-                    农户账户
-                  </Col>
-                  <Col sm={8} md={8}>
-                    导入结果
-                  </Col>
+									{
+										importResTitleArr.map(v => {
+											return (
+												<Col key={v} sm={colNum} md={colNum}>
+                	    		{v}
+                	  		</Col>
+											)
+										})
+									}
                 </Row>
                 {this.state.list.map(function(item) {
                   return (
                     <Row className={styles.row}>
-                      <Col sm={8} md={8}>
-                        {item.realname}
-                      </Col>
-                      <Col sm={8} md={8}>
-                        {item.userAccount}
-                      </Col>
-                      <Col sm={8} md={8}>
-                        {item.importMsg ? (
-                          <span style={{ color: '#f00' }}>{item.importMsg}</span>
-                        ) : (
-                          <span style={{ color: 'green' }}>导入成功</span>
-                        )}
-                      </Col>
+											{
+												Object.keys(item).map(k => {
+													
+													return (
+														k === 'importMsg' ? (
+															<Col key={k} sm={colNum} md={colNum}>
+																<span style={{ color: '#f00' }}>{item[k]}</span>
+															</Col>
+														) : (
+															<Col key={k} sm={colNum} md={colNum}>
+																{item[k]}
+															</Col>
+														)
+													)
+												})
+											}
+											{
+												item.importMsg ? '' : (
+													<Col sm={colNum} md={colNum}>
+                        		<span style={{ color: 'green' }}>导入成功</span>
+													</Col>
+												)
+											}
                     </Row>
                   );
                 })}

@@ -40,6 +40,7 @@ export default {
   namespace: 'base',
 
   state: {
+		importResTitleArr: [],
 		shengCode: '130000',
 		shiCode: '130100',
 		isEdit: true,

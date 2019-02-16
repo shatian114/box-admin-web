@@ -249,9 +249,10 @@ temp = {
               marginLeft: 8,
               color: '#fff',
               backgroundColor: '#f0ad4e',
-              borderColor: '#eea236',
+							borderColor: '#eea236',
               }}
-              reload={this.handleSearch}
+							reload={this.handleSearch}
+							importResTitleArr={['业主ID', '小区ID', '业主编号']}
               />
             </Operate>
                   <Operate operateName="export">

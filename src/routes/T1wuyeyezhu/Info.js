@@ -56,7 +56,7 @@ export default class DicManagerInfo extends Component {
 		dispatch({
 			type: 'list/list',
 			payload: {
-				url: '/api/T1wuyewuye/queryT1wuyewuyeList'
+				url: '/api/T1wuyexiaoqu/queryT1wuyexiaoquList'
 			},
 			
 		});
@@ -98,11 +98,10 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
-
-        const { dispatch } = this.props;
-        if (this.props.base.info.id) {
+        let temp = {};
+				const { dispatch } = this.props;
+				console.log(this.props.base.info);
+        if (this.props.base.info.t1wuyeyezhuId) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -160,7 +159,7 @@ export default class DicManagerInfo extends Component {
  })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
 	{
 		this.props.list.list.map(v => (
-			<Option key={v.t_1wuyexiaoqu_id} value={v.t_1wuyewuye_id}>{v.t_1wuyewuye_id}</Option>
+			<Option key={v.t_1wuyexiaoqu_id} value={v.t_1wuyewuye_id}>{`${v.xqmc}---${v.t_1wuyexiaoqu_id}`}</Option>
 		))
 	}
 </Select>)}
@@ -174,7 +173,7 @@ export default class DicManagerInfo extends Component {
       message: '业主编号不能缺失!',
     },{ max: 255,message: '业主编号必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input placeholder="请输入" disabled={this.props.base.isEdit} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="楼房编号">
 {getFieldDecorator('lfbh', {

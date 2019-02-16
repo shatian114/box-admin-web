@@ -87,15 +87,15 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
+        let temp = {};
 				const { dispatch } = this.props;
-				console.log(this.props.base.info);
+				console.log(this.props.base.newInfo);
         if (this.props.base.info.t1wuyewuyeId) {
           dispatch({
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -106,7 +106,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,

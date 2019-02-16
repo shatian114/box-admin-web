@@ -126,8 +126,6 @@ temp = {
 
   render() {
     const { form, base } = this.props;
-    
-    
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -173,17 +171,14 @@ temp = {
                 删除
               </Button>
             </Operate>
-        
-
           </Row>
         ),
       },
-       {  title: '物业ID',   dataIndex: 't_1wuyewuye_id',     width: 150,     sorter: false,      },
- {  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
- {  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
- {  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
- {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
-
+      {  title: '物业ID',   dataIndex: 't_1wuyewuye_id',     width: 150,     sorter: false,      },
+ 			{  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
+ 			{  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
+ 			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
+ 			{  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
     ];
 
     const listConfig = {
@@ -199,13 +194,11 @@ temp = {
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业ID'>{getFieldDecorator('t_1wuyewuye_id',{initialValue: this.props.list.queryMap.t_1wuyewuye_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业编号'>{getFieldDecorator('wybh',{initialValue: this.props.list.queryMap.wybh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业名称'>{getFieldDecorator('wymc',{initialValue: this.props.list.queryMap.wymc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-
-              
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业编号'>{getFieldDecorator('wybh',{initialValue: this.props.list.queryMap.wybh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业名称'>{getFieldDecorator('wymc',{initialValue: this.props.list.queryMap.wymc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
               <Col md={12} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button icon="search" type="primary" htmlType="submit">
@@ -234,7 +227,8 @@ temp = {
 											}}
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
-            			  	reload={this.handleSearch}
+											reload={this.handleSearch}
+											importResTitleArr={['物业ID', '物业编号', '物业名称', '物业描述', '创建时间', '创建用户', '修改时间', '修改用户']}
             			  />
             			</Operate>
                   <Operate operateName="export">
