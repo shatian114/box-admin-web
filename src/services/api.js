@@ -1,7 +1,7 @@
 // import { stringify } from 'qs';
 import md5 from 'js-md5';
 
-import { request, requestModels, download } from '../utils/request';
+import { request, requestModels, download, requestCosAuth } from '../utils/request';
 
 var SERVER_ADDR="";
 
@@ -267,7 +267,7 @@ export async function getChartData(params, url) {
 }
 
 export async function getCosSigner(params) {
-  return request(`${SERVER_ADDR}/api/getCosSigner`, {
+  return requestCosAuth(`/cos/getCosSigner`, {
     method: 'POST',
     body: params,
   });

@@ -6,7 +6,8 @@ import styles from './index.less';
 
 export default ({ className, linkElement = 'a', type, title, desc, img, actions, ...rest }) => {
   const pageType = type in config ? type : '404';
-  const clsString = classNames(styles.exception, className);
+	const clsString = classNames(styles.exception, className);
+
   return (
     <div className={clsString} {...rest}>
       <div className={styles.imgBlock}>

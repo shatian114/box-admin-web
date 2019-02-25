@@ -178,8 +178,27 @@ temp = {
  			{  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
  			{  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
  			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
- 			{  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+      {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
+
+    const importColumns = [
+      {  title: '导入状态',   dataIndex: 'importMsg',     width: 150,     sorter: false,   render: (text, record) => {
+        if(text == '导入成功'){
+          return <span>{text}</span>
+        }else{
+          return <span style={{color: 'red'}}>{text}</span>
+        }
+      }   },
+      {  title: '物业ID',   dataIndex: 't1wuyewuyeId',     width: 150,     sorter: false,      },
+ 			{  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
+ 			{  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
+ 			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
+      {  title: '创建用户',   dataIndex: 'createUser',     width: 150,     sorter: false,      },
+      {  title: '创建时间',   dataIndex: 'createDate',     width: 150,     sorter: false,      },
+      {  title: '修改用户',   dataIndex: 'modifyUser',     width: 150,     sorter: false,      },
+      {  title: '修改时间',   dataIndex: 'modifyDate',     width: 150,     sorter: false,      },
+    ]
 
     const listConfig = {
       url: '/api/T1wuyewuye/queryT1wuyewuyeList', // 必填,请求url
@@ -228,7 +247,8 @@ temp = {
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
 											reload={this.handleSearch}
-											importResTitleArr={['物业ID', '物业编号', '物业名称', '物业描述', '创建时间', '创建用户', '修改时间', '修改用户']}
+                      importResTitleArr={['物业ID', '物业编号', '物业名称', '物业描述', '创建时间', '创建用户', '修改时间', '修改用户']}
+                      importColumns={importColumns}
             			  />
             			</Operate>
                   <Operate operateName="export">

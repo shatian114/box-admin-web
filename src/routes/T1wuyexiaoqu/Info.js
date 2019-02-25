@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Upload } from 'antd';
+import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Upload, Tooltip, Popover, Alert } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import Operate from '../../components/Oprs';
@@ -17,6 +17,7 @@ import { isEmpty } from '../../utils/utils';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
 import {shengShiQu} from '../../utils/shengShiQu';
+import {uploadImg} from '../../utils/uploadImg';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -100,13 +101,12 @@ export default class DicManagerInfo extends Component {
       if (!err) {
         let temp = {};
 				const { dispatch } = this.props;
-				console.log(this.props.base.info);
         if (this.props.base.info.t1wuyexiaoquId) {
           dispatch({
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -117,7 +117,7 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -154,6 +154,28 @@ export default class DicManagerInfo extends Component {
 		});
 	}
 
+	uploadChange = (file) => {
+		this.props.dispatch({
+			type: 'base/save',
+			payload: {
+				isSelectImg: file.fileList.length > 0
+			}
+		})
+		if(file.fileList.length > 0) {
+			let imgKey = (this.props.base.info.t1wuyexiaoquId || this.props.base.newInfo.t1wuyexiaoquId)+'.jpg';
+			uploadImg(file.fileList[0].originFileObj, imgKey, v => {
+				if(v){
+					this.props.form.setFields({
+						piclink: {value: webConfig.tpUriPre + imgKey}
+					})
+					console.log('上传成功');
+				}else{
+					console.log('上传失败');
+				}
+			});
+		}
+	}
+
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
@@ -173,7 +195,7 @@ export default class DicManagerInfo extends Component {
 						  ],
 						 })(<Input disabled />)}
 					</FormItem>
-					<FormItem {...formItemLayout} hasFeedback label="物业id">
+					<FormItem {...formItemLayout} hasFeedback label="物业">
 						{getFieldDecorator('wyid', {
 						 initialValue: info.wyid ||  '请选择',
 						  rules: [
@@ -184,10 +206,10 @@ export default class DicManagerInfo extends Component {
 						  ],
 						 })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
 							 {
-								 this.props.list.list.map(v => (
-									 <Option key={v.t_1wuyewuye_id} value={v.t_1wuyewuye_id}>{`${v.wymc}---${v.t_1wuyewuye_id}`}</Option>
+								 this.props.list.list.map((v, k) => (
+									 <Option key={k} value={v.t_1wuyewuye_id}>{v.wymc}</Option>
 								 ))
-							 }
+								}
 						 </Select>)}
 					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="小区编号">
@@ -226,7 +248,7 @@ export default class DicManagerInfo extends Component {
 								 shengShiQu['86'].map(v => (
 									<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
 								 ))
-							 }
+							}
 						 </Select>)}
 					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="市">
@@ -243,7 +265,7 @@ export default class DicManagerInfo extends Component {
 								shengShiQu[this.props.base.shengCode] ? shengShiQu[this.props.base.shengCode].map(v => (
 									<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
 								 )) : ''
-							}
+								}
 						</Select>)}
 					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="区">
@@ -260,7 +282,7 @@ export default class DicManagerInfo extends Component {
 								shengShiQu[this.props.base.shiCode] ? shengShiQu[this.props.base.shiCode].map(v => (
 									<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
 								 )) : ''
-							}
+								}
 						</Select>)}
 					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="楼栋数">
@@ -382,10 +404,20 @@ export default class DicManagerInfo extends Component {
 						      message: '小区图片不能缺失!',
 						    },{ max: 1000,message: '小区图片必须小于1000位!',   },
 						  ],
-						 })(<Input placeholder="请输入" />)}
-						 
-						 {info.piclink ? <DelImg goDel={() => {info.piclink=undefined}} imgUrl={info.piclink + '?' + Math.random()} /> : ''}
-						 
+						})(<Input placeholder="请输入" disabled/>)}
+						<Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
+						{info.piclink ? <DelImg goDel={() => {info.piclink=undefined}} imgUrl={info.piclink + '?' + Math.random()} /> : ''}
+						<Upload
+							disabled={this.props.base.isSelectImg}
+							onChange={this.uploadChange}
+							listType="picture-card"
+							multiple={false}
+            	accept="image/jpg,image/jpeg,image/png"
+							beforeUpload={(file, fileList) => {
+								return false;
+							}}>
+						 选择小区图片
+						</Upload>
 					</FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button

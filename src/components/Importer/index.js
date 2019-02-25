@@ -8,7 +8,7 @@
 
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Spin, Upload, Icon, Modal, Row, Col } from 'antd';
+import { Form, Input, Button, Spin, Upload, Icon, Modal, Row, Col, Table } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../../index';
 import db from '../../utils/db';
@@ -99,7 +99,8 @@ export default class Importer extends Component {
           }}
           footer={null}
         >
-          {(this.state.list && this.state.list.length) || this.props.base.importMsg ? (
+          <Table columns={this.props.importColumns} dataSource={this.state.list} />
+          {/*(this.state.list && this.state.list.length) || this.props.base.importMsg ? (
             this.props.base.importMsg ? (
               <div>
                 <Icon type="close" style={{ color: 'red' }} />
@@ -153,7 +154,7 @@ export default class Importer extends Component {
             <div>
               <Icon type="check" style={{ color: 'green' }} />导入成功
             </div>
-          )}
+          )*/}
         </Modal>
       </Fragment>
     );

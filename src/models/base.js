@@ -32,6 +32,7 @@ import {
   addobjCount,
   queryLocation,
   queryAllDic,
+  getCosSigner,
 } from '../services/api';
 import { queryList } from '../services/list';
 import { isEmpty } from '../utils/utils';
@@ -40,6 +41,7 @@ export default {
   namespace: 'base',
 
   state: {
+    isSelectImg: false,
 		importResTitleArr: [],
 		shengCode: '130000',
 		shiCode: '130100',
@@ -549,6 +551,13 @@ export default {
         Message.error(response.msg);
       }
     },
+    *uploadImg({payload}, { call, put }) {
+      const response = yield call(getCosSigner, {...payload});
+      if(response) {
+        
+      }
+      console.log('get cos signer: ', response);
+    }
   },
 
   reducers: {

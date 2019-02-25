@@ -21,6 +21,12 @@ export default {
       changeOrigin: true,
       secure: false,
     },
+    '/cos': {
+      target: 'http://124.232.150.3:8180',
+      pathRewrite: { '^/cos': '' },
+      changeOrigin: true,
+      secure: false,
+    },
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',

@@ -147,7 +147,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input disabled />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="小区id">
+ <FormItem {...formItemLayout} hasFeedback label="小区">
 {getFieldDecorator('xiaoquid', {
  initialValue: info.xiaoquid ||  newInfo.xiaoquid,
   rules: [
@@ -159,7 +159,7 @@ export default class DicManagerInfo extends Component {
  })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
 	{
 		this.props.list.list.map(v => (
-			<Option key={v.t_1wuyexiaoqu_id} value={v.t_1wuyewuye_id}>{`${v.xqmc}---${v.t_1wuyexiaoqu_id}`}</Option>
+			<Option key={v.t_1wuyexiaoqu_id} value={v.t_1wuyewuye_id}>{v.xqmc}</Option>
 		))
 	}
 </Select>)}

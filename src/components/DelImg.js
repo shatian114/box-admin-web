@@ -20,6 +20,7 @@ class DelImg extends PureComponent {
           width="auto"
           style={{ zIndex: 99, paddingRight: '8px' }}
           src={this.props.imgUrl}
+          alt="暂无图片"
         />
       </div>
     );

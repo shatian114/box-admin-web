@@ -178,6 +178,17 @@ export default class T1wuyexiaoquList extends Component {
 		}
 	}
 
+	testSpringBoot = () => {
+		this.props.dispatch({
+			type: 'base/uploadImg',
+			payload: {
+				url: '/getCosAuth',
+				signType: 'img',
+				imgKey: '123'
+			}
+		})
+	}
+
   render() {
     const { form, base } = this.props;
     const { getFieldDecorator } = form;
@@ -261,6 +272,7 @@ export default class T1wuyexiaoquList extends Component {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
+				{/*<Button onClick={this.testSpringBoot}>测试springboot</Button>*/}
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区ID'>{getFieldDecorator('t_1wuyexiaoqu_id',{initialValue: this.props.list.queryMap.t_1wuyexiaoqu_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
