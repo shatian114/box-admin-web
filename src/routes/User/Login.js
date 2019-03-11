@@ -65,10 +65,13 @@ export default class LoginPage extends Component {
         </Button>
       </Spin>
     );
+    const tabName = (
+      <p className={styles.tabName}>欢迎登录</p>
+    )
     return (
       <div className={styles.main}>
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
-          <Tab key="account" tab="欢迎登录">
+          <Tab key="account" tab={tabName}>
             {login.status === 'error' &&
               login.type === 'account' &&
               !login.submitting &&

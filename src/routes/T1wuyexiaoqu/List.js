@@ -246,6 +246,7 @@ export default class T1wuyexiaoquList extends Component {
 			{  title: '省',   dataIndex: 'sheng',     width: 150,     sorter: false,      },
 			{  title: '市',   dataIndex: 'shi',     width: 150,     sorter: false,      },
 			{  title: '区',   dataIndex: 'qu',     width: 150,     sorter: false,      },
+			{  title: '详细地址',   dataIndex: 'dz',     width: 150,     sorter: false,      },
 			{  title: '楼栋数',   dataIndex: 'lds',     width: 150,     sorter: false,      },
 			{  title: '户型数',   dataIndex: 'hxs',     width: 150,     sorter: false,      },
 			{  title: '固定车数量',   dataIndex: 'gdc',     width: 150,     sorter: false,      },
@@ -256,11 +257,12 @@ export default class T1wuyexiaoquList extends Component {
 			{  title: '电费价格',   dataIndex: 'df',     width: 150,     sorter: false,      },
 			{  title: '地库车价格',   dataIndex: 'dkc',     width: 150,     sorter: false,      },
 			{  title: '地面车价格',   dataIndex: 'dmc',     width: 150,     sorter: false,      },
+			{  title: '开发商',   dataIndex: 'kfs',     width: 150,     sorter: false,      },
 			{  title: '小区图片',   dataIndex: 'piclink',     width: 150,     sorter: false,  render: (val, record, index) => (
 				<img src={val} width={80} height={80} alt="暂无图片" />
 					)    },
 			{  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
-    ];
+		];
 
     const listConfig = {
       url: '/api/T1wuyexiaoqu/queryT1wuyexiaoquList', // 必填,请求url
@@ -310,6 +312,7 @@ export default class T1wuyexiaoquList extends Component {
 									</Select>)}
 								</FormItem>
 							</Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='详细地址'>{getFieldDecorator('dz',{initialValue: this.props.list.queryMap.dz, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区编号'>{getFieldDecorator('xqbh',{initialValue: this.props.list.queryMap.xqbh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区名称'>{getFieldDecorator('xqmc',{initialValue: this.props.list.queryMap.xqmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='楼栋数'>{getFieldDecorator('lds',{initialValue: this.props.list.queryMap.lds, })(<Input placeholder='请输入' />)} </FormItem> </Col>
@@ -322,6 +325,7 @@ export default class T1wuyexiaoquList extends Component {
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='电费价格'>{getFieldDecorator('df',{initialValue: this.props.list.queryMap.df, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地库车价格'>{getFieldDecorator('dkc',{initialValue: this.props.list.queryMap.dkc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地面车价格'>{getFieldDecorator('dmc',{initialValue: this.props.list.queryMap.dmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='开发商'>{getFieldDecorator('dmc',{initialValue: this.props.list.queryMap.kfs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区图片'>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
@@ -354,7 +358,7 @@ export default class T1wuyexiaoquList extends Component {
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
 											reload={this.handleSearch}
-											importResTitleArr={['小区ID', '物业ID', '小区编号', '小区名称']}
+											rowId="t1wuyexiaoquId"
             			  />
             			</Operate>
                   <Operate operateName="export">

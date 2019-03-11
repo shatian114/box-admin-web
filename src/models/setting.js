@@ -26,6 +26,7 @@ export default {
     *getMenuData({ callback }, { call, put }) {
       const response = yield call(getMenuData);
       if (response) {
+        // response.data[0].menus.push({args: {moduleCode: 'T1kaimentongji'}, iconOrder: '', isMenu: true, menuIcon: '', menuid: 4621, menuname: '掌上开门统计', menus: [], type: 'ZJ', url: '/T1kaimentongji'})
         let menuData = [];
         const clear = () => {
           finish.splice(0, finish.length);
@@ -136,3 +137,4 @@ export default {
     },
   },
 };
+

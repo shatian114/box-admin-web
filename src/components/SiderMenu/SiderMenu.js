@@ -67,7 +67,7 @@ export default class SiderMenu extends PureComponent {
     return menus.map(item => {
       if (item.children && item.children.length) {
         return (
-          <Menu.SubMenu key={`link_${item.menuid}`} title={item.name}>
+          <Menu.SubMenu key={`link_${item.menuid}`} title={<span><span style={{marginRight: '10px'}}><i className={`iconfont ${item.icon}`}></i></span>{item.name}</span>}>
             {this.generateMenuTree(item.children, item)}
           </Menu.SubMenu>
         );
@@ -75,7 +75,8 @@ export default class SiderMenu extends PureComponent {
         return (
           <Menu.Item key={`link_${item.menuid}`}>
             <a href={item.path.replace(/^\/http/, 'http')} target="_blank">
-              <Icon className="menu-icon" name={item.icon || 'chain'} />
+              {/* <Icon className={item.icon} name={item.icon || 'chain'} /> */}
+              <span style={{marginRight: '10px'}}><i className={`iconfont ${item.icon}`}></i></span>
               {item.name}
             </a>
           </Menu.Item>
@@ -84,7 +85,8 @@ export default class SiderMenu extends PureComponent {
         return (
           <Menu.Item key={`link_${item.menuid}`}>
             <Link to={{ pathname: item.path, params: { args: item.args } }}>
-              <Icon className="menu-icon" name={item.icon || 'chain'} />
+              {/* <Icon className="menu-icon" name={item.icon || 'chain'} /> */}
+              <span style={{marginRight: '10px'}}><i className={`iconfont ${item.icon}`}></i></span>
               {item.name}
             </Link>
           </Menu.Item>
@@ -110,7 +112,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} key="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>{webConfig.webName}</h1>
+            {/* <h1>{webConfig.webName}</h1> */}
           </Link>
         </div>
         <Menu

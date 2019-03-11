@@ -24,16 +24,16 @@ import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-//const routerUrl = cache.keysMenu.T1carfixedinfo;
-const routerUrl ='/T1carfixedinfo';
-const url = 'T1carfixedinfo';
-const rowKey = 't_1carfixedinfo_id';
+//const routerUrl = cache.keysMenu.T1kaimentongji;
+const routerUrl ='/T1kaimentongji';
+const url = 'T1kaimentongji';
+const rowKey = 't_1kaimentongji_id';
 const DateFormat = 'YYYY-MM-DD';
 
 @connect(({ base }) => ({ base }))
 @Form.create()
 @List.create()
-export default class T1carfixedinfoList extends Component {
+export default class T1kaimentongjiList extends Component {
   state = {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
@@ -115,7 +115,7 @@ temp = {
     dispatch({
         type: `list/exportExcel`,
         payload: {
-        filename: '小区固定车辆.xls',
+        filename: '掌上开门统计.xls',
         queryMap: { ...values, ...date } || {},
         },
         url,
@@ -178,18 +178,23 @@ temp = {
           </Row>
         ),
       },
-      {  title: '固定车id',   dataIndex: 't_1carfixedinfo_id',     width: 150,     sorter: false,      },
-      {  title: '业主id',   dataIndex: 'yzid',     width: 150,     sorter: false,      },
-      {  title: '车牌号',   dataIndex: 'carcode',     width: 150,     sorter: false,      },
-      {  title: '车辆描述',   dataIndex: 'cardesc',     width: 150,     sorter: false,      },
-      {  title: '车位等信息',   dataIndex: 'otherinfo',     width: 150,     sorter: false,      },
-      {  title: '到期时间',   dataIndex: 'expiredate',     width: 150,     sorter: false,      },
-      {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+       {  title: '序号',   dataIndex: 't_1kaimentongji_id',     width: 150,     sorter: false,      },
+ {  title: '市',   dataIndex: 'shi',     width: 150,     sorter: false,      },
+ {  title: '区',   dataIndex: 'qu',     width: 150,     sorter: false,      },
+ {  title: '小区名称',   dataIndex: 'xqmc',     width: 150,     sorter: false,      },
+ {  title: '房屋总数',   dataIndex: 'fwzs',     width: 150,     sorter: false,      },
+ {  title: '掌上开门使用占比',   dataIndex: 'sybl',     width: 150,     sorter: false,      },
+ {  title: '用户数',   dataIndex: 'yhs',     width: 150,     sorter: false,      },
+ {  title: '每周开门次数',   dataIndex: 'kmcs',     width: 150,     sorter: false,      },
+ {  title: '绑定设备数',   dataIndex: 'sbs',     width: 150,     sorter: false,      },
+ {  title: '广告投放率',   dataIndex: 'ggbl',     width: 150,     sorter: false,      },
+ {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
+
     ];
 
     const listConfig = {
-      url: '/api/T1carfixedinfo/queryT1carfixedinfoList', // 必填,请求url
-      scroll: { x: 1050, y: this.state.scrollY }, // 可选配置,同antd table
+      url: '/api/T1kaimentongji/queryT1kaimentongjiList', // 必填,请求url
+      scroll: { x: 1650, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -199,12 +204,16 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='固定车id'>{getFieldDecorator('t_1carfixedinfo_id',{initialValue: this.props.list.queryMap.t_1carfixedinfo_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='业主id'>{getFieldDecorator('yzid',{initialValue: this.props.list.queryMap.yzid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='车牌号'>{getFieldDecorator('carcode',{initialValue: this.props.list.queryMap.carcode, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='车辆描述'>{getFieldDecorator('cardesc',{initialValue: this.props.list.queryMap.cardesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='车位等信息'>{getFieldDecorator('otherinfo',{initialValue: this.props.list.queryMap.otherinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='到期时间'>{getFieldDecorator('expiredate',{initialValue: this.props.list.queryMap.expiredate ? moment(this.props.list.queryMap.expiredate) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='序号'>{getFieldDecorator('t_1kaimentongji_id',{initialValue: this.props.list.queryMap.t_1kaimentongji_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区名称'>{getFieldDecorator('xqmc',{initialValue: this.props.list.queryMap.xqmc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='房屋总数'>{getFieldDecorator('fwzs',{initialValue: this.props.list.queryMap.fwzs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='掌上开门使用占比'>{getFieldDecorator('sybl',{initialValue: this.props.list.queryMap.sybl, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户数'>{getFieldDecorator('yhs',{initialValue: this.props.list.queryMap.yhs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='每周开门次数'>{getFieldDecorator('kmcs',{initialValue: this.props.list.queryMap.kmcs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='绑定设备数'>{getFieldDecorator('sbs',{initialValue: this.props.list.queryMap.sbs, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='广告投放率'>{getFieldDecorator('ggbl',{initialValue: this.props.list.queryMap.ggbl, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 

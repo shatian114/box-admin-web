@@ -86,7 +86,7 @@ class BasicLayout extends React.PureComponent {
     const { location } = this.props;
     const { routerData } = this.state;
     const { pathname } = location;
-    let title = `${webConfig.webName}管理系统`;
+    let title = `${webConfig.companyName}${webConfig.webName}管理系统`;
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }

@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker} from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -182,24 +182,6 @@ temp = {
 
     ];
 
-    const importColumns = [
-      {  title: '导入状态',   dataIndex: 'importMsg',     width: 150,     sorter: false,   render: (text, record) => {
-        if(text == '导入成功'){
-          return <span>{text}</span>
-        }else{
-          return <span style={{color: 'red'}}>{text}</span>
-        }
-      }   },
-      {  title: '物业ID',   dataIndex: 't1wuyewuyeId',     width: 150,     sorter: false,      },
- 			{  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
- 			{  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
- 			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
-      {  title: '创建用户',   dataIndex: 'createUser',     width: 150,     sorter: false,      },
-      {  title: '创建时间',   dataIndex: 'createDate',     width: 150,     sorter: false,      },
-      {  title: '修改用户',   dataIndex: 'modifyUser',     width: 150,     sorter: false,      },
-      {  title: '修改时间',   dataIndex: 'modifyDate',     width: 150,     sorter: false,      },
-    ]
-
     const listConfig = {
       url: '/api/T1wuyewuye/queryT1wuyewuyeList', // 必填,请求url
       scroll: { x: 750, y: this.state.scrollY }, // 可选配置,同antd table
@@ -247,8 +229,7 @@ temp = {
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
 											reload={this.handleSearch}
-                      importResTitleArr={['物业ID', '物业编号', '物业名称', '物业描述', '创建时间', '创建用户', '修改时间', '修改用户']}
-                      importColumns={importColumns}
+                      rowId="t1wuyewuyeId"
             			  />
             			</Operate>
                   <Operate operateName="export">

@@ -337,16 +337,16 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="当期小计">
+ <FormItem {...formItemLayout} hasFeedback label="当前小计">
 {getFieldDecorator('dqxj', {
  initialValue: info.dqxj ||  newInfo.dqxj,
   rules: [
     {
       required: true,
-      message: '当期小计不能缺失!',
-    },
+      message: '当前小计不能缺失!',
+    },{ max: 255,message: '当前小计必须小于255位!',   },
   ],
- })()}
+ })(<Input placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="年月">
 {getFieldDecorator('ny', {

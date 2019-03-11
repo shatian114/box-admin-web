@@ -212,9 +212,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '收费总额不能缺失!',
-    },
+    },{ required: true,message: '收费总额不能缺失!', },
   ],
- })()}
+ })(<InputNumber min={0} disabled />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="商户订单号">
 {getFieldDecorator('seq', {

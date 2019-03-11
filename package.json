@@ -6,7 +6,7 @@
   "homepage": "/cpzhsqweb/",
   "scripts": {
     "precommit": "npm run lint-staged",
-    "start": "cross-env HARD_SOURCE=none npm run _start",
+    "start": "cross-env BROWSER=none HARD_SOURCE=none npm run _start",
     "_start": "cross-env ESLINT=none roadhog dev",
     "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none roadhog build",

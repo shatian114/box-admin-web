@@ -5,22 +5,21 @@ import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 //import logo from '../assets/logo.svg';
-import logo from '../assets/logo.png';
+import logo from '../assets/loginTitle.png';
 import { getRoutes } from '../utils/utils';
 import {webConfig} from '../utils/Constant';
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 {webConfig.companyName}出品
+    <span style={{color: '#fefefe'}}>Copyright <Icon type="copyright" /> 2019 {webConfig.companyName}出品</span>
   </Fragment>
 );
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
-    console.log('userlayout');
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = `${webConfig.webName}管理系统`;
+    let title = `${webConfig.companyName}${webConfig.webName}管理系统-登录`;
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
@@ -34,11 +33,11 @@ class UserLayout extends React.PureComponent {
           <div className={styles.content}>
             <div className={styles.top}>
               <img alt="logo" className={styles.logo} src={logo} />
-              <div className={styles.header}>
+              {/* <div className={styles.header}>
                 <Link to="/">
                   <span className={styles.title}>{webConfig.webName}管理系统</span>
                 </Link>
-              </div>
+              </div> */}
               <div className={styles.desc}>{webConfig.companyName}科技有限公司</div>
             </div>
             <Switch>

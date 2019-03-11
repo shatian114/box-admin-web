@@ -248,6 +248,9 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/t_dic':{  component: dynamicWrapper(app, [], () => import('../routes/t_dic')),  },
 	'/t_dic/list': {  component: dynamicWrapper(app, [], () => import('../routes/t_dic/List')),  },
 	'/t_dic/info': {  component: dynamicWrapper(app, [], () => import('../routes/t_dic/Info')),  },
+	'/T1kaimentongji':{  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji')),  },
+	'/T1kaimentongji/list': {  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji/List')),  },
+	'/T1kaimentongji/info': {  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji/Info')),  },
 });
 
 export default commonroute;

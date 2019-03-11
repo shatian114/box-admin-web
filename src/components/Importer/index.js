@@ -28,16 +28,26 @@ export default class Importer extends Component {
     uploadState: 'none',
     uid: '',
     list: [],
-	};
+    importColumns: [],
+  };
 
-	componentDidMount = () => {
-		importResTitleArr = this.props.importResTitleArr;
-		importResTitleArr.push('导入结果');
-		colNum = parseInt(24/importResTitleArr.length);
-	}
+  componentDidMount = () => {
+    let importColumns = [
+      {title: '导入状态', dataIndex: 'importMsg', width: 150, render: (text, record) => {
+        if(text == '导入成功'){
+          return <span>{text}</span>
+        }else{
+          return <span style={{color: 'red'}}>{text}</span>
+        }
+      }},
+      {title: 'id', dataIndex: this.props.rowId, width: 150}
+    ]
+    this.setState({
+      importColumns: importColumns
+    });
+  }
 
   render() {
-		
     return (
       <Fragment>
         <Upload
@@ -90,7 +100,7 @@ export default class Importer extends Component {
           </Button>
         </Upload>
         <Modal
-					width={document.body.clientWidth}
+					width="80%"
           visible={this.state.uploadState === 'uploaded'}
           onCancel={() => {
             this.setState({
@@ -99,7 +109,7 @@ export default class Importer extends Component {
           }}
           footer={null}
         >
-          <Table columns={this.props.importColumns} dataSource={this.state.list} />
+          <Table columns={this.state.importColumns} dataSource={this.state.list} />
           {/*(this.state.list && this.state.list.length) || this.props.base.importMsg ? (
             this.props.base.importMsg ? (
               <div>

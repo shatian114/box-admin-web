@@ -285,6 +285,17 @@ export default class DicManagerInfo extends Component {
 								}
 						</Select>)}
 					</FormItem>
+					<FormItem {...formItemLayout} hasFeedback label="详细地址">
+						{getFieldDecorator('dz', {
+						 initialValue: info.dz ||  newInfo.dz,
+						  rules: [
+						    {
+						      required: true,
+						      message: '详细地址不能缺失!',
+						    },{ max: 255,message: '详细地址必须小于255位!',   },
+						  ],
+						 })(<Input placeholder="请输入" />)}
+					</FormItem>
 					<FormItem {...formItemLayout} hasFeedback label="楼栋数">
 						{getFieldDecorator('lds', {
 						 initialValue: info.lds ||  newInfo.lds,
@@ -392,6 +403,17 @@ export default class DicManagerInfo extends Component {
 						      required: true,
 						      message: '地面车价格不能缺失!',
 						    },{ max: 255,message: '地面车价格必须小于255位!',   },
+						  ],
+						 })(<Input placeholder="请输入" />)}
+					</FormItem>
+					<FormItem {...formItemLayout} hasFeedback label="开发商">
+						{getFieldDecorator('kfs', {
+						 initialValue: info.kfs ||  newInfo.kfs,
+						  rules: [
+						    {
+						      required: true,
+						      message: '开发商不能缺失!',
+						    },{ max: 255,message: '开发商必须小于255位!',   },
 						  ],
 						 })(<Input placeholder="请输入" />)}
 					</FormItem>
