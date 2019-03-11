@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker} from 'antd';
+import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker} from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -144,7 +144,7 @@ temp = {
       {
         title: '操作',
         key: 'action',
-        width: 160,
+        width: 120,
         align: 'center',
         render: (text, record) => (
           <Row type="flex" justify="space-around">
@@ -184,7 +184,7 @@ temp = {
 
     const listConfig = {
       url: '/api/T1wuyewuye/queryT1wuyewuyeList', // 必填,请求url
-      scroll: { x: 750, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 710, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -192,7 +192,7 @@ temp = {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
-          <Form onSubmit={this.handleSearch} layout="inline">
+          <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业ID'>{getFieldDecorator('t_1wuyewuye_id',{initialValue: this.props.list.queryMap.t_1wuyewuye_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业编号'>{getFieldDecorator('wybh',{initialValue: this.props.list.queryMap.wybh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
@@ -200,19 +200,19 @@ temp = {
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-              <Col md={12} sm={24}>
+              <Col md={12} sm={24} offset={2}>
                 <span className={styles.submitButtons}>
-                  <Button icon="search" type="primary" htmlType="submit">
+                  <Button style={{backgroundColor: '#4987e8'}} icon="search" type="primary" htmlType="submit">
                     查询
                   </Button>
-                  <Button icon="sync" style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                  <Button icon="sync" style={{ marginLeft: 8, backgroundColor: '#62c086' }} onClick={this.handleFormReset}>
                     重置
                   </Button>
                   <Operate operateName="NEW">
                     <Button
                       icon="plus"
                       type="primary"
-                      style={{ marginLeft: 8 }}
+                      style={{ marginLeft: 8, backgroundColor: '#4987e8' }}
                       onClick={() => this.props.dispatch(routerRedux.push(`${routerUrl}/info`))}
                     >
                       新建
@@ -220,12 +220,6 @@ temp = {
                   </Operate>
                   <Operate operateName="import">
             			  <Importer
-            			  	style={{
-            			  	marginLeft: 8,
-            			  	color: '#fff',
-            			  	backgroundColor: '#f0ad4e',
-            			  	borderColor: '#eea236',
-											}}
 											uploadName={`${url}Impoter`}
 											uploadUrl={url}
 											reload={this.handleSearch}
@@ -236,7 +230,7 @@ temp = {
               			<Button
               				icon="export"
               				type="primary"
-              				style={{ marginLeft: 8 }}
+              				style={{ marginLeft: 8, backgroundColor: '#4987e8' }}
               				loading={this.props.base.exporting}
               				onClick={this.handleExport}
               				>

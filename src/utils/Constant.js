@@ -2,18 +2,19 @@ export const formItemLayout = {
 	labelCol: {
     xs: { span: 24 },
     sm: { span: 7 },
+    md: { span: 7}
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
+    sm: { span: 17 },
+    md: { span: 17 },
   },
 };
 
 export const formItemGrid = {
 	span: 8
 };
-
+8
 export function geneImportColumn(column){
   let column2 = column;
   column2.shift();

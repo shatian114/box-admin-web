@@ -207,7 +207,7 @@ temp = {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
-          <Form onSubmit={this.handleSearch} layout="inline">
+          <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_activity_id',{initialValue: this.props.list.queryMap.t_activity_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='名称'>{getFieldDecorator('activityname',{initialValue: this.props.list.queryMap.activityname, })(<Input placeholder='请输入' />)} </FormItem> </Col>

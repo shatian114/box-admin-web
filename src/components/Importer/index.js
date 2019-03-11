@@ -94,7 +94,12 @@ export default class Importer extends Component {
             }
           }}
         >
-          <Button style={this.props.style}>
+          <Button style={{
+            			  marginLeft: 8,
+            			  color: '#fff',
+            			  backgroundColor: '#e5b16c',
+            			  borderColor: '#eea236',
+									}}>
             <Icon type={this.state.uploadState === 'importing' ? 'loading' : 'upload'} />
             {this.state.uploadState === 'importing' ? '导入中' : '导入'}
           </Button>

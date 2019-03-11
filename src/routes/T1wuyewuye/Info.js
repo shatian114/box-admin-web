@@ -124,7 +124,7 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="物业ID" style={{display: 'none'}}>
+           <FormItem hasFeedback {...formItemLayout} label="物业ID" style={{display: 'none'}}>
 						{getFieldDecorator('t1wuyewuyeId', {
 						 initialValue: info.t1wuyewuyeId || newInfo.t1wuyewuyeId,
 						  rules: [

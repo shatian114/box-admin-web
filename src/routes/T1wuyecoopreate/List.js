@@ -206,7 +206,7 @@ temp = {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
-          <Form onSubmit={this.handleSearch} layout="inline">
+          <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_1wuyecoopreate_id',{initialValue: this.props.list.queryMap.t_1wuyecoopreate_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='id：这个不用系统生成，手工设定，长度是6位数字'>{getFieldDecorator('uniqueID',{initialValue: this.props.list.queryMap.uniqueID, })(<Input placeholder='请输入' />)} </FormItem> </Col>

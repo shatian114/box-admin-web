@@ -225,7 +225,7 @@ export default class TuserList extends Component {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
-          <Form onSubmit={this.handleSearch} layout="inline">
+          <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={8} sm={24}>
                 <FormItem label="用户名称">

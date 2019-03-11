@@ -197,7 +197,7 @@ temp = {
     return (
       <div className={styles.tableListForm}>
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
-          <Form onSubmit={this.handleSearch} layout="inline">
+          <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='门岗ID'>{getFieldDecorator('t_1carstop_id',{initialValue: this.props.list.queryMap.t_1carstop_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区ID(起始)'>{getFieldDecorator('start_xiaoquid',{initialValue: this.props.list.queryMap.start_xiaoquid  ? moment(this.props.list.queryMap.start_xiaoquid): null, })
