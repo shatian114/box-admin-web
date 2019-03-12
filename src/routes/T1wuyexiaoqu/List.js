@@ -17,8 +17,7 @@ import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
-import cache from '../../utils/cache';
-import Importer from '../../components/Importer';
+import ListButtonGroup from '../../components/ListButtonGroup';
 import {shengShiQu} from '../../utils/shengShiQu';
 
 const FormItem = Form.Item;
@@ -328,50 +327,10 @@ export default class T1wuyexiaoquList extends Component {
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小区图片'>{getFieldDecorator('piclink',{initialValue: this.props.list.queryMap.piclink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-							<Col md={12} sm={24}>
-                <span className={styles.submitButtons}>
-                  <Button icon="search" type="primary" htmlType="submit">
-                    查询
-                  </Button>
-                  <Button icon="sync" style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                    重置
-                  </Button>
-                  <Operate operateName="NEW">
-                    <Button
-                      icon="plus"
-                      type="primary"
-                      style={{ marginLeft: 8 }}
-                      onClick={() => this.props.dispatch(routerRedux.push(`${routerUrl}/info`))}
-                    >
-                      新建
-                    </Button>
-                  </Operate>
-                  <Operate operateName="import">
-            			  <Importer
-            			  	style={{
-            			  		marginLeft: 8,
-            			  		color: '#fff',
-            			  		backgroundColor: '#f0ad4e',
-            			  		borderColor: '#eea236',
-											}}
-											uploadName={`${url}Impoter`}
-											uploadUrl={url}
-											reload={this.handleSearch}
-											rowId="t1wuyexiaoquId"
-            			  />
-            			</Operate>
-                  <Operate operateName="export">
-              			<Button
-              				icon="export"
-              				type="primary"
-              				style={{ marginLeft: 8 }}
-              				loading={this.props.base.exporting}
-              				onClick={this.handleExport}
-              			>
-              				导出
-              			</Button>
-              		</Operate>
-                </span>
+            </Row>
+						<Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={12} sm={24}>
+                <ListButtonGroup handleFormReset={this.handleFormReset} routerUrl={this.routerUrl} dispatch={this.props.dispatch} handleExport={this.handleExport} url={url} handleSearch={this.handleSearch} />
               </Col>
             </Row>
           </Form>

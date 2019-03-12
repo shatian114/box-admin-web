@@ -8,7 +8,6 @@ export default {
   namespace: 'list',
 
   state: {
-		test: 'this is a test',
 		list: [],
     total: 0,
     queryMap: {},
@@ -18,10 +17,18 @@ export default {
     },
     url: undefined,
     sorter: {},
+    exporting: false,
+    searching: false,
   },
 
   effects: {
     *list({ payload }, { call, put, select }) {
+      yield put({
+        type: 'save',
+        payload: {
+          searching: true,
+        }
+      });
       const list = yield select(state => state.list);
       const { current, pageSize, url, queryMap, sorter } = payload;
       const path = url || list.url;
@@ -61,8 +68,15 @@ export default {
           },
         });
       }
+      yield put({
+        type: 'save',
+        payload: {
+          searching: false,
+        }
+      });
 		},
-		*exportExcel2({payload}, {call}) {
+		*exportExcel2({payload}, {call, put}) {
+      
 			const temp = {
         page: 1,
         len: 100000,
@@ -109,20 +123,26 @@ export default {
 				document.body.removeChild(a);
         window.URL.revokeObjectURL(turl);
 				console.log(blob);
-
-				payload.dispatch({
-					type: `base/save`,
-					payload: {
-						exporting: false,
-					}
-				});
 			}else{
 				message.error('服务器错误');
-			}
+      }
 		},
-		*exportExcel({ payload, url }, { call }) {
+		*exportExcel({ payload, url }, { call, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: true,
+        }
+      });
       yield call(exportExcel, payload, url);
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: false,
+        }
+      });
     },
+    
 
   },
 
