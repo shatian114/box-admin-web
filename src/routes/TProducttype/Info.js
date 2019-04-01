@@ -82,7 +82,7 @@ export default class DicManagerInfo extends Component {
         
 
         const { dispatch } = this.props;
-        if (this.props.base.info.id) {
+        if (this.props.base.info.producttypeid) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -117,27 +117,28 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tProducttypeId', {
- initialValue: info.tProducttypeId || newInfo.tProducttypeId,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },
-  ],
- })(<Input disabled />)}
- </FormItem>
+           
  <FormItem {...formItemLayout} hasFeedback label="产品类型id">
-{getFieldDecorator('producttypeid', {
- initialValue: info.producttypeid ||  newInfo.producttypeid,
+{getFieldDecorator('tProducttypeId', {
+ initialValue: info.tProducttypeId ||  newInfo.tProducttypeId,
   rules: [
     {
       required: true,
       message: '产品类型id不能缺失!',
     },{ required: true,message: '产品类型id不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Input min={0} disabled />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="产品类型编号">
+{getFieldDecorator('producttypeid', {
+ initialValue: info.producttypeid ||  newInfo.producttypeid,
+  rules: [
+    {
+      required: true,
+      message: '产品类型编号不能缺失!',
+    },{ required: true,message: '产品类型编号不能缺失!', },
+  ],
+ })(<Input min={0} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="产品类型名称">
 {getFieldDecorator('producttypename', {

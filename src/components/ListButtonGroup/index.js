@@ -33,7 +33,7 @@ export default class ListButtonGroup extends Component {
             icon="plus"
             type="primary"
             style={{ marginLeft: 8 }}
-            onClick={() => this.props.dispatch(routerRedux.push(`${this.props.routerUrl}/info`))}
+            onClick={ () => this.props.dispatch(routerRedux.push(`${this.props.routerUrl}/info`)) }
           >
             新建
           </Button>

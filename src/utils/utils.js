@@ -297,3 +297,8 @@ export function s2ab(s) {
 			return buf;
 	}
 }
+
+//表格里面显示是否
+export function viewBoolean(val, record, index) {
+  return <span>{val == "1" ? "是" : "否"}</span>;
+}
