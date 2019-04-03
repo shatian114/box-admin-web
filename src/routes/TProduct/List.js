@@ -184,7 +184,10 @@ temp = {
  {  title: '商品编号',   dataIndex: 'productid',     width: 150,     sorter: false,      },
  {  title: '商品排序',   dataIndex: 'orderindex',     width: 150,     sorter: false,      },
  {  title: '商品名称',   dataIndex: 'productname',     width: 150,     sorter: false,      },
- {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 450,     sorter: false,      },
+ {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 450,     sorter: false,   render: (val, record, index) => {
+    let indexImgArr = val.split(",");
+    return <img src={indexImgArr[0]} width={80} height={80} alt="暂无图片" />
+  }   },
  {  title: '剩余数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
  {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,      },
  {  title: '支付的费用',   dataIndex: 'price',     width: 150,     sorter: false,      },

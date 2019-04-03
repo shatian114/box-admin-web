@@ -8,15 +8,15 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Alert, Upload } from 'antd';
+import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Alert, Upload, Progress } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { isEmpty } from '../../utils/utils';
-import {uploadImg} from '../../utils/uploadImg';
+import { isEmpty, geneUuidArr } from '../../utils/utils';
+import {uploadImg, uploadUgc} from '../../utils/uploadImg';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
 
@@ -53,6 +53,11 @@ const submitFormLayout = {
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+
+  state = {
+    percent: 0,
+    indexImgArr: []
+  }
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -95,6 +100,29 @@ export default class DicManagerInfo extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
+    //先上传索引图
+    console.log(this.state.indexImgArr.length);
+    let uuidArr = geneUuidArr(this.state.indexImgArr.length);
+    let tagIndexStr = "";
+    for(let i=0; i<uuidArr.length; i++) {
+      let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
+      imgKey += "_indexTag_" + uuidArr[i] + ".jpg";
+      tagIndexStr += webConfig.tpUriPre + imgKey + ",";
+      uploadImg(this.state.indexImgArr[i].originFileObj, imgKey, v => {
+				if(v){
+          //tagIndexStr += webConfig.tpUriPre + imgKey + ",";
+					console.log('上传成功');
+				}else{
+					console.log('上传失败');
+				}
+			});
+    }
+    console.log("索引图: ", tagIndexStr);
+    this.props.form.setFields({
+      tagindex: {value: tagIndexStr}
+    });
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
@@ -127,6 +155,7 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  //上传主图
   uploadChange = (file) => {
 		this.props.dispatch({
 			type: 'base/save',
@@ -147,7 +176,38 @@ export default class DicManagerInfo extends Component {
 				}
 			});
 		}
-	}
+  }
+
+  //上传视频
+  uploadVideo = (file) => {
+    this.setState({
+      percent: 0
+    });
+		this.props.dispatch({
+			type: 'base/save',
+			payload: {
+				isSelectVideo: file.fileList.length > 0
+			}
+		})
+		if(file.fileList.length > 0) {
+      uploadUgc(file.fileList[0].originFileObj, this.progressCall).then(res => {
+        console.log("视频上传成功：", res);
+        this.props.form.setFields({
+          videolink: {value: res.video.url}
+        });
+      }).then(err => {
+        console.log('上传视频错误：', err);
+      });
+		}
+  }
+  
+  //上传视频进度
+  progressCall = result => {
+    this.setState({
+      percent: result,
+    })
+    console.log(result.curr);
+  };
 
   render() {
     const { submitting, form, loading, base } = this.props;
@@ -290,7 +350,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否审核过">
 {getFieldDecorator('ispassed', {
- initialValue: info.ispassed ||  newInfo.ispassed,
+ initialValue: info.ispassed ||  newInfo.ispassed || "1",
   rules: [
     {
       required: true,
@@ -304,7 +364,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否置顶">
 {getFieldDecorator('istop', {
- initialValue: info.istop ||  newInfo.istop,
+ initialValue: info.istop ||  newInfo.istop || "1",
   rules: [
     {
       required: true,
@@ -318,7 +378,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否允许用户上传图片">
 {getFieldDecorator('isneeduserpic', {
- initialValue: info.isneeduserpic ||  newInfo.isneeduserpic,
+ initialValue: info.isneeduserpic ||  newInfo.isneeduserpic || "1",
   rules: [
     {
       required: true,
@@ -332,7 +392,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否用户可留言">
 {getFieldDecorator('isneeduserinfo', {
- initialValue: info.isneeduserinfo ||  newInfo.isneeduserinfo,
+ initialValue: info.isneeduserinfo ||  newInfo.isneeduserinfo || "1",
   rules: [
     {
       required: true,
@@ -346,7 +406,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否需要输入完整收货地址">
 {getFieldDecorator('isneeduseraddress', {
- initialValue: info.isneeduseraddress ||  newInfo.isneeduseraddress,
+ initialValue: info.isneeduseraddress ||  newInfo.isneeduseraddress || "1",
   rules: [
     {
       required: true,
@@ -360,7 +420,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否要填写桌号信息">
 {getFieldDecorator('isneeddesktag', {
- initialValue: info.isneeddesktag ||  newInfo.isneeddesktag,
+ initialValue: info.isneeddesktag ||  newInfo.isneeddesktag || "1",
   rules: [
     {
       required: true,
@@ -374,7 +434,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否放到首页">
 {getFieldDecorator('isatmain', {
- initialValue: info.isatmain ||  newInfo.isatmain,
+ initialValue: info.isatmain ||  newInfo.isatmain || "1",
   rules: [
     {
       required: true,
@@ -395,7 +455,20 @@ export default class DicManagerInfo extends Component {
       message: '视频链接不能缺失!',
     },{ max: 255,message: '视频链接必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input disabled placeholder="请选择视频文件" />)}
+ <Alert type="warning" showIcon message="提示：只可选择一个视频，如果要重新选择视频，请先删除之前选择的视频" />
+  <Upload
+  	disabled={this.props.base.isSelectVideo}
+    onChange={this.uploadVideo}
+    onRemove={(file) => {this.props.form.setFields({videolink: undefined}); return true;}}
+  	listType="picture-card"
+  	multiple={false}
+  	beforeUpload={(file, fileList) => {
+  		return false;
+  	}}>
+   选择视频文件
+  </Upload>
+  <Progress percent={this.state.percent} />
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="产品主图">
 {getFieldDecorator('mainpic', {
@@ -406,12 +479,13 @@ export default class DicManagerInfo extends Component {
       message: '产品主图不能缺失!',
     },{ max: 400,message: '产品主图必须小于400位!',   },
   ],
- })(<Input placeholder="请输入" disabled />)}
+ })(<Input placeholder="请选择商品主图文件" disabled />)}
  <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
 						{info.mainpic ? <DelImg goDel={() => {info.mainpic=undefined}} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
 						<Upload
 							disabled={this.props.base.isSelectImg}
-							onChange={this.uploadChange}
+              onChange={this.uploadChange}
+              onRemove={(file) => {this.props.form.setFields({mainpic: undefined}); return true;}}
 							listType="picture-card"
 							multiple={false}
             	accept="image/jpg,image/jpeg,image/png"
@@ -430,7 +504,17 @@ export default class DicManagerInfo extends Component {
       message: '商品图片索引不能缺失!',
     },{ max: 255,message: '商品图片索引必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input placeholder="请选择商品索引图" disabled />)}
+  <Upload
+  	onChange={file => {this.setState({indexImgArr: file.fileList}); console.log(file.fileList.length);}}
+  	listType="picture-card"
+  	multiple={false}
+  	accept="image/jpg,image/jpeg,image/png"
+  	beforeUpload={(file, fileList) => {
+  		return false;
+  	}}>
+   选择商品索引图
+  </Upload>
  </FormItem>
 
           

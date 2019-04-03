@@ -1,6 +1,7 @@
 import {webConfig} from './Constant';
 import {getCosSigner} from '../services/api';
 import { message } from 'antd';
+import axios from 'axios';
 var COS = require('cos-js-sdk-v5');
 
 var cos = new COS({
@@ -47,4 +48,37 @@ export function uploadImg(img, imgPath, callback) {
       }
     }
   );
+}
+
+export function ugcGetSign(callback) {
+  return axios.get('https://qqphoto.cn/pet/pet?command=getuploadsignaturevideo', { param: {} })
+    .then(res => {
+      console.log('ugcGetSign: ', res.data);
+      return res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+//上传视频，参数：视频文件
+export function uploadUgc(ugcFile, progressCall) {
+  console.log('开始上传视频');
+  const tcVod = new TcVod.default({
+    getSignature: ugcGetSign
+  });
+  const uploader = tcVod.upload({
+    videoFile: ugcFile
+  });
+  return new Promise((resolve, reject) => {
+    uploader.on('video_progress', function(info) {
+      console.log('upload video: ', info.percent);
+      progressCall(info.percent * 100);
+    });
+    uploader.done().then(res => {
+      console.log('视频上传完成： ', res);
+      resolve(res)
+    });
+  });
+  
 }

@@ -41,6 +41,7 @@ export default {
   namespace: 'base',
 
   state: {
+    isSelectVideo: false,
     isSelectImg: false,
 		importResTitleArr: [],
 		shengCode: '130000',

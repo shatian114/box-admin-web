@@ -1,4 +1,5 @@
 import moment from 'moment';
+const UUID = require('uuidjs');
 
 const DateFormat = 'YYYY-MM-DD';
 
@@ -301,4 +302,21 @@ export function s2ab(s) {
 //表格里面显示是否
 export function viewBoolean(val, record, index) {
   return <span>{val == "1" ? "是" : "否"}</span>;
+}
+
+//根据值来删除数组元素
+export function delArrEle(arr, val) {
+  if (arr.indexOf(val) !== -1) {
+    arr.splice(arr.indexOf(val), 1);
+  }
+  return arr;
+}
+
+//生成uuid数组
+export function geneUuidArr(arrNum) {
+  let uuidArr = [];
+  for (let i = 0; i < arrNum; i++) {
+    uuidArr.push(UUID.generate());
+  }
+  return uuidArr;
 }
