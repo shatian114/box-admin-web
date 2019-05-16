@@ -1,7 +1,7 @@
 const path = require('path');
 var SERVICE_URL = 'http://124.232.150.3:8086';
 export default {
-  outputPath: 'cpzhsqweb',
+  outputPath: 'clzweb',
 
   entry: 'src/index.js',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
@@ -15,9 +15,9 @@ export default {
   },
 
   proxy: {
-    '/cpzhsq': {
+    '/clz': {
       target: SERVICE_URL,
-      pathRewrite: { '^/cpzhsq': '' },
+      pathRewrite: { '^/clz': '' },
       changeOrigin: true,
       secure: false,
     },
@@ -34,6 +34,6 @@ export default {
     template: './src/index.ejs',
   },
   disableDynamicImport: true,
-  publicPath: '/cpzhsqweb/',
+  publicPath: '/clzweb/',
   hash: true,
 };

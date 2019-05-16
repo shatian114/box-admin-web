@@ -8,12 +8,10 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Upload, Tooltip, Popover, Alert } from 'antd';
-import moment from 'moment';
+import { Form, Input, Button, Spin, Select, Upload, Alert } from 'antd';
 import { routerRedux } from 'dva/router';
 import Operate from '../../components/Oprs';
 import '../../utils/utils.less';
-import { isEmpty } from '../../utils/utils';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
 import {shengShiQu} from '../../utils/shengShiQu';
@@ -22,8 +20,6 @@ import {uploadImg} from '../../utils/uploadImg';
 const FormItem = Form.Item;
 const { Option } = Select;
 
-const { TextArea } = Input;
-const DateFormat = 'YYYY-MM-DD';
 const url = 'T1wuyexiaoqu';
 
 const formItemLayout = {
@@ -158,8 +154,8 @@ export default class DicManagerInfo extends Component {
 		this.props.dispatch({
 			type: 'base/save',
 			payload: {
-				isSelectImg: file.fileList.length > 0
-			}
+				isSelectImg: file.fileList.length > 0,
+			},
 		})
 		if(file.fileList.length > 0) {
 			let imgKey = (this.props.base.info.t1wuyexiaoquId || this.props.base.newInfo.t1wuyexiaoquId)+'.jpg';

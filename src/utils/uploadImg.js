@@ -19,35 +19,37 @@ var cos = new COS({
   },
 });
 
-export function uploadImg(img, imgPath, callback) {
-  cos.putObject(
-    {
-      Bucket: webConfig.Bucket,
-      Region: webConfig.Region,
-      Key: imgPath,
-      Body: img,
-    },
-    function(err, data) {
-      if (data != undefined) {
-        callback(true);
-        //图片上传成功
-        //console.log('upload code: ', data);
-      } else {
-        callback(false);
-        //图片上传失败
-        console.log('img upload fail');
-        for (var k in err) {
-          if (typeof err[k] == 'Object') {
-            for (var k2 in err[k]) {
-              console.log(k2 + ': ' + err[k][k2]);
+export function uploadImg(img, imgPath) {
+  return new Promise((resolve, reject) => {
+    cos.putObject(
+      {
+        Bucket: webConfig.Bucket,
+        Region: webConfig.Region,
+        Key: imgPath,
+        Body: img,
+      },
+      function(err, data) {
+        if (data) {
+          resolve(true)
+          //图片上传成功
+          //console.log('upload code: ', data);
+        } else {
+          reject(false);
+          //图片上传失败
+          console.log('img upload fail');
+          for (var k in err) {
+            if (typeof err[k] == 'Object') {
+              for (var k2 in err[k]) {
+                console.log(k2 + ': ' + err[k][k2]);
+              }
+            } else {
+              console.log(k + ': ' + err[k]);
             }
-          } else {
-            console.log(k + ': ' + err[k]);
           }
         }
       }
-    }
-  );
+    );
+  });
 }
 
 export function ugcGetSign(callback) {
@@ -62,7 +64,7 @@ export function ugcGetSign(callback) {
 }
 
 //上传视频，参数：视频文件
-export function uploadUgc(ugcFile, progressCall) {
+export async function uploadUgc(ugcFile, progressCall) {
   console.log('开始上传视频');
   const tcVod = new TcVod.default({
     getSignature: ugcGetSign
@@ -77,7 +79,7 @@ export function uploadUgc(ugcFile, progressCall) {
     });
     uploader.done().then(res => {
       console.log('视频上传完成： ', res);
-      resolve(res)
+      resolve(res);
     });
   });
   

@@ -32,7 +32,6 @@ import {
   addobjCount,
   queryLocation,
   queryAllDic,
-  getCosSigner,
 } from '../services/api';
 import { queryList } from '../services/list';
 import { isEmpty } from '../utils/utils';
@@ -53,6 +52,7 @@ export default {
     info: {},
     otherInfo: {},
     newOther: {},
+    tagindex: '',
   },
 
   effects: {
@@ -180,6 +180,14 @@ export default {
     *info({ payload, url, callback }, { call, put }) {
       const response = yield call(getobj, payload, url);
       if (response && response.code === '200') {
+        if(response.data.tagindex) {
+          yield put({
+            type: 'save',
+            payload: {
+              tagindex: response.data.tagindex || '',
+            },
+          });
+        }
         yield put({
           type: 'save',
           payload: {
@@ -552,18 +560,17 @@ export default {
         Message.error(response.msg);
       }
     },
-    *uploadImg({payload}, { call, put }) {
-      const response = yield call(getCosSigner, {...payload});
-      if(response) {
+    // *uploadImg({payload}, { call, put }) {
+    //   const response = yield call(getCosSigner, {...payload});
+    //   if(response) {
         
-      }
-      console.log('get cos signer: ', response);
-    }
+    //   }
+    //   console.log('get cos signer: ', response);
+    // }
   },
 
   reducers: {
     save(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         ...payload,
@@ -575,6 +582,7 @@ export default {
         ...state,
         newInfo: {},
         info: {},
+        tagindex: '',
       };
     },
   },

@@ -1,12 +1,12 @@
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 
 import store from '../index';
 import { getToken } from '../utils/authority';
 
-const SERVER_ADDR = '/cpzhsq';
+const SERVER_ADDR = '/clz';
 
 const codeMessage = {
   // 200: '服务器成功返回请求的数据。',
@@ -113,7 +113,8 @@ export function request(url, options) {
         return;
       }
       if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/exception/404'));
+        // dispatch(routerRedux.push('/exception/404'));
+        message.error('请求的链接不存在');
       }
     });
 }
@@ -167,7 +168,8 @@ export function requestModels(url, options) {
         return;
       }
       if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/exception/404'));
+        //dispatch(routerRedux.push('/exception/404'));
+        message.error('请求的链接不存在');
       }
     });
 }
@@ -234,7 +236,8 @@ export function download(url, options) {
         return;
       }
       if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/exception/404'));
+        // dispatch(routerRedux.push('/exception/404'));
+        message.error('请求的链接不存在');
       }
     });
 }
@@ -296,7 +299,8 @@ export function requestCosAuth(url, options) {
         return;
       }
       if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/exception/404'));
+        // dispatch(routerRedux.push('/exception/404'));
+        message.error('请求的链接不存在');
       }
     });
 }
