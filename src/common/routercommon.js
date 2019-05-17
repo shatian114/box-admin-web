@@ -251,6 +251,16 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/T1kaimentongji':{  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji')),  },
 	'/T1kaimentongji/list': {  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji/List')),  },
 	'/T1kaimentongji/info': {  component: dynamicWrapper(app, [], () => import('../routes/T1kaimentongji/Info')),  },
+	
+	'/TClzBigtype':{  component: dynamicWrapper(app, [], () => import('../routes/TClzBigtype')),  },
+	'/TClzBigtype/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzBigtype/List')),  },
+	'/TClzBigtype/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzBigtype/Info')),  },
+	'/TClzFood':{  component: dynamicWrapper(app, [], () => import('../routes/TClzFood')),  },
+	'/TClzFood/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzFood/List')),  },
+	'/TClzFood/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzFood/Info')),  },
+	'/TClzSmalltype':{  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype')),  },
+	'/TClzSmalltype/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype/List')),  },
+	'/TClzSmalltype/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype/Info')),  },
 });
 
 export default commonroute;

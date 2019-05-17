@@ -53,6 +53,7 @@ export default {
     otherInfo: {},
     newOther: {},
     tagindex: '',
+    upList: [],
   },
 
   effects: {
@@ -88,19 +89,24 @@ export default {
         Message.error('系统繁忙');
       }
 		},
-		*getUpperId({ payload, url }, { call, put }) {
+		*getUpperId({ payload }, { call, put }) {
       const temp = {
         page: 1,
         len: 100000,
         queryMap: {},
-        url: url,
+        url: payload.url,
         columnProp: undefined,
         columnOrder: undefined,
 			};
 			
 			const response = yield call(queryList, temp);
 			if(response){
-				let list = response.data.list;
+        yield put({
+          type: 'save',
+          payload: {
+            upList: response.data.list,
+          },
+        })
 				
 			}else{
 				message.error('获取上级id失败');

@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Spin } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import { Link } from 'dva/router';
 import styles from './index.less';
 import db from '../../utils/db';
 import {webConfig} from '../../utils/Constant';
+import { connect } from 'dva';
 
 const { Sider } = Layout;
 
@@ -28,13 +29,26 @@ export const getMeunMatcheys = (flatMenuKeys, path) => {
   });
 };
 
+@connect()
 export default class SiderMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.menus = props.menuData;
     this.state = {
       openKeys: [],
+      loading: true,
     };
+  }
+
+  componentDidMount = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'setting/getMenuData',
+      callback: () =>
+        this.setState({
+          loading: false,
+        }),
+    });
   }
 
   onOpenChange = openKeys => {
@@ -115,18 +129,22 @@ export default class SiderMenu extends PureComponent {
             {/* <h1>{webConfig.webName}</h1> */}
           </Link>
         </div>
-        <Menu
-          key="Menu"
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['link_4603']}
-          openKeys={this.state.openKeys}
-          onOpenChange={this.onOpenChange}
-          // selectedKeys={selectedKeys}
-          style={{ padding: '16px 0', width: '100%' }}
-        >
-          {this.generateMenuTree(this.menus)}
-        </Menu>
+        {
+          this.state.loading ? <div style={{textAlign: 'center'}}><Spin /></div> : 
+          <Menu
+            key="Menu"
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={['link_4603']}
+            openKeys={this.state.openKeys}
+            onOpenChange={this.onOpenChange}
+            // selectedKeys={selectedKeys}
+            style={{ padding: '16px 0', width: '100%' }}
+          >
+            {this.generateMenuTree(this.props.menuData)}
+          </Menu>
+        }
+        
       </Sider>
     );
   }

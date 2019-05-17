@@ -1,5 +1,5 @@
 const path = require('path');
-var SERVICE_URL = 'http://124.232.150.3:8086';
+var SERVICE_URL = 'http://124.232.150.3:8088';
 export default {
   outputPath: 'clzweb',
 

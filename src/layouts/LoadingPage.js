@@ -32,7 +32,7 @@ const getRedirectData = () => {
 class LoadingPage extends PureComponent {
   state = {
     isMobile: false,
-    loading: true,
+    loading: false,
   };
 
   componentDidMount() {
@@ -46,20 +46,13 @@ class LoadingPage extends PureComponent {
     dispatch({
       type: 'user/fetchCurrent',
     });
-    dispatch({
-      type: 'setting/getMenuData',
-      callback: () =>
-        this.setState({
-          loading: false,
-        }),
-    });
     /*dispatch({
       type: 'base/querySubwareList',
     });*/
 
-    dispatch({
-      type: 'base/queryAllDic',
-    });
+    // dispatch({
+    //   type: 'base/queryAllDic',
+    // });
     /* dispatch({
       type: 'user/info',
     });

@@ -28,4 +28,5 @@ export const webConfig = {
 	Bucket: 'pet-1252596634',
   Region: 'ap-chengdu',
   tpUriPre: 'http://pet-1252596634.cos.ap-chengdu.myqcloud.com/',
+  foodunitNameArr: ['斤', '两', '个', '升'],
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout } from 'antd';
+import { Layout, Spin } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -11,7 +11,6 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-//import logo from '../assets/logo.svg';
 import logo from '../assets/logo.png';
 import { getRouterData } from '../common/router';
 import { app } from '../index';
@@ -86,7 +85,7 @@ class BasicLayout extends React.PureComponent {
     const { location } = this.props;
     const { routerData } = this.state;
     const { pathname } = location;
-    let title = `${webConfig.companyName}${webConfig.webName}管理系统`;
+    let title = `${webConfig.webName}管理系统`;
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
@@ -159,6 +158,7 @@ class BasicLayout extends React.PureComponent {
             menuData,
           }}
         />
+        
         <Layout>
           <Header style={{ padding: 0 }}>
             <GlobalHeader
