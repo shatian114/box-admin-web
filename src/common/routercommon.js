@@ -261,6 +261,9 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/TClzSmalltype':{  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype')),  },
 	'/TClzSmalltype/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype/List')),  },
 	'/TClzSmalltype/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzSmalltype/Info')),  },
+	'/TClzAssignfood':{  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood')),  },
+	'/TClzAssignfood/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood/List')),  },
+	'/TClzAssignfood/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood/Info')),  },
 });
 
 export default commonroute;

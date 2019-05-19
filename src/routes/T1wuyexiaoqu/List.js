@@ -42,8 +42,8 @@ export default class T1wuyexiaoquList extends Component {
 			type: 'base/save',
 			payload: {
 				shengCode: '',
-				shiCode: ''
-			}
+				shiCode: '',
+			},
 		})
   }
 
@@ -127,25 +127,25 @@ export default class T1wuyexiaoquList extends Component {
   };
 
 	changeSheng = (v, v2) => {
-		if(v2 != undefined){
+		if(v2 !== undefined){
 			this.props.dispatch({
 				type: 'base/save', 
 				payload: 
-					{shengCode: v2.key}
+					{shengCode: v2.key},
 				}
 			);
 			this.props.form.setFields({
-				shi: {value: ''}
+				shi: {value: ''},
 			});
 		}else{
 			this.props.dispatch({
 				type: 'base/save', 
 				payload: 
-					{shengCode: ''}
+					{shengCode: ''},
 				}
 			);
 			this.props.form.setFields({
-				shi: {value: ''}
+				shi: {value: ''},
 			});
 		}
 		let v3 = {};
@@ -154,25 +154,25 @@ export default class T1wuyexiaoquList extends Component {
 	}
 
 	changeShi = (v, v2) => {
-		if(v2 != undefined){
+		if(v2 !== undefined){
 			this.props.dispatch({
 				type: 'base/save', 
 				payload: 
-					{shiCode: v2.key}
+					{shiCode: v2.key},
 				}
 			);
 			this.props.form.setFields({
-				qu: {value: ''}
+				qu: {value: ''},
 			});
 		}else{
 			this.props.dispatch({
 				type: 'base/save', 
 				payload: 
-					{shiCode: ''}
+					{shiCode: ''},
 				}
 			);
 			this.props.form.setFields({
-				qu: {value: ''}
+				qu: {value: ''},
 			});
 		}
 	}
@@ -183,8 +183,8 @@ export default class T1wuyexiaoquList extends Component {
 			payload: {
 				url: '/getCosAuth',
 				signType: 'img',
-				imgKey: '123'
-			}
+				imgKey: '123',
+			},
 		})
 	}
 

@@ -19,7 +19,7 @@ class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = `${webConfig.companyName}${webConfig.webName}管理系统-登录`;
+    let title = `${webConfig.webName}管理系统-登录`;
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
@@ -38,7 +38,7 @@ class UserLayout extends React.PureComponent {
                   <span className={styles.title}>{webConfig.webName}管理系统</span>
                 </Link>
               </div> */}
-              <div className={styles.desc}>{webConfig.companyName}科技有限公司</div>
+              <div className={styles.desc}>{webConfig.companyName}</div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item => (

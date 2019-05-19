@@ -179,7 +179,7 @@ temp = {
           </Row>
         ),
       },
-       {  title: '大类id',   dataIndex: 't_clz_bigtype_id',     width: 150,     sorter: false,      },
+       {  title: '大类编号',   dataIndex: 't_clz_bigtype_id',     width: 150,     sorter: false,      },
  {  title: '大类名称',   dataIndex: 'typename',     width: 150,     sorter: false,      },
  {  title: '大类描述',   dataIndex: 'typedesc',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },

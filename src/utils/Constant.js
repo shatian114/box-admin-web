@@ -24,7 +24,7 @@ export function geneImportColumn(column){
 export const webConfig = {
 	webName: '海南菜篮子',
 	webPreName: 'clz',
-	companyName: '海南菜篮子',
+	companyName: '海南环宇信息技术有限公司',
 	Bucket: 'pet-1252596634',
   Region: 'ap-chengdu',
   tpUriPre: 'http://pet-1252596634.cos.ap-chengdu.myqcloud.com/',

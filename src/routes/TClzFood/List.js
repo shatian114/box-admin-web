@@ -6,23 +6,20 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import moment from 'moment';
 import ListButtonGroup from '../../components/ListButtonGroup';
-import { webConfig } from '../../utils/Constant';
+import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
 
 import styles from '../../styles/list.less';
 
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
-import cache from '../../utils/cache';
-import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -187,13 +184,13 @@ temp = {
           </Row>
         ),
       },
-       {  title: '菜品id',   dataIndex: 't_clz_food_id',     width: 150,     sorter: false,      },
- {  title: '关联的小类ID',   dataIndex: 't_clz_smalltype_id',     width: 150,     sorter: false,      },
+       {  title: '菜品编号',   dataIndex: 't_clz_food_id',     width: 150,     sorter: false,      },
+ {  title: '关联的小类',   dataIndex: 'smalltypename',     width: 150,     sorter: false,      },
  {  title: '菜的名称',   dataIndex: 'foodname',     width: 150,     sorter: false,      },
  {  title: '菜的描述',   dataIndex: 'fooddesc',     width: 150,     sorter: false,      },
- {  title: '菜的单价,单位:元 支持小数点',   dataIndex: 'foodprice',     width: 150,     sorter: false,      },
- {  title: '单位，斤 、两 、个 、升 等',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
- {  title: '菜的图片链接，云端图片的链接',   dataIndex: 'foodpiclink',     width: 150,     sorter: false,   render: (text) => (
+ {  title: '菜的单价',   dataIndex: 'foodprice',     width: 150,     sorter: false,      },
+ {  title: '单位',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
+ {  title: '菜的图片',   dataIndex: 'foodpiclink',     width: 150,     sorter: false,   render: (text) => (
   <img src={`${text}?${Math.random}`} width={80} height={80} alt="暂无图片" />
  )   },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
@@ -232,7 +229,8 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
-              
+            </Row>
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={24}>
                 <ListButtonGroup handleFormReset={this.handleFormReset} routerUrl={routerUrl} dispatch={this.props.dispatch} handleExport={this.handleExport} url={url} handleSearch={this.handleSearch} />
               </Col>
