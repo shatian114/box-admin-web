@@ -10,6 +10,7 @@ import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePi
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
+import { Link } from 'dva/router';
 import moment from 'moment';
 import ListButtonGroup from '../../components/ListButtonGroup';
 import ShengShiQu from '../../components/ShengShiQu';
@@ -58,26 +59,23 @@ export default class TClzAssignfoodList extends Component {
     const { form, list } = this.props;
     const { setList } = list;
     form.validateFieldsAndScroll((err, values) => {
-
-      console.log('test form value: ', values);
-
-//       let temp = {};
-//       if (!isEmpty(values.start_create_date))
-// temp = {
-//   ...temp,
-//   start_create_date: values.start_create_date.format(DateFormat),
-//  };
-// if (!isEmpty(values.end_create_date))
-// temp = {
-//   ...temp,
-//   end_create_date: values.end_create_date.format(DateFormat),
-//  };
+      let temp = {};
+      if (!isEmpty(values.start_create_date))
+temp = {
+  ...temp,
+  start_create_date: values.start_create_date.format(DateFormat),
+ };
+if (!isEmpty(values.end_create_date))
+temp = {
+  ...temp,
+  end_create_date: values.end_create_date.format(DateFormat),
+ };
 
       
-//       setList({
-//         current: 1,
-//         queryMap: { ...values, ...temp },
-//       });
+      setList({
+        current: 1,
+        queryMap: { ...values, ...temp },
+      });
     });
   };
 
@@ -218,16 +216,13 @@ export default class TClzAssignfoodList extends Component {
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点id'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-{/* <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='省'>{getFieldDecorator('sheng',{initialValue: this.props.list.queryMap.sheng, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Input placeholder='请输入' />)} </FormItem> </Col> */}
-{<ShengShiQu getFieldDecorator={getFieldDecorator} base={base} form={form} />}
+              {<ShengShiQu getFieldDecorator={getFieldDecorator} base={base} form={form} />}
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='详细地址'>{getFieldDecorator('address',{initialValue: this.props.list.queryMap.address, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='经度'>{getFieldDecorator('longitude',{initialValue: this.props.list.queryMap.longitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='纬度'>{getFieldDecorator('latitude',{initialValue: this.props.list.queryMap.latitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点名称'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.assignfoodname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点描述'>{getFieldDecorator('assignfooddesc',{initialValue: this.props.list.queryMap.assignfooddesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点外景图片'>{getFieldDecorator('assignfoodnpic',{initialValue: this.props.list.queryMap.assignfoodnpic, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+{/* <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点外景图片'>{getFieldDecorator('assignfoodnpic',{initialValue: this.props.list.queryMap.assignfoodnpic, })(<Input placeholder='请输入' />)} </FormItem> </Col> */}
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='负责人名称'>{getFieldDecorator('assignfoodadminname',{initialValue: this.props.list.queryMap.assignfoodadminname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='负责人联系方式'>{getFieldDecorator('assignfoodadminphone',{initialValue: this.props.list.queryMap.assignfoodadminphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点对外电话'>{getFieldDecorator('assignfoodphone',{initialValue: this.props.list.queryMap.assignfoodphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>

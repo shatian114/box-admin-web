@@ -269,7 +269,7 @@ export default class DicManagerInfo extends Component {
       message: '政府补贴费率,单位:元 支持小数点不能缺失!',
     },
   ],
- })()}
+ })(<Input placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="外墙广告价位,单位:元 支持小数点">
 {getFieldDecorator('advertisementprice', {
@@ -280,7 +280,7 @@ export default class DicManagerInfo extends Component {
       message: '外墙广告价位,单位:元 支持小数点不能缺失!',
     },
   ],
- })()}
+ })(<Input placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="外墙广告价位描述">
 {getFieldDecorator('advertisementpricedesc', {
@@ -302,7 +302,10 @@ export default class DicManagerInfo extends Component {
       message: '是否交过保证金不能缺失!',
     },{ required: true,message: '是否交过保证金不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+   <Option value="1">是</Option>
+   <Option value="0">否</Option>
+ </Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="保证金数额">
 {getFieldDecorator('guranteeamount', {
@@ -313,7 +316,7 @@ export default class DicManagerInfo extends Component {
       message: '保证金数额不能缺失!',
     },{ required: true,message: '保证金数额不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<InputNumber min={0} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="预留字段1">
 {getFieldDecorator('yuliu1', {
