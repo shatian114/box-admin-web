@@ -14,6 +14,10 @@ export default {
     components: path.resolve(__dirname, 'src/components/'),
   },
 
+  externals: {
+    'AMap': 'AMap',
+  },
+
   proxy: {
     '/clz': {
       target: SERVICE_URL,

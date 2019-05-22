@@ -75,41 +75,81 @@ export default class ShengShiQu extends Component {
 
   render() {
 
-    const { getFieldDecorator, base, form } = this.props;
+    const { getFieldDecorator, base, form, gridType } = this.props;
 
     return (
-      <span className={styles.submitButtons}>
-        <Col {...formItemGrid}>
-					<FormItem {...formItemLayout} label='省'>{getFieldDecorator('sheng',{initialValue: this.props.list.queryMap.sheng, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeSheng} allowClear>
-							{
-							 shengShiQu['86'].map(v => (
-								<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
-							 ))
-							}
-						</Select>)}
-					</FormItem>
-				</Col>
-				<Col {...formItemGrid}>
-					<FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeShi} allowClear>
-							{
-								shengShiQu[this.props.base.shengCode] ? shengShiQu[this.props.base.shengCode].map(v => (
-									<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
-								 )) : ''
-							}
-						</Select>)}
-					</FormItem>
-				</Col>
-				<Col {...formItemGrid}>
-					<FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Select dropdownMatchSelectWidth={true} allowClear>
-							{
-								shengShiQu[this.props.base.shiCode] ? shengShiQu[this.props.base.shiCode].map(v => (
-									<Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
-								 )) : ''
-							}
-						</Select>)}
-					</FormItem>
-				</Col>
-      </span>
+      (gridType === 'list') ? (<span className={styles.submitButtons}>
+      <Col {...formItemGrid}>
+        <FormItem {...formItemLayout} label='省'>{getFieldDecorator('sheng',{initialValue: this.props.list.queryMap.sheng, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeSheng} allowClear>
+            {
+             shengShiQu['86'].map(v => (
+              <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+             ))
+            }
+          </Select>)}
+        </FormItem>
+      </Col>
+      <Col {...formItemGrid}>
+        <FormItem {...formItemLayout} label='市'>{getFieldDecorator('shi',{initialValue: this.props.list.queryMap.shi, })(<Select dropdownMatchSelectWidth={true} onChange={this.changeShi} allowClear>
+            {
+              shengShiQu[this.props.base.shengCode] ? shengShiQu[this.props.base.shengCode].map(v => (
+                <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+               )) : ''
+            }
+          </Select>)}
+        </FormItem>
+      </Col>
+      <Col {...formItemGrid}>
+        <FormItem {...formItemLayout} label='区'>{getFieldDecorator('qu',{initialValue: this.props.list.queryMap.qu, })(<Select dropdownMatchSelectWidth={true} allowClear>
+            {
+              shengShiQu[this.props.base.shiCode] ? shengShiQu[this.props.base.shiCode].map(v => (
+                <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+               )) : ''
+            }
+          </Select>)}
+        </FormItem>
+      </Col>
+    </span>) : (<span>
+        <FormItem {...this.props.formItemLayoutInfo} hasFeedback label='省'>{getFieldDecorator('sheng',{initialValue: base.info.sheng || base.newInfo.sheng, rules: [
+    {
+      required: true,
+      message: '省不能缺失!',
+    },{ max: 255,message: '省必须小于255位!',   },
+  ],})(<Select dropdownMatchSelectWidth={true} onChange={this.changeSheng} allowClear>
+            {
+             shengShiQu['86'].map(v => (
+              <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+             ))
+            }
+          </Select>)}
+        </FormItem>
+        <FormItem {...this.props.formItemLayoutInfo} hasFeedback label='市'>{getFieldDecorator('shi',{initialValue: base.info.shi || base.newInfo.shi, rules: [
+    {
+      required: true,
+      message: '市不能缺失!',
+    },{ max: 255,message: '市必须小于255位!',   },
+  ],})(<Select dropdownMatchSelectWidth={true} onChange={this.changeShi} allowClear>
+            {
+              shengShiQu[this.props.base.shengCode] ? shengShiQu[this.props.base.shengCode].map(v => (
+                <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+               )) : ''
+            }
+          </Select>)}
+        </FormItem>
+        <FormItem {...this.props.formItemLayoutInfo} hasFeedback label='区'>{getFieldDecorator('qu',{initialValue: base.info.qu || base.newInfo.qu, rules: [
+    {
+      required: true,
+      message: '区不能缺失!',
+    },{ max: 255,message: '区必须小于255位!',   },
+  ],})(<Select dropdownMatchSelectWidth={true} allowClear>
+            {
+              shengShiQu[this.props.base.shiCode] ? shengShiQu[this.props.base.shiCode].map(v => (
+                <Option key={v.code} value={v.name} title={v.name}>{v.name}</Option>
+               )) : ''
+            }
+          </Select>)}
+        </FormItem>
+    </span>)
     );
   }
 }

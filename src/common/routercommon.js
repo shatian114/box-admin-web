@@ -264,6 +264,10 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/TClzAssignfood':{  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood')),  },
 	'/TClzAssignfood/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood/List')),  },
 	'/TClzAssignfood/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzAssignfood/Info')),  },
+	'/TClzDeliveryclerk':{  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk')),  },
+	'/TClzDeliveryclerk/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk/List')),  },
+	'/TClzDeliveryclerk/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk/Info')),  },
+ 
 });
 
 export default commonroute;

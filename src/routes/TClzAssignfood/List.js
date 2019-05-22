@@ -14,9 +14,8 @@ import { Link } from 'dva/router';
 import moment from 'moment';
 import ListButtonGroup from '../../components/ListButtonGroup';
 import ShengShiQu from '../../components/ShengShiQu';
-
+import { FormValid } from '../../utils/FormValid';
 import styles from '../../styles/list.less';
-
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
@@ -125,9 +124,7 @@ temp = {
 
 
   render() {
-    const { form, base } = this.props;
-    
-    
+    const { form, base, list } = this.props;
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
     const showConfirm = record => {
@@ -178,7 +175,7 @@ temp = {
           </Row>
         ),
       },
-       {  title: '配菜点id',   dataIndex: 't_clz_assignfood_id',     width: 150,     sorter: false,      },
+       {  title: '配菜点编号',   dataIndex: 't_clz_assignfood_id',     width: 150,     sorter: false,      },
  {  title: '省',   dataIndex: 'sheng',     width: 150,     sorter: false,      },
  {  title: '市',   dataIndex: 'shi',     width: 150,     sorter: false,      },
  {  title: '区',   dataIndex: 'qu',     width: 150,     sorter: false,      },
@@ -187,13 +184,15 @@ temp = {
  {  title: '纬度',   dataIndex: 'latitude',     width: 150,     sorter: false,      },
  {  title: '配菜点名称',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
  {  title: '配菜点描述',   dataIndex: 'assignfooddesc',     width: 150,     sorter: false,      },
- {  title: '配菜点外景图片',   dataIndex: 'assignfoodnpic',     width: 150,     sorter: false,      },
+ {  title: '配菜点外景图片',   dataIndex: 'assignfoodnpic',     width: 150,     sorter: false,   render: (text) => (
+  <img src={`${text}?${Math.random}`} width={80} height={80} alt="暂无图片" />
+ )   },
  {  title: '负责人名称',   dataIndex: 'assignfoodadminname',     width: 150,     sorter: false,      },
  {  title: '负责人联系方式',   dataIndex: 'assignfoodadminphone',     width: 150,     sorter: false,      },
  {  title: '配菜点对外电话',   dataIndex: 'assignfoodphone',     width: 150,     sorter: false,      },
- {  title: '政府补贴费率,单位:元 支持小数点',   dataIndex: 'subsideprice',     width: 150,     sorter: false,      },
- {  title: '外墙广告价位,单位:元 支持小数点',   dataIndex: 'advertisementprice',     width: 150,     sorter: false,      },
- {  title: '外墙广告价位描述',   dataIndex: 'advertisementpricedesc',     width: 150,     sorter: false,      },
+ {  title: '政府补贴费率',   dataIndex: 'subsideprice',     width: 150,     sorter: false,      },
+ {  title: '外墙广告价位',   dataIndex: 'advertisementprice',     width: 150,     sorter: false,      },
+ {  title: '外墙广告描述',   dataIndex: 'advertisementpricedesc',     width: 150,     sorter: false,      },
  {  title: '是否交过保证金',   dataIndex: 'ispaygurantee',     width: 150,     sorter: false,      },
  {  title: '保证金数额',   dataIndex: 'guranteeamount',     width: 150,     sorter: false,      },
  {  title: '预留字段1',   dataIndex: 'yuliu1',     width: 150,     sorter: false,      },
@@ -215,8 +214,8 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点id'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-              {<ShengShiQu getFieldDecorator={getFieldDecorator} base={base} form={form} />}
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点编号'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+              {<ShengShiQu getFieldDecorator={getFieldDecorator} base={base} form={form} gridType='list' list={list} />}
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='详细地址'>{getFieldDecorator('address',{initialValue: this.props.list.queryMap.address, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='经度'>{getFieldDecorator('longitude',{initialValue: this.props.list.queryMap.longitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='纬度'>{getFieldDecorator('latitude',{initialValue: this.props.list.queryMap.latitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
@@ -232,10 +231,10 @@ temp = {
    <Option value="1">是</Option>
    <Option value="2">否</Option>
  </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='保证金数额(起始)'>{getFieldDecorator('start_guranteeamount',{initialValue: this.props.list.queryMap.start_guranteeamount  ? moment(this.props.list.queryMap.start_guranteeamount): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='保证金数额(结束)'>{getFieldDecorator('end_guranteeamount',{initialValue: this.props.list.queryMap.end_guranteeamount  ? moment(this.props.list.queryMap.end_guranteeamount): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='保证金数额(起始)'>{getFieldDecorator('start_guranteeamount',{initialValue: this.props.list.queryMap.start_guranteeamount  ? moment(this.props.list.queryMap.start_guranteeamount): null, rules: [{ validator: FormValid.jine },] })
+ (<InputNumber addonAfter='元' placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='保证金数额(结束)'>{getFieldDecorator('end_guranteeamount',{initialValue: this.props.list.queryMap.end_guranteeamount  ? moment(this.props.list.queryMap.end_guranteeamount): null, rules: [{ validator: FormValid.jine },] })
+ (<InputNumber addonAfter='元' placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='预留字段1'>{getFieldDecorator('yuliu1',{initialValue: this.props.list.queryMap.yuliu1, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='预留字段2'>{getFieldDecorator('yuliu2',{initialValue: this.props.list.queryMap.yuliu2, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='预留字段3'>{getFieldDecorator('yuliu3',{initialValue: this.props.list.queryMap.yuliu3, })(<Input placeholder='请输入' />)} </FormItem> </Col>

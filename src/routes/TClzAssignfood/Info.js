@@ -8,9 +8,15 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, Row, Button, Spin, Select, Alert, Upload, Col } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
+import DelImg from '../../components/DelImg';
+import {uploadImg} from '../../utils/uploadImg';
+import ShengShiQu from '../../components/ShengShiQu';
+import { webConfig } from '../../utils/Constant';
+import { FormValid } from '../../utils/FormValid';
+import AMap from '../../components/AMap';
 
 import Operate from '../../components/Oprs';
 
@@ -49,6 +55,15 @@ const submitFormLayout = {
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+  
+  state = {
+    uploading: false,
+    mapPoint: {
+      lng: 111.496392,
+      lat: 36.952779
+    }
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
@@ -108,6 +123,55 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  goDel = () => {
+    this.props.form.setFields({
+      foodpiclink: {value: ""},
+    });
+    this.props.base.info.foodpiclink = "";
+  }
+
+  uploadChange = (file) => {
+		this.props.dispatch({
+			type: 'base/save',
+			payload: {
+				isSelectImg: file.fileList.length > 0,
+			},
+		})
+		if(file.fileList.length > 0) {
+      this.setState({
+        uploading: true,
+      });
+			const imgKey = `${(this.props.base.info.tClzAssignfoodId || this.props.base.newInfo.tClzAssignfoodId)}.jpg`;
+			uploadImg(file.fileList[0].originFileObj, imgKey).then( v => {
+				if(v){
+					this.props.form.setFields({
+						assignfoodnpic: {value: webConfig.tpUriPre + imgKey},
+          });
+          console.log('上传成功');
+          this.setState({
+            uploading: false,
+          });
+				}else{
+          console.log('上传失败');
+          this.setState({
+            uploading: false,
+          });
+				}
+			});
+		}else{
+      this.props.form.setFields({
+        assignfoodnpic: {value: ""},
+      });
+    }
+  }
+  
+  setMap = (lng, lat) => {
+    this.props.form.setFieldsValue({
+      longitude: lng,
+      latitude: lat,
+    });
+  }
+
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
@@ -117,7 +181,7 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="配菜点id">
+           <FormItem {...formItemLayout} hasFeedback label="配菜点编号">
 {getFieldDecorator('tClzAssignfoodId', {
  initialValue: info.tClzAssignfoodId || newInfo.tClzAssignfoodId,
   rules: [
@@ -128,39 +192,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input disabled />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="省">
-{getFieldDecorator('sheng', {
- initialValue: info.sheng ||  newInfo.sheng,
-  rules: [
-    {
-      required: true,
-      message: '省不能缺失!',
-    },{ max: 255,message: '省必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="市">
-{getFieldDecorator('shi', {
- initialValue: info.shi ||  newInfo.shi,
-  rules: [
-    {
-      required: true,
-      message: '市不能缺失!',
-    },{ max: 255,message: '市必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="区">
-{getFieldDecorator('qu', {
- initialValue: info.qu ||  newInfo.qu,
-  rules: [
-    {
-      required: true,
-      message: '区不能缺失!',
-    },{ max: 255,message: '区必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
+ {<ShengShiQu getFieldDecorator={getFieldDecorator} base={base} form={form} gridType='info' formItemLayoutInfo={formItemLayout} />}
  <FormItem {...formItemLayout} hasFeedback label="详细地址">
 {getFieldDecorator('address', {
  initialValue: info.address ||  newInfo.address,
@@ -169,28 +201,6 @@ export default class DicManagerInfo extends Component {
       required: true,
       message: '详细地址不能缺失!',
     },{ max: 255,message: '详细地址必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="经度">
-{getFieldDecorator('longitude', {
- initialValue: info.longitude ||  newInfo.longitude,
-  rules: [
-    {
-      required: true,
-      message: '经度不能缺失!',
-    },{ max: 255,message: '经度必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="纬度">
-{getFieldDecorator('latitude', {
- initialValue: info.latitude ||  newInfo.latitude,
-  rules: [
-    {
-      required: true,
-      message: '纬度不能缺失!',
-    },{ max: 255,message: '纬度必须小于255位!',   },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
@@ -213,17 +223,6 @@ export default class DicManagerInfo extends Component {
       required: true,
       message: '配菜点描述不能缺失!',
     },{ max: 255,message: '配菜点描述必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="配菜点外景图片">
-{getFieldDecorator('assignfoodnpic', {
- initialValue: info.assignfoodnpic ||  newInfo.assignfoodnpic,
-  rules: [
-    {
-      required: true,
-      message: '配菜点外景图片不能缺失!',
-    },{ max: 255,message: '配菜点外景图片必须小于255位!',   },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
@@ -260,27 +259,27 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="政府补贴费率,单位:元 支持小数点">
+ <FormItem {...formItemLayout} hasFeedback label="政府补贴费率">
 {getFieldDecorator('subsideprice', {
  initialValue: info.subsideprice ||  newInfo.subsideprice,
   rules: [
     {
       required: true,
-      message: '政府补贴费率,单位:元 支持小数点不能缺失!',
-    },
+      message: '政府补贴费率',
+    },{ validator: FormValid.jine },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="外墙广告价位,单位:元 支持小数点">
+ <FormItem {...formItemLayout} hasFeedback label="外墙广告价位">
 {getFieldDecorator('advertisementprice', {
  initialValue: info.advertisementprice ||  newInfo.advertisementprice,
   rules: [
     {
       required: true,
-      message: '外墙广告价位,单位:元 支持小数点不能缺失!',
-    },
+      message: '外墙广告价位',
+    },{ validator: FormValid.jine },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="外墙广告价位描述">
 {getFieldDecorator('advertisementpricedesc', {
@@ -289,7 +288,7 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '外墙广告价位描述不能缺失!',
-    },{ max: 255,message: '外墙广告价位描述必须小于255位!',   },
+    },{ max: 255,message: '外墙广告价位描述必须小于255位!', },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
@@ -314,9 +313,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '保证金数额不能缺失!',
-    },{ required: true,message: '保证金数额不能缺失!', },
+    },{ validator: FormValid.jine },
   ],
- })(<InputNumber min={0} />)}
+ })(<Input addonAfter='元' />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="预留字段1">
 {getFieldDecorator('yuliu1', {
@@ -351,7 +350,58 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="配菜点外景图片">
+{getFieldDecorator('assignfoodnpic', {
+ initialValue: info.assignfoodnpic ||  newInfo.assignfoodnpic,
+  rules: [
+    {
+      required: true,
+      message: '图片不能缺失!',
+    },{ max: 255,message: '图片的链接必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" disabled />)}
+ <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
+            {info.assignfoodnpic ? <DelImg goDel={this.goDel} imgUrl={info.assignfoodnpic + '?' + Math.random()} /> : ''}
+            <Spin spinning={this.state.uploading} tip='图片上传中...'>
+              <Upload
+						  	disabled={this.props.form.getFieldValue("assignfoodnpic") !== undefined}
+						  	onChange={this.uploadChange}
+						  	listType="picture-card"
+						  	multiple={false}
+              	accept="image/jpg,image/jpeg,image/png"
+						  	beforeUpload={(file, fileList) => {
+						  		return false;
+						  	}}>
+						   选择配菜点外景图片
+						  </Upload>
+            </Spin>
+						
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="经度">
+{getFieldDecorator('longitude', {
+ initialValue: info.longitude ||  newInfo.longitude,
+  rules: [
+    {
+      required: true,
+      message: '经度不能缺失!',
+    },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="纬度">
+{getFieldDecorator('latitude', {
+ initialValue: info.latitude ||  newInfo.latitude,
+  rules: [
+    {
+      required: true,
+      message: '纬度不能缺失!',
+    },
+  ],
+ })(<Input placeholder="请输入" />)}
 
+{/* <Alert type="warning" showIcon message="提示：请点击下面的地图，可自动设置经度和纬度" />
+<AMap form={form} latFieldName='latitude' lngFieldName='longitude' lng={info.longitude} lat={info.latitude} setMap={this.setMap} /> */}
+ </FormItem>
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button

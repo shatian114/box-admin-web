@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Alert, Button, Spin, Select, Upload } from 'antd';
 import { routerRedux } from 'dva/router';
+import { FormValid } from '../../utils/FormValid';
 import DelImg from '../../components/DelImg';
 import {uploadImg} from '../../utils/uploadImg';
 import Operate from '../../components/Oprs';
@@ -50,6 +51,10 @@ export default class DicManagerInfo extends Component {
 
   state = {
     uploading: false,
+    mapPoint: {
+      lat: '116.446238',
+      lng: '39.970917',
+    },
   }
 
   componentDidMount() {
@@ -157,7 +162,11 @@ export default class DicManagerInfo extends Component {
         foodpiclink: {value: ""},
       });
     }
-	}
+  }
+  
+  setMap = (...props) => {
+    console.log('latitude: ', props);
+  }
 
   render() {
     const { submitting, form, loading, base } = this.props;
@@ -225,9 +234,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '单价必填',
-    },
+    },{ validator: FormValid.jine },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="单位">
 {getFieldDecorator('foodunit', {
