@@ -11,16 +11,19 @@ import { connect } from 'dva';
 import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { FormValid } from '../../utils/FormValid';
+
 import Operate from '../../components/Oprs';
+import { FormValid } from '../../utils/FormValid';
+
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+
 const { TextArea } = Input;
 const DateFormat = 'YYYY-MM-DD';
-const url = 'TClzDeliveryclerk';
+const url = 'TClzOrderDatail';
 
 const formItemLayout = {
   labelCol: {
@@ -40,7 +43,7 @@ const submitFormLayout = {
   },
 };
 
-@connect(({ list, base, loading }) => ({
+@connect(({ base, loading, list }) => ({
   base,
   list,
   submitting: loading.effects['base/fetch'] || loading.effects['base/fetchAdd'],
@@ -50,13 +53,6 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'list/list',
-      payload: {
-        url: '/api/TClzAssignfood/queryTClzAssignfoodList',
-      },
-      
-    });
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       dispatch({
         type: 'base/info',
@@ -71,6 +67,18 @@ export default class DicManagerInfo extends Component {
         url,
       });
     }
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzFood/queryTClzFoodList',
+      },
+    });
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzOrder/queryTClzOrderList',
+      },
+    });
   }
 
   componentWillUnmount() {
@@ -88,7 +96,7 @@ export default class DicManagerInfo extends Component {
         
 
         const { dispatch } = this.props;
-        if (this.props.base.info.tClzDeliveryclerkId) {
+        if (this.props.base.info.tClzOrderDatailId) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -115,107 +123,94 @@ export default class DicManagerInfo extends Component {
   };
 
   render() {
-    const { submitting, form, loading, base } = this.props;
+    const { submitting, form, loading, base, list } = this.props;
     const { getFieldDecorator } = form;
+    const { queryTClzFoodList, queryTClzOrderList  } = list;
     
   const { info, newInfo } = base;
 
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="配送员编号">
-{getFieldDecorator('tClzDeliveryclerkId', {
- initialValue: info.tClzDeliveryclerkId || newInfo.tClzDeliveryclerkId,
+           <FormItem {...formItemLayout} hasFeedback label="订单详情编号">
+{getFieldDecorator('tClzOrderDatailId', {
+ initialValue: info.tClzOrderDatailId || newInfo.tClzOrderDatailId,
   rules: [
     {
       required: true,
-      message: '配送员编号不能缺失!',
+      message: '不能缺失!',
     },
   ],
- })(<Input disabled />)}
+ })(<Input />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="所属配送点">
-{getFieldDecorator('assignfoodId', {
- initialValue: info.assignfoodId ||  newInfo.assignfoodId,
+ <FormItem {...formItemLayout} hasFeedback label="订单id">
+{getFieldDecorator('tClzOrderId', {
+ initialValue: info.tClzOrderId ||  newInfo.tClzOrderId,
   rules: [
     {
       required: true,
-      message: '配送点编号不能缺失!',
-    },{ max: 255,message: '配送点编号必须小于255位!',   },
+      message: '订单id不能缺失!',
+    },{ max: 180,message: '订单id必须小于180位!',   },
   ],
- })(<Select dropdownMatchSelectWidth={true}>
-  {
-    this.props.list.list.map((v, k) => (
-      <Option key={k} value={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
-    ))
-   }
+ })(<Select allowClear showSearch optionFilterProp="children">
+ {
+   queryTClzOrderList ? queryTClzOrderList.map(v => (
+     <Option key={v.t_clz_order_id}>{v.t_clz_order_id}</Option>
+   )
+   ) : ''
+ }
 </Select>)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="账号">
-{getFieldDecorator('useraccount', {
- initialValue: info.useraccount ||  newInfo.useraccount,
+ <FormItem {...formItemLayout} hasFeedback label="菜品">
+{getFieldDecorator('tClzFoodId', {
+ initialValue: info.tClzFoodId ||  newInfo.tClzFoodId,
   rules: [
     {
       required: true,
-      message: '账号不能缺失!',
-    },{ max: 255,message: '账号必须小于255位!',   },
+      message: '菜品id不能缺失!',
+    },{ max: 255,message: '菜品id必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Select allowClear showSearch optionFilterProp="children">
+ {
+   queryTClzFoodList ? queryTClzFoodList.map(v => (
+     <Option key={v.t_clz_food_id}>{v.foodname}</Option>
+   )
+   ) : ''
+ }
+</Select>)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="密码">
-{getFieldDecorator('userpassword', {
- initialValue: info.userpassword ||  newInfo.userpassword,
+ <FormItem {...formItemLayout} hasFeedback label="当时这个菜品的单价">
+{getFieldDecorator('foodprice', {
+ initialValue: info.foodprice ||  newInfo.foodprice,
   rules: [
     {
       required: true,
-      message: '密码不能缺失!',
-    },{ max: 255,message: '密码必须小于255位!',   },
+      message: '当时这个菜品的单价不能缺失!',
+    },{validator: FormValid.jine}
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="联系电话">
-{getFieldDecorator('userphone', {
- initialValue: info.userphone ||  newInfo.userphone,
+ <FormItem {...formItemLayout} hasFeedback label="数量">
+{getFieldDecorator('foodnum', {
+ initialValue: info.foodnum ||  newInfo.foodnum,
   rules: [
     {
       required: true,
-      message: '联系电话不能缺失!',
-    },{ max: 255,message: '联系电话必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="姓名">
-{getFieldDecorator('username', {
- initialValue: info.username ||  newInfo.username,
-  rules: [
-    {
-      required: true,
-      message: '姓名不能缺失!',
-    },{ max: 255,message: '姓名必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="描述">
-{getFieldDecorator('userdesc', {
- initialValue: info.userdesc ||  newInfo.userdesc,
-  rules: [
-    {
-      required: true,
-      message: '描述不能缺失!',
-    },{ max: 255,message: '描述必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="配送单价">
-{getFieldDecorator('userprice', {
- initialValue: info.userprice ||  newInfo.userprice,
-  rules: [
-    {
-      required: true,
-      message: '配送单价不能缺失!',
-    },{ validator: FormValid.jine },
+      message: '数量不能缺失!',
+    },{ required: true,message: '数量不能缺失!', },
   ],
  })(<InputNumber min={0} />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="本菜总价">
+{getFieldDecorator('foodtotalamount', {
+ initialValue: info.foodtotalamount ||  newInfo.foodtotalamount,
+  rules: [
+    {
+      required: true,
+      message: '本菜总价不能缺失!',
+    },{validator: FormValid.jine}
+  ],
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
 
           

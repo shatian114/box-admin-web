@@ -19,6 +19,10 @@ export default {
     sorter: {},
     exporting: false,
     searching: false,
+    queryTClzAssignfoodList: [], //配菜点tlis
+    queryTClzDeliveryclerkList: [], //配送员list
+    queryTClzFoodList: [], //菜品list
+    queryTClzOrderList: [], //订单list
   },
 
   effects: {
@@ -27,7 +31,7 @@ export default {
         type: 'save',
         payload: {
           searching: true,
-        }
+        },
       });
       const list = yield select(state => state.list);
       const { current, pageSize, url, queryMap, sorter } = payload;
@@ -47,12 +51,13 @@ export default {
         columnOrder: columnSorter.order,
       };
       const response = yield call(queryList, temp);
+
       if (response) {
-        //之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
+        // 之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
         for (let k in response.data) {
           response[k] = response.data[k];
-				}
-
+        }
+      
         yield put({
           type: 'save',
           payload: {
@@ -74,8 +79,59 @@ export default {
           searching: false,
         }
       });
-		},
-		*exportExcel2({payload}, {call, put}) {
+    },
+    *listsaveinfo({ payload }, { call, put}) {
+      const response = yield call(queryList, {
+        page: 1,
+        len: 100000,
+        url: payload.url,
+      });
+
+      if (response) {
+        // 之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
+        for (let k in response.data) {
+          response[k] = response.data[k];
+        }
+      
+        const saveinfokey = payload.url.split('/').pop();
+        console.log(saveinfokey);
+        switch (saveinfokey) {
+          case 'queryTClzAssignfoodList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzAssignfoodList: response.list,
+              },
+            });
+            break;
+          case 'queryTClzDeliveryclerkList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzDeliveryclerkList: response.list,
+              },
+            });
+            break;
+          case 'queryTClzFoodList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzFoodList: response.list,
+              },
+            });
+            break;
+          case 'queryTClzOrderList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzOrderList: response.list,
+              },
+            });
+            break;
+        }
+      }
+    },
+		*exportExcel2({payload}, {call}) {
       
 			const temp = {
         page: 1,

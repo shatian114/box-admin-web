@@ -267,6 +267,12 @@ const commonroute = (app, dynamicWrapper) => ({
 	'/TClzDeliveryclerk':{  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk')),  },
 	'/TClzDeliveryclerk/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk/List')),  },
 	'/TClzDeliveryclerk/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzDeliveryclerk/Info')),  },
+	'/TClzOrder':{  component: dynamicWrapper(app, [], () => import('../routes/TClzOrder')),  },
+	'/TClzOrder/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzOrder/List')),  },
+	'/TClzOrder/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzOrder/Info')),  },
+	'/TClzOrderDatail':{  component: dynamicWrapper(app, [], () => import('../routes/TClzOrderDatail')),  },
+	'/TClzOrderDatail/list': {  component: dynamicWrapper(app, [], () => import('../routes/TClzOrderDatail/List')),  },
+	'/TClzOrderDatail/info': {  component: dynamicWrapper(app, [], () => import('../routes/TClzOrderDatail/Info')),  },
  
 });
 

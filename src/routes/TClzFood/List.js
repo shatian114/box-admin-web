@@ -43,7 +43,7 @@ export default class TClzFoodList extends Component {
     dispatch({
       type: 'base/getUpperId',
       payload: {
-        url: '/api/TClzBigtype/queryTClzBigtypeList',
+        url: '/api/TClzSmalltype/queryTClzSmalltypeList',
       },
     });
   }
@@ -213,7 +213,7 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='关联的小类'>{getFieldDecorator('t_clz_smalltype_id',{initialValue: this.props.list.queryMap.t_clz_smalltype_id, })(<Select dropdownMatchSelectWidth={true} allowClear>
   {
     base.upList.map((v) => (
-      <Option key={v.t_clz_smalltype_id} value={v.t_clz_bigtype_id}>{v.typename}</Option>
+      <Option key={v.t_clz_smalltype_id} value={v.t_clz_smalltype_id}>{v.typename}</Option>
     ))
    }
 </Select>)} </FormItem> </Col>

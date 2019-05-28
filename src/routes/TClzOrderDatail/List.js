@@ -13,8 +13,9 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import moment from 'moment';
 import ListButtonGroup from '../../components/ListButtonGroup';
-import { FormValid } from '../../utils/FormValid';
+
 import styles from '../../styles/list.less';
+
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
@@ -24,16 +25,16 @@ import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-//const routerUrl = cache.keysMenu.TClzDeliveryclerk;
-const routerUrl ='/TClzDeliveryclerk';
-const url = 'TClzDeliveryclerk';
-const rowKey = 't_clz_deliveryclerk_id';
+//const routerUrl = cache.keysMenu.TClzOrderDatail;
+const routerUrl ='/TClzOrderDatail';
+const url = 'TClzOrderDatail';
+const rowKey = 't_clz_order_datail_id';
 const DateFormat = 'YYYY-MM-DD';
 
 @connect(({ base, list }) => ({ base, list }))
 @Form.create()
 @List.create()
-export default class TClzDeliveryclerkList extends Component {
+export default class TClzOrderDatailList extends Component {
   state = {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
@@ -44,7 +45,13 @@ export default class TClzDeliveryclerkList extends Component {
     dispatch({
       type: 'list/listsaveinfo',
       payload: {
-        url: '/api/TClzAssignfood/queryTClzAssignfoodList',
+        url: '/api/TClzFood/queryTClzFoodList',
+      },
+    });
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzOrder/queryTClzOrderList',
       },
     });
   }
@@ -122,7 +129,7 @@ temp = {
     dispatch({
         type: `list/exportExcel`,
         payload: {
-        filename: '配送员.xls',
+        filename: '订单明细.xls',
         queryMap: { ...values, ...date } || {},
         },
         url,
@@ -133,7 +140,7 @@ temp = {
 
   render() {
     const { form, list } = this.props;
-    const { queryTClzAssignfoodList  } = list;
+    const { queryTClzFoodList, queryTClzOrderList  } = list;
     
     const { getFieldDecorator } = form;
     const { hanleDelete } = this;
@@ -185,21 +192,19 @@ temp = {
           </Row>
         ),
       },
-       {  title: '配送员编号',   dataIndex: 't_clz_deliveryclerk_id',     width: 150,     sorter: false,      },
- {  title: '配送点编号',   dataIndex: 'assignfood_id',     width: 150,     sorter: false,      },
- {  title: '账号',   dataIndex: 'useraccount',     width: 150,     sorter: false,      },
- {  title: '密码',   dataIndex: 'userpassword',     width: 150,     sorter: false,      },
- {  title: '联系电话',   dataIndex: 'userphone',     width: 150,     sorter: false,      },
- {  title: '姓名',   dataIndex: 'username',     width: 150,     sorter: false,      },
- {  title: '描述',   dataIndex: 'userdesc',     width: 150,     sorter: false,      },
- {  title: '配送单价',   dataIndex: 'userprice',     width: 150,     sorter: false,      },
+       {  title: '',   dataIndex: 't_clz_order_datail_id',     width: 150,     sorter: false,      },
+ {  title: '订单id',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
+ {  title: '菜品id',   dataIndex: 't_clz_food_id',     width: 150,     sorter: false,      },
+ {  title: '当时这个菜品的单价',   dataIndex: 'foodprice',     width: 150,     sorter: false,      },
+ {  title: '数量',   dataIndex: 'foodnum',     width: 150,     sorter: false,      },
+ {  title: '本菜总价',   dataIndex: 'foodtotalamount',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];
 
     const listConfig = {
-      url: '/api/TClzDeliveryclerk/queryTClzDeliveryclerkList', // 必填,请求url
-      scroll: { x: 1350, y: this.state.scrollY }, // 可选配置,同antd table
+      url: '/api/TClzOrderDatail/queryTClzOrderDatailList', // 必填,请求url
+      scroll: { x: 1050, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -209,23 +214,26 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员编号'>{getFieldDecorator('t_clz_deliveryclerk_id',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送点'>{getFieldDecorator('assignfood_id',{initialValue: this.props.list.queryMap.assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单详情编号'>{getFieldDecorator('t_clz_order_datail_id',{initialValue: this.props.list.queryMap.t_clz_order_datail_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单id'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
-      queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-        <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+      queryTClzOrderList ? queryTClzOrderList.map(v => (
+        <Option key={v.t_clz_order_id}>{v.t_clz_order_id}</Option>
       )
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='账号'>{getFieldDecorator('useraccount',{initialValue: this.props.list.queryMap.useraccount, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='密码'>{getFieldDecorator('userpassword',{initialValue: this.props.list.queryMap.userpassword, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='联系电话'>{getFieldDecorator('userphone',{initialValue: this.props.list.queryMap.userphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.username, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='描述'>{getFieldDecorator('userdesc',{initialValue: this.props.list.queryMap.userdesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送单价(起始)'>{getFieldDecorator('start_userprice',{initialValue: this.props.list.queryMap.start_userprice  ? moment(this.props.list.queryMap.start_userprice): null, rules: [{ validator: FormValid.jine}] })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='菜品'>{getFieldDecorator('t_clz_food_id',{initialValue: this.props.list.queryMap.t_clz_food_id, })(<Select allowClear showSearch optionFilterProp="children">
+    {
+      queryTClzFoodList ? queryTClzFoodList.map(v => (
+        <Option key={v.t_clz_food_id}>{v.foodname}</Option>
+      )
+      ) : ''
+    }
+  </Select>)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='数量(起始)'>{getFieldDecorator('start_foodnum',{initialValue: this.props.list.queryMap.start_foodnum  ? moment(this.props.list.queryMap.start_foodnum): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送单价(结束)'>{getFieldDecorator('end_userprice',{initialValue: this.props.list.queryMap.end_userprice  ? moment(this.props.list.queryMap.end_userprice): null, rules: [{validator: FormValid.jine}] })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='数量(结束)'>{getFieldDecorator('end_foodnum',{initialValue: this.props.list.queryMap.end_foodnum  ? moment(this.props.list.queryMap.end_foodnum): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
