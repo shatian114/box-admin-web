@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import GlobalHeader from '../components/GlobalHeader';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
-import { getRoutes } from '../utils/utils';
+import { getRoutes, getLocationParam } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import logo from '../assets/logo.png';
 import { getRouterData } from '../common/router';
@@ -64,6 +64,7 @@ const query = {
 };
 
 class BasicLayout extends React.PureComponent {
+
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -79,6 +80,9 @@ class BasicLayout extends React.PureComponent {
       location,
       breadcrumbNameMap: getBreadcrumbNameMap(this.props.menuData, this.state.routerData),
     };
+  }
+
+  componentDidMount = () => {
   }
 
   getPageTitle() {

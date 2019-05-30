@@ -6,6 +6,8 @@ import styles from './index.less';
 import db from '../../utils/db';
 import {webConfig} from '../../utils/Constant';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { getLocationParam } from '../../utils/utils';
 
 const { Sider } = Layout;
 
@@ -40,14 +42,25 @@ export default class SiderMenu extends PureComponent {
     };
   }
 
+  getMenuCallback = () => {
+    this.setState({
+      loading: false,
+    });
+
+    const param = getLocationParam();
+    if(param.component) {
+      console.log(routerRedux);
+    
+      this.props.dispatch(routerRedux.push(`${param.component}`));
+    }
+  }
+
   componentDidMount = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'setting/getMenuData',
-      callback: () =>
-        this.setState({
-          loading: false,
-        }),
+      callback: () => {this.getMenuCallback()},
+      
     });
   }
 

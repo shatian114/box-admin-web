@@ -18,7 +18,7 @@ import styles from '../../styles/list.less';
 
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
-import { isEmpty } from '../../utils/utils';
+import { isEmpty, getLocationParam } from '../../utils/utils';
 import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
@@ -39,9 +39,21 @@ export default class TClzOrderDatailList extends Component {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
 
+  componentWillMount = () => {
+
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.resize);
     const { dispatch } = this.props;
+
+    const param = getLocationParam();
+    if(param.id) {
+      this.props.form.setFieldsValue({
+        t_clz_order_id: param.id,
+      });
+    }
+
     dispatch({
       type: 'list/listsaveinfo',
       payload: {
@@ -58,6 +70,14 @@ export default class TClzOrderDatailList extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.resize);
+  }
+
+  getQueryMap = () => {
+    const param = getLocationParam();
+    if(param.id) {
+      return {'t_clz_order_id': param.id};
+    }
+    return {};
   }
 
   @Bind()
@@ -207,6 +227,7 @@ temp = {
       scroll: { x: 1050, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
+      queryMap: this.getQueryMap(),
     };
 
     return (
@@ -215,7 +236,7 @@ temp = {
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单详情编号'>{getFieldDecorator('t_clz_order_datail_id',{initialValue: this.props.list.queryMap.t_clz_order_datail_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单id'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzOrderList ? queryTClzOrderList.map(v => (
         <Option key={v.t_clz_order_id}>{v.t_clz_order_id}</Option>

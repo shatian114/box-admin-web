@@ -176,6 +176,17 @@ export default class DicManagerInfo extends Component {
   ],
  })(<DatePicker showTime format='YYYY-MM-DD HH:mm:ss' placeholder='请输入' />)}
  </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="订单日期">
+ {getFieldDecorator('orderdate', {
+ initialValue: moment(info.orderdate || moment(), DateTimeFormat),
+  rules: [
+    {
+      required: true,
+      message: '订单日期不能缺失!',
+    }
+  ],
+ })(<DatePicker showTime format='YYYY-MM-DD' placeholder='请输入' />)}
+ </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="配菜点">
 {getFieldDecorator('tClzAssignfoodId', {
  initialValue: info.tClzAssignfoodId ||  newInfo.tClzAssignfoodId,

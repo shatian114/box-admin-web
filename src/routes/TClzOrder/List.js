@@ -38,6 +38,7 @@ export default class TClzOrderList extends Component {
   };
 
   componentDidMount() {
+    console.log(window.location.href);
     window.addEventListener('resize', this.resize);
     const { dispatch } = this.props;
     dispatch({
@@ -135,6 +136,9 @@ temp = {
     });
   };
 
+  openOrderDatail = (record) => {
+    window.open(window.location.href + "?component=TClzOrderDatail&id=" + record[rowKey]);
+  }
 
   render() {
     const { form, base, list } = this.props;
@@ -159,7 +163,7 @@ temp = {
       {
         title: '操作',
         key: 'action',
-        width: 160,
+        width: 240,
         align: 'center',
         render: (text, record) => (
           <Row type="flex" justify="space-around">
@@ -186,18 +190,28 @@ temp = {
                 删除
               </Button>
             </Operate>
-        
+            <Operate operateName="DELETE">
+              <Button
+                type="primary"
+                icon="info"
+                ghost
+                size="small"
+                onClick={this.openOrderDatail.bind(this, record)}
+              >
+                详情
+              </Button>
+            </Operate>
 
           </Row>
         ),
       },
-       {  title: '订单id',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
- {  title: '用户id(微信id)',   dataIndex: 'userid',     width: 300,     sorter: false,      },
+       {  title: '订单编号',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
+ {  title: '用户姓名',   dataIndex: 'username',     width: 100,     sorter: false,      },
  {  title: '本订单总金额',   dataIndex: 'totalamount',     width: 150,     sorter: false,      },
  {  title: '下单时间',   dataIndex: 'ordertime',     width: 150,     sorter: false,      },
- {  title: '关联的配菜点id',   dataIndex: 't_clz_assignfood_id',     width: 150,     sorter: false,      },
- {  title: '关联的配送员id',   dataIndex: 't_clz_deliveryclerk_id',     width: 150,     sorter: false,      },
- {  title: '买家用户指定的配送地址id',   dataIndex: 't_clz_useraddress_id',     width: 150,     sorter: false,      },
+ {  title: '配菜点',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
+ {  title: '配送员',   dataIndex: 'deliveryusername',     width: 150,     sorter: false,      },
+ {  title: '配送地址',   dataIndex: 'recieveaddress',     width: 150,     sorter: false,      },
  {  title: '订单获取状态补充描述',   dataIndex: 'ordergetstatusdes',     width: 150,     sorter: false,       },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
  {  title: '是否生效',   dataIndex: 'orderstatus',     width: 150,     sorter: false,  render: text => (
@@ -249,7 +263,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzOrder/queryTClzOrderList', // 必填,请求url
-      scroll: { x: 1950, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -259,10 +273,10 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单id'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户id(微信id)'>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间'>{getFieldDecorator('ordertime',{initialValue: this.props.list.queryMap.ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
         <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
@@ -270,7 +284,7 @@ temp = {
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('t_clz_deliveryclerk_id',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
         <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
@@ -278,7 +292,7 @@ temp = {
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='买家用户指定的配送地址id'>{getFieldDecorator('t_clz_useraddress_id',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(

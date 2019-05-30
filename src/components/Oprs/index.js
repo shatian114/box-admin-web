@@ -22,7 +22,7 @@ Operate.create = pathname => WrappedComponent => {
   }))
   class War extends React.PureComponent {
     componentDidMount() {
-			const moduleName = '/' + pathname;
+      const moduleName = '/' + pathname;
 			
       // 打包压缩会更改类名
       /*  const moduleName =

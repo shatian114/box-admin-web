@@ -94,7 +94,6 @@ export default {
         }
       
         const saveinfokey = payload.url.split('/').pop();
-        console.log(saveinfokey);
         switch (saveinfokey) {
           case 'queryTClzAssignfoodList':
             yield put({
@@ -161,7 +160,6 @@ export default {
 					});
 					xlsArr.push(rowArr);
 				});
-				//console.log('xls arr', xlsArr);
 
 				let worksheet = xlsx.utils.aoa_to_sheet(xlsArr);
 				let new_workbook = xlsx.utils.book_new();
@@ -178,7 +176,6 @@ export default {
 				a.click();
 				document.body.removeChild(a);
         window.URL.revokeObjectURL(turl);
-				console.log(blob);
 			}else{
 				message.error('服务器错误');
       }

@@ -320,3 +320,16 @@ export function geneUuidArr(arrNum) {
   }
   return uuidArr;
 }
+
+export function getLocationParam() {
+  let param = {};
+  let paramArrTmp = window.location.href.split('?');
+  if(paramArrTmp.length > 1) {
+    paramArrTmp = paramArrTmp.pop().split('&');
+    for(let i=0; i<paramArrTmp.length; i+=1) {
+      const arr = paramArrTmp[i].split('=');
+      param[arr[0]] = arr[1];
+    }
+  }
+  return param;
+}
