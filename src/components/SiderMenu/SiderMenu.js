@@ -49,8 +49,6 @@ export default class SiderMenu extends PureComponent {
 
     const param = getLocationParam();
     if(param.component) {
-      console.log(routerRedux);
-    
       this.props.dispatch(routerRedux.push(`${param.component}`));
     }
   }

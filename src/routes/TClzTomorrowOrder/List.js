@@ -27,7 +27,7 @@ const { Option } = Select;
 const routerUrl ='/TClzOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
-const DateFormat = 'YYYY-MM-DD HH:mm:ss';
+const DateFormat = 'YYYY-MM-DD';
 
 @connect(({ base, list }) => ({ base, list }))
 @Form.create()
@@ -125,9 +125,9 @@ temp = {
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
     if (values.endDate) date.endDate = values.endDate.format(DateFormat);
     dispatch({
-        type: `list/exportExcel`,
+        type: `list/exportTomorrowExcel`,
         payload: {
-        filename: '订单.xls',
+        filename: '次日菜量需求管理和统计.xls',
         queryMap: { ...values, ...date } || {},
         },
         url,
@@ -209,67 +209,20 @@ temp = {
           </Row>
         ),
       },
-       {  title: '订单编号',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
-       {  title: '订单金额',   dataIndex: 'totalamount',     width: 150,     sorter: false,      },
-       {  title: '下单时间',   dataIndex: 'ordertime',     width: 150,     sorter: false,      },
-       {  title: '获取方式',   dataIndex: 'gettype',     width: 150,     sorter: false,   render: text => (
-        <span>{text === '1' ? '自提' : '配送'}</span>
-      )   },
-      {  title: '订单获取状态',   dataIndex: 'ordergetstatus',     width: 150,     sorter: false,  render: text => {
-        let showInfo = '';
-       switch(text) {
-         case "1":
-            showInfo = "下单成功等调配";
-            break;
-         case "2":
-            showInfo = "调配好等自提";
-            break;
-         case "3":
-           showInfo = "自提成功";
-           break;
-         case "4":
-             showInfo = "自提延期保留";
-             break;
-         case "5":
-           showInfo = "自提延期过期销毁";
-           break;
-         case "6":
-             showInfo = "调配好等配送";
-             break;
-         case "7":
-           showInfo = "配送中等签收";
-           break;
-         case "8":
-           showInfo = "配送签收成功";
-           break;
-         case "9":
-           showInfo = "配送签收失败退回保留";
-           break;
-         case "10":
-           showInfo = "配送签收失败退回过期销毁";
-           break;
-        }
-        return (
-          <span>{showInfo}</span>
-        )
-      },     },
-      {  title: '配菜点',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
-      {  title: '配送员',   dataIndex: 'deliveryusername',     width: 150,     sorter: false,      },
-      {  title: '配送地址',   dataIndex: 'recieveaddress',     width: 150,     sorter: false,      },
- {  title: '订单描述',   dataIndex: 'ordergetstatusdes',     width: 150,     sorter: false,       },
- {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
- {  title: '是否生效',   dataIndex: 'orderstatus',     width: 150,     sorter: false,  render: text => (
-   <span>{text === '0' ? '不生效' : '生效'}</span>
- ),     },
- {  title: '用户姓名',   dataIndex: 'username',     width: 100,     sorter: false,      },
-
+       {  title: '菜品大类',   dataIndex: 'bigtypename',     width: 150,     sorter: false,      },
+       {  title: '菜品小类',   dataIndex: 'samlltypename',     width: 150,     sorter: false,      },
+       {  title: '菜品',   dataIndex: 'foodname',     width: 150,     sorter: false,      },
+       {  title: '总菜量',   dataIndex: 'totalfoodnum',     width: 150,     sorter: false,      },
+       {  title: '菜品单位',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
+       {  title: '总价格',   dataIndex: 'foodtotalamount',     width: 150,     sorter: false,      },
     ];
 
     const listConfig = {
-      url: '/api/TClzOrder/queryTClzOrderList', // 必填,请求url
+      url: '/api/TClzOrder/queryTClzFoodDatailList', // 必填,请求url
       scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
+      queryMap: { start_orderdate: moment().format("YYYY-MM-DD"), end_orderdate: moment().format("YYYY-MM-DD") },
     };
 
     return (
@@ -277,12 +230,28 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: this.props.list.queryMap.start_orderdate, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: this.props.list.queryMap.end_orderdate, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(this.props.list.queryMap.start_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(this.props.list.queryMap.end_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单获取状态'> {getFieldDecorator('ordergetstatus', { initialValue: this.props.list.queryMap.ordergetstatus,})(
+  <Select showSearch allowClear placeholder='订单获取状态' optionFilterProp="children">
+  <Option value=""></Option>
+ <Option value="1">下单成功等调配</Option>
+ <Option value="2">调配好等自提</Option>
+ <Option value="3">自提成功</Option>
+ <Option value="4">自提延期保留</Option>
+ <Option value="5">自提延期过期销毁</Option>
+ <Option value="6">调配好等配送</Option>
+ <Option value="7">配送中等签收</Option>
+ <Option value="8">配送签收成功</Option>
+ <Option value="9">配送签收失败退回保留</Option>
+ <Option value="10">配送签收失败退回过期销毁</Option>
+ </Select>
+)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
+  <Option value=""></Option>
+  <Option value="1">自提</Option>
+  <Option value="2">配送</Option>
+</Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
@@ -299,48 +268,17 @@ temp = {
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(
+  <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(
 <Select showSearch allowClear placeholder='是否生效' >
 <Option value=""></Option>
  <Option value="0">不生效</Option>
  <Option value="1">生效</Option>
  </Select>
 )} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
-  <Option value=""></Option>
-  <Option value="1">自提</Option>
-  <Option value="2">配送</Option>
-</Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单获取状态'> {getFieldDecorator('ordergetstatus', { initialValue: this.props.list.queryMap.ordergetstatus,})(
-  <Select showSearch allowClear placeholder='订单获取状态' optionFilterProp="children">
-  <Option value=""></Option>
- <Option value="1">下单成功等调配</Option>
- <Option value="2">调配好等自提</Option>
- <Option value="3">自提成功</Option>
- <Option value="4">自提延期保留</Option>
- <Option value="5">自提延期过期销毁</Option>
- <Option value="6">调配好等配送</Option>
- <Option value="7">配送中等签收</Option>
- <Option value="8">配送签收成功</Option>
- <Option value="9">配送签收失败退回保留</Option>
- <Option value="10">配送签收失败退回过期销毁</Option>
- </Select>
-)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单描述'> {getFieldDecorator('ordergetstatusdes', { initialValue: this.props.list.queryMap.ordergetstatusdes,})(<Input />)} </FormItem> </Col>
-              
-             
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={12} sm={24}>
                 <ListButtonGroup handleFormReset={this.handleFormReset} routerUrl={routerUrl} dispatch={this.props.dispatch} handleExport={this.handleExport} url={url} handleSearch={this.handleSearch} />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <span style={{marginLeft: 140}}>共有{list.list.length}个订单，合计金额{list.response.sumtotal}</span>
               </Col>
             </Row>
           </Form>

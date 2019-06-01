@@ -27,7 +27,7 @@ const { Option } = Select;
 const routerUrl ='/TClzOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
-const DateFormat = 'YYYY-MM-DD HH:mm:ss';
+const DateFormat = 'YYYY-MM-DD';
 
 @connect(({ base, list }) => ({ base, list }))
 @Form.create()
@@ -86,7 +86,7 @@ temp = {
       
       setList({
         current: 1,
-        queryMap: { ...values, ...temp },
+        queryMap: { ...values, ...temp  },
       });
     });
   };
@@ -265,11 +265,15 @@ temp = {
 
     ];
 
+    const orderdate = moment().format("YYYY-MM-DD");
+    const orderdate7 = moment().subtract(7, 'days').format("YYYY-MM-DD");
+
     const listConfig = {
       url: '/api/TClzOrder/queryTClzOrderList', // 必填,请求url
       scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
+      queryMap: { start_orderdate: orderdate7, end_orderdate: orderdate },
     };
 
     return (
@@ -277,60 +281,9 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: this.props.list.queryMap.start_orderdate, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: this.props.list.queryMap.end_orderdate, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
-    {
-      queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-        <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
-      )
-      ) : ''
-    }
-  </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
-    {
-      queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
-        <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
-      )
-      ) : ''
-    }
-  </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(
-<Select showSearch allowClear placeholder='是否生效' >
-<Option value=""></Option>
- <Option value="0">不生效</Option>
- <Option value="1">生效</Option>
- </Select>
-)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
-  <Option value=""></Option>
-  <Option value="1">自提</Option>
-  <Option value="2">配送</Option>
-</Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单获取状态'> {getFieldDecorator('ordergetstatus', { initialValue: this.props.list.queryMap.ordergetstatus,})(
-  <Select showSearch allowClear placeholder='订单获取状态' optionFilterProp="children">
-  <Option value=""></Option>
- <Option value="1">下单成功等调配</Option>
- <Option value="2">调配好等自提</Option>
- <Option value="3">自提成功</Option>
- <Option value="4">自提延期保留</Option>
- <Option value="5">自提延期过期销毁</Option>
- <Option value="6">调配好等配送</Option>
- <Option value="7">配送中等签收</Option>
- <Option value="8">配送签收成功</Option>
- <Option value="9">配送签收失败退回保留</Option>
- <Option value="10">配送签收失败退回过期销毁</Option>
- </Select>
-)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单描述'> {getFieldDecorator('ordergetstatusdes', { initialValue: this.props.list.queryMap.ordergetstatusdes,})(<Input />)} </FormItem> </Col>
               
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(this.props.list.queryMap.start_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(this.props.list.queryMap.end_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
              
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -340,7 +293,7 @@ temp = {
             </Row>
             <Row>
               <Col>
-                <span style={{marginLeft: 140}}>共有{list.list.length}个订单，合计金额{list.response.sumtotal}</span>
+                <span style={{marginLeft: 140}}>共有{list.list.length || 0}个订单，合计金额{list.sumtotal || 0}</span>
               </Col>
             </Row>
           </Form>

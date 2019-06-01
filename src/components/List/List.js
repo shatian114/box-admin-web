@@ -12,7 +12,6 @@ import styles from './index.less';
 export default class List extends Component {
   componentDidMount() {
     const { dispatch, url, queryMap } = this.props;
-    console.log(queryMap);
     if (db.oldhistory.split('/').pop() === 'info' || db.oldhistory.split('/').pop() === 'storage') {
       dispatch({
         type: 'list/list',

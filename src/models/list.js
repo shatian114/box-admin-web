@@ -2,12 +2,14 @@ import { queryList } from '../services/list';
 import { message } from 'antd';
 import {s2ab} from '../utils/utils';
 import xlsx from 'xlsx';
-import { exportExcel } from '../services/api';
+import { exportExcel, exportTomorrowExcel } from '../services/api';
 
 export default {
   namespace: 'list',
 
   state: {
+    sumtotal: 0,
+    response: {},
 		list: [],
     total: 0,
     queryMap: {},
@@ -61,6 +63,8 @@ export default {
         yield put({
           type: 'save',
           payload: {
+            sumtotal: response.sumtotal || 0,
+            'response': response,
             list: response.list,
             total: response.totalitem,
             pagination: {
@@ -131,7 +135,6 @@ export default {
       }
     },
 		*exportExcel2({payload}, {call}) {
-      
 			const temp = {
         page: 1,
         len: 100000,
@@ -195,6 +198,22 @@ export default {
         }
       });
     },
+		*exportTomorrowExcel({ payload, url }, { call, put }) {
+      console.log('exporttomorrow');
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: true,
+        }
+      });
+      yield call(exportTomorrowExcel, payload, url);
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: false,
+        }
+      });
+    },
     
 
   },
@@ -208,6 +227,8 @@ export default {
     },
     clear() {
       return {
+        sumtotal: 0,
+        response: {},
         list: [],
         total: 0,
         queryMap: {},

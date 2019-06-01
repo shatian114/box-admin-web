@@ -202,6 +202,13 @@ export async function exportExcel(params, url) {
     body: params,
   });
 }
+
+export async function exportTomorrowExcel(params, url) {
+  return download(`${SERVER_ADDR}/api/${url}/exportdetaillistExcel`, {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function queryCodeCount(params) {
   return requestModels(`${SERVER_ADDR}/api/tmporder2code/queryCodeCount`, {
     method: 'POST',
