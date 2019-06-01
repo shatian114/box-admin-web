@@ -2,7 +2,7 @@ import { queryList } from '../services/list';
 import { message } from 'antd';
 import {s2ab} from '../utils/utils';
 import xlsx from 'xlsx';
-import { exportExcel, exportTomorrowExcel } from '../services/api';
+import { exportExcel, exportTomorrowExcel, setDeliveryList } from '../services/api';
 
 export default {
   namespace: 'list',
@@ -21,6 +21,7 @@ export default {
     sorter: {},
     exporting: false,
     searching: false,
+    selectRecordArr: [],
     queryTClzAssignfoodList: [], //配菜点tlis
     queryTClzDeliveryclerkList: [], //配送员list
     queryTClzFoodList: [], //菜品list
@@ -197,6 +198,9 @@ export default {
           exporting: false,
         }
       });
+    },
+    *setDeliveryList({ payload, url }, { call }) {
+      yield call(setDeliveryList, payload, url);
     },
 		*exportTomorrowExcel({ payload, url }, { call, put }) {
       console.log('exporttomorrow');

@@ -127,11 +127,11 @@ temp = {
     dispatch({
         type: `list/exportTomorrowExcel`,
         payload: {
-        filename: '次日菜量需求管理和统计.xls',
-        queryMap: { ...values, ...date } || {},
+          filename: '次日菜量需求管理和统计.xls',
+          queryMap: { ...values, ...date } || {},
         },
         url,
-        });
+      });
     });
   };
 
