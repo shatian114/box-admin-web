@@ -200,10 +200,16 @@ export default {
       });
     },
     *setDeliveryList({ payload, url }, { call }) {
-      yield call(setDeliveryList, payload, url);
+      const response = yield call(setDeliveryList, payload, url);
+      if(response && response.code === '200' && response.msg === '操作成功') {
+        message.success(response.msg);
+        yield call(payload.callback);
+      }else if(response.msg) {
+        message.error(response.msg);
+      }
+      
     },
 		*exportTomorrowExcel({ payload, url }, { call, put }) {
-      console.log('exporttomorrow');
       yield put({
         type: 'save',
         payload: {

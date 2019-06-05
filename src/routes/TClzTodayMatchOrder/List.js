@@ -28,6 +28,7 @@ const routerUrl ='/TClzOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
 const DateFormat = 'YYYY-MM-DD HH:mm:ss';
+const DateFormat2 = 'YYYY-MM-DD';
 let selectRecordArr = [];
 
 @connect(({ base, list, loading }) => ({ base, list, setting: loading.effects['list/setDeliveryList'] }))
@@ -83,10 +84,35 @@ temp = {
   ...temp,
   end_create_date: values.end_create_date.format(DateFormat),
  };
+ if(!isEmpty(values.start_orderdate)) {
+  temp = {
+    ...temp,
+    start_orderdate: values.start_orderdate.format(DateFormat2),
+  }
+}
+if(!isEmpty(values.end_orderdate)) {
+ temp = {
+   ...temp,
+   end_orderdate: values.end_orderdate.format(DateFormat2),
+ }
+}
 
- let orderdate = moment().format("YYYY-MM-DD");
+if(!isEmpty(values.start_ordertime)) {
+  temp = {
+    ...temp,
+    start_ordertime: values.start_ordertime.format(DateFormat),
+  }
+}
+if(!isEmpty(values.end_ordertime)) {
+  temp = {
+    ...temp,
+    end_ordertime: values.end_ordertime.format(DateFormat),
+  }
+}
+
+ let orderdate = moment().format(DateFormat2);
  if(moment().format("HH") > 16) {
-   orderdate = moment(new Date()).add(1, 'days').format("YYYY-MM-DD");
+   orderdate = moment().add(1, 'days').format("YYYY-MM-DD");
  }
 
       
@@ -130,6 +156,10 @@ temp = {
     const date = {};
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
     if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    if (values.start_orderdate) date.start_orderdate = values.start_orderdate.format(DateFormat2);
+    if (values.end_orderdate) date.end_orderdate = values.end_orderdate.format(DateFormat2);
+    if (values.start_ordertime) date.start_ordertime = values.start_ordertime.format(DateFormat);
+    if (values.end_ordertime) date.end_ordertime = values.end_ordertime.format(DateFormat);
     dispatch({
         type: `list/exportExcel`,
         payload: {
@@ -162,6 +192,7 @@ temp = {
         'orderids': orderids.join(','),
         t_clz_assignfood_id: assignfoodid,
         t_clz_deliveryclerk_id: deliveryclerkid,
+        callback: this.handleSearch,
       },
       url,
     });
@@ -240,6 +271,7 @@ temp = {
        {  title: '订单编号',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
        {  title: '订单金额',   dataIndex: 'totalamount',     width: 150,     sorter: false,      },
        {  title: '下单时间',   dataIndex: 'ordertime',     width: 150,     sorter: false,      },
+       {  title: '订单日期',   dataIndex: 'orderdate',     width: 150,     sorter: false,      },
        {  title: '获取方式',   dataIndex: 'gettype',     width: 150,     sorter: false,   render: text => (
         <span>{text === '1' ? '自提' : '配送'}</span>
       )   },
@@ -316,10 +348,6 @@ temp = {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: moment(this.props.list.queryMap.start_ordertime), })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: moment(this.props.list.queryMap.end_ordertime), })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(this.props.list.queryMap.start_orderdate), })(<DatePicker format="YYYY-MM-DD" placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(this.props.list.queryMap.end_orderdate), })(<DatePicker format="YYYY-MM-DD" placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
@@ -351,6 +379,10 @@ temp = {
   <Option value="1">自提</Option>
   <Option value="2">配送</Option>
 </Select>)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(), })(<DatePicker disabled format={DateFormat2} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(), })(<DatePicker disabled format={DateFormat2} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单获取状态'> {getFieldDecorator('ordergetstatus', { initialValue: this.props.list.queryMap.ordergetstatus,})(
   <Select showSearch allowClear placeholder='订单获取状态' optionFilterProp="children">
  <Option value="1">下单成功等调配</Option>

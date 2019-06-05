@@ -82,7 +82,18 @@ temp = {
   ...temp,
   end_create_date: values.end_create_date.format(DateFormat),
  };
-
+ if(!isEmpty(values.start_orderdate)) {
+  temp = {
+    ...temp,
+    start_orderdate: values.start_orderdate.format(DateFormat),
+  }
+}
+if(!isEmpty(values.end_orderdate)) {
+ temp = {
+   ...temp,
+   end_orderdate: values.end_orderdate.format(DateFormat),
+ }
+}
       
       setList({
         current: 1,
@@ -124,6 +135,8 @@ temp = {
     const date = {};
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
     if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    if (values.start_orderdate) date.start_orderdate = values.start_orderdate.format(DateFormat);
+    if (values.end_orderdate) date.end_orderdate = values.end_orderdate.format(DateFormat);
     dispatch({
         type: `list/exportExcel`,
         payload: {
@@ -212,6 +225,7 @@ temp = {
        {  title: '订单编号',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
        {  title: '订单金额',   dataIndex: 'totalamount',     width: 150,     sorter: false,      },
        {  title: '下单时间',   dataIndex: 'ordertime',     width: 150,     sorter: false,      },
+       {  title: '订单日期',   dataIndex: 'orderdate',     width: 150,     sorter: false,      },
        {  title: '获取方式',   dataIndex: 'gettype',     width: 150,     sorter: false,   render: text => (
         <span>{text === '1' ? '自提' : '配送'}</span>
       )   },

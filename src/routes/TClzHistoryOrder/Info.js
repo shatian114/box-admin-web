@@ -95,6 +95,7 @@ export default class DicManagerInfo extends Component {
         let temp = {};
         let valuesTemp = values;
         valuesTemp.ordertime = moment(values.ordertime._d).format('YYYY-MM-DD HH:mm:ss');
+        valuesTemp.orderdate = moment(values.orderdate._d).format('YYYY-MM-DD');
         const { dispatch } = this.props;
         if (this.props.base.info.tClzOrderId) {
           dispatch({

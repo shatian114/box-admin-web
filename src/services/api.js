@@ -211,7 +211,7 @@ export async function exportTomorrowExcel(params, url) {
 }
 
 export async function setDeliveryList(params, url) {
-  return download(`${SERVER_ADDR}/api/${url}/SetDeliveryList`, {
+  return request(`${SERVER_ADDR}/api/${url}/setDeliveryList`, {
     method: 'POST',
     body: params,
   });

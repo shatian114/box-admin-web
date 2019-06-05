@@ -6,7 +6,7 @@
  * @Description: 用户管理列表
  */
 import React, { Component } from 'react';
-import { Form, Row, Col, Input, InputNumber, Button, Modal, Card, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Button, Modal, Card, Select, DatePicker } from 'antd';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
@@ -82,6 +82,18 @@ temp = {
   ...temp,
   end_create_date: values.end_create_date.format(DateFormat),
  };
+ if(!isEmpty(values.start_orderdate)) {
+  temp = {
+    ...temp,
+    start_orderdate: values.start_orderdate.format(DateFormat),
+  }
+}
+if(!isEmpty(values.end_orderdate)) {
+ temp = {
+   ...temp,
+   end_orderdate: values.end_orderdate.format(DateFormat),
+ }
+}
 
       
       setList({
@@ -124,6 +136,8 @@ temp = {
     const date = {};
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
     if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    if (values.start_orderdate) date.start_orderdate = values.start_orderdate.format(DateFormat);
+    if (values.end_orderdate) date.end_orderdate = values.end_orderdate.format(DateFormat);
     dispatch({
         type: `list/exportTomorrowExcel`,
         payload: {
@@ -159,67 +173,18 @@ temp = {
     };
 
     const columns = [
-      {
-        title: '操作',
-        key: 'action',
-        width: 240,
-        align: 'center',
-        render: (text, record) => (
-          <Row gutter={8}>
-            <Col span={8}>
-              <Operate operateName="UPDATE">
-                <Link
-                  to={{
-                    pathname: `${routerUrl}/info`,
-                    state: { id: record[rowKey] },
-                  }}
-                >
-                  <Button type="primary" icon="edit" ghost size="small">
-                    编辑
-                  </Button>
-                </Link>
-              </Operate>
-            </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
-                <Button
-                  type="danger"
-                  icon="delete"
-                  ghost
-                  size="small"
-                  onClick={() => showConfirm(record)}
-                >
-                  删除
-                </Button>
-              </Operate>
-            </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
-                <Button
-                  type="primary"
-                  icon="info"
-                  ghost
-                  size="small"
-                  onClick={this.openOrderDatail.bind(this, record)}
-                >
-                  详情
-                </Button>
-              </Operate>
-            </Col>
-          </Row>
-        ),
-      },
-       {  title: '菜品大类',   dataIndex: 'bigtypename',     width: 150,     sorter: false,      },
-       {  title: '菜品小类',   dataIndex: 'samlltypename',     width: 150,     sorter: false,      },
-       {  title: '菜品',   dataIndex: 'foodname',     width: 150,     sorter: false,      },
-       {  title: '总菜量',   dataIndex: 'totalfoodnum',     width: 150,     sorter: false,      },
-       {  title: '菜品单位',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
-       {  title: '总价格',   dataIndex: 'foodtotalamount',     width: 150,     sorter: false,      },
+       {  title: '菜品大类',   dataIndex: 'bigtypename',     width: 100,     sorter: false,      },
+       {  title: '菜品小类',   dataIndex: 'samlltypename',     width: 100,     sorter: false,      },
+       {  title: '菜品',   dataIndex: 'foodname',     width: 100,     sorter: false,      },
+       {  title: '总菜量',   dataIndex: 'totalfoodnum',     width: 100,     sorter: false,      },
+       {  title: '菜品单位',   dataIndex: 'foodunit',     width: 100,     sorter: false,      },
+       {  title: '总价格',   dataIndex: 'foodtotalamount',     width: 100,     sorter: false,      },
+       {  title: '总订单数',   dataIndex: 'ordernum',     width: 100,     sorter: false,      },
     ];
 
     const listConfig = {
       url: '/api/TClzOrder/queryTClzFoodDatailList', // 必填,请求url
-      scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 940, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
       queryMap: { start_orderdate: moment().format("YYYY-MM-DD"), end_orderdate: moment().format("YYYY-MM-DD") },
