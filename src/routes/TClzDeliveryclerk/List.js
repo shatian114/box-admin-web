@@ -125,6 +125,7 @@ temp = {
         filename: '配送员.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

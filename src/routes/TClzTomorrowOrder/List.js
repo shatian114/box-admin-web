@@ -143,6 +143,8 @@ if(!isEmpty(values.end_orderdate)) {
         payload: {
           filename: '次日菜量需求管理和统计.xls',
           queryMap: { ...values, ...date } || {},
+          ...values,
+          ...date,
         },
         url,
       });

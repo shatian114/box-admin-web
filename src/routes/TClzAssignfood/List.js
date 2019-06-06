@@ -117,6 +117,7 @@ temp = {
         filename: '配菜点.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

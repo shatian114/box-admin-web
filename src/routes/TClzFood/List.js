@@ -124,6 +124,7 @@ temp = {
         filename: '菜品.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

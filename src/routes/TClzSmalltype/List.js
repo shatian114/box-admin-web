@@ -126,6 +126,7 @@ temp = {
         filename: '小类.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

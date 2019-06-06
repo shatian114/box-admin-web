@@ -152,6 +152,7 @@ temp = {
         filename: '订单明细.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

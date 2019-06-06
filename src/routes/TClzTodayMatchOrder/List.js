@@ -166,6 +166,7 @@ if(!isEmpty(values.end_ordertime)) {
         filename: '订单.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });

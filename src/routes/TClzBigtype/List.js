@@ -119,6 +119,7 @@ temp = {
         filename: '大类.xls',
         queryMap: { ...values, ...date } || {},
         },
+        ...values, ...date,
         url,
         });
     });
