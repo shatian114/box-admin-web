@@ -259,6 +259,28 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="负责人账户">
+{getFieldDecorator('useraccount', {
+ initialValue: info.useraccount ||  newInfo.useraccount,
+  rules: [
+    {
+      required: true,
+      message: '负责人账户不能缺失!',
+    },{ max: 255,message: '负责人账户必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="负责人密码">
+{getFieldDecorator('userpassword', {
+ initialValue: info.userpassword ||  newInfo.userpassword,
+  rules: [
+    {
+      required: true,
+      message: '负责人密码不能缺失!',
+    },{ max: 255,message: '负责人密码必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="政府补贴费率">
 {getFieldDecorator('subsideprice', {
  initialValue: info.subsideprice ||  newInfo.subsideprice,
