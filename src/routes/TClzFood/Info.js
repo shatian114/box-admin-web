@@ -60,11 +60,11 @@ export default class DicManagerInfo extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-			type: 'list/list',
+			type: 'base/getUpperId',
 			payload: {
 				url: '/api/TClzSmalltype/queryTClzSmalltypeList',
 			},
-		});
+    });
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       dispatch({
         type: 'base/info',
@@ -199,7 +199,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzSmalltypeId}>
   {
-    this.props.list.list.map((v, k) => (
+    this.props.base.upList.map((v, k) => (
       <Option key={k} value={v.t_clz_smalltype_id}>{v.typename}</Option>
     ))
    }
