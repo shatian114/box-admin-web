@@ -42,7 +42,13 @@ export async function logout() {
 // 菜单与操作权限
 
 export async function getMenuData() {
-  return request(`${SERVER_ADDR}/api/authority/getMenus`);
+  // return request(`${SERVER_ADDR}/api/authority/getMenus`);
+  return requestModels(`${SERVER_ADDR}/api/authority/getnewMenus`, {
+    method: 'POST',
+    body: {
+      sysid: 'Z3',
+    },
+  });
 }
 
 export async function getOprs(params) {

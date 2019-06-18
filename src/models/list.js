@@ -22,10 +22,12 @@ export default {
     exporting: false,
     searching: false,
     selectRecordArr: [],
-    queryTClzAssignfoodList: [], //配菜点tlis
+    queryTClzAssignfoodList: [],    //配菜点tlis
     queryTClzDeliveryclerkList: [], //配送员list
     queryTClzFoodList: [], //菜品list
     queryTClzOrderList: [], //订单list
+    queryTClzBigtypeList: [], //菜品大类list
+    queryTClzSmalltypeList: [], //菜品小类list
   },
 
   effects: {
@@ -82,14 +84,14 @@ export default {
         type: 'save',
         payload: {
           searching: false,
-        }
+        },
       });
     },
     *listsaveinfo({ payload }, { call, put}) {
       const response = yield call(queryList, {
         page: 1,
         len: 100000,
-        url: payload.url,
+        ...payload,
       });
 
       if (response) {
@@ -129,6 +131,22 @@ export default {
               type: 'save',
               payload: {
                 queryTClzOrderList: response.list,
+              },
+            });
+            break;
+          case 'queryTClzBigtypeList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzBigtypeList: response.list,
+              },
+            });
+            break;
+          case 'queryTClzSmalltypeList':
+            yield put({
+              type: 'save',
+              payload: {
+                queryTClzSmalltypeList: response.list,
               },
             });
             break;

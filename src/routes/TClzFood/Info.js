@@ -60,10 +60,16 @@ export default class DicManagerInfo extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-			type: 'base/getUpperId',
-			payload: {
-				url: '/api/TClzSmalltype/queryTClzSmalltypeList',
-			},
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzBigtype/queryTClzBigtypeList',
+      },
+    });
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzSmalltype/queryTClzSmalltypeList',
+      },
     });
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       dispatch({
@@ -168,6 +174,20 @@ export default class DicManagerInfo extends Component {
     console.log('latitude: ', props);
   }
 
+  changeBigtype = (bigtype_id) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzSmalltype/queryTClzSmalltypeList',
+        queryMap: {
+          t_clz_bigtype_id: bigtype_id,
+        },
+      },
+    });
+    this.props.form.setFieldsValue({'tClzSmalltypeId': ''});
+  }
+
   render() {
     const { submitting, form, loading, base } = this.props;
     const { getFieldDecorator } = form;
@@ -188,6 +208,23 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input disabled />)}
  </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="关联的大类">
+{getFieldDecorator('tClzBigtypeId', {
+ initialValue: info.tClzBigtypeId ||  newInfo.tClzBigtypeId,
+  rules: [
+    {
+      required: true,
+      message: '关联的大类不能缺失!',
+    },{ max: 255,message: '关联的大类必须小于255位!',   },
+  ],
+ })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzBigtypeId} showSearch onChange={this.changeBigtype}>
+  {
+    this.props.list.queryTClzBigtypeList.map((v, k) => (
+      <Option key={k} value={v.t_clz_bigtype_id}>{v.typename}</Option>
+    ))
+   }
+</Select>)}
+ </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="关联的小类">
 {getFieldDecorator('tClzSmalltypeId', {
  initialValue: info.tClzSmalltypeId ||  newInfo.tClzSmalltypeId,
@@ -197,9 +234,9 @@ export default class DicManagerInfo extends Component {
       message: '关联的小类不能缺失!',
     },{ max: 255,message: '关联的小类必须小于255位!',   },
   ],
- })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzSmalltypeId}>
+ })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzSmalltypeId} showSearch>
   {
-    this.props.base.upList.map((v, k) => (
+    this.props.list.queryTClzSmalltypeList.map((v, k) => (
       <Option key={k} value={v.t_clz_smalltype_id}>{v.typename}</Option>
     ))
    }

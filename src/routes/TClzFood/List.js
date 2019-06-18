@@ -29,7 +29,7 @@ const url = 'TClzFood';
 const rowKey = 't_clz_food_id';
 const DateFormat = 'YYYY-MM-DD';
 
-@connect(({ base }) => ({ base }))
+@connect(({ base, list }) => ({ base, list }))
 @Form.create()
 @List.create()
 export default class TClzFoodList extends Component {
@@ -41,7 +41,13 @@ export default class TClzFoodList extends Component {
     const { dispatch } = this.props;
     window.addEventListener('resize', this.resize);
     dispatch({
-      type: 'base/getUpperId',
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzBigtype/queryTClzBigtypeList',
+      },
+    });
+    dispatch({
+      type: 'list/listsaveinfo',
       payload: {
         url: '/api/TClzSmalltype/queryTClzSmalltypeList',
       },
@@ -130,9 +136,22 @@ temp = {
     });
   };
 
+  changeBigtype = (bigtype_id) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzSmalltype/queryTClzSmalltypeList',
+        queryMap: {
+          t_clz_bigtype_id: bigtype_id,
+        },
+      },
+    });
+    this.props.form.setFieldsValue({'t_clz_smalltype_id': ''});
+  }
 
   render() {
-    const { form, base } = this.props;
+    const { form, base, list } = this.props;
     
     
     const { getFieldDecorator } = form;
@@ -211,9 +230,16 @@ temp = {
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='菜品编号'>{getFieldDecorator('t_clz_food_id',{initialValue: this.props.list.queryMap.t_clz_food_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='关联的小类'>{getFieldDecorator('t_clz_smalltype_id',{initialValue: this.props.list.queryMap.t_clz_smalltype_id, })(<Select dropdownMatchSelectWidth={true} allowClear>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='关联的大类'>{getFieldDecorator('t_clz_bigtype_id',{initialValue: this.props.list.queryMap.t_clz_bigtype_id, })(<Select dropdownMatchSelectWidth={true} allowClear showSearch onChange={this.changeBigtype}>
   {
-    base.upList.map((v) => (
+    list.queryTClzBigtypeList.map((v) => (
+      <Option key={v.t_clz_bigtype_id} value={v.t_clz_bigtype_id}>{v.typename}</Option>
+    ))
+   }
+</Select>)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='关联的小类'>{getFieldDecorator('t_clz_smalltype_id',{initialValue: this.props.list.queryMap.t_clz_smalltype_id, })(<Select dropdownMatchSelectWidth={true} allowClear showSearch>
+  {
+    list.queryTClzSmalltypeList.map((v) => (
       <Option key={v.t_clz_smalltype_id} value={v.t_clz_smalltype_id}>{v.typename}</Option>
     ))
    }
