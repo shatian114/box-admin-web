@@ -1,0 +1,21 @@
+html,
+body,
+.mainContainer {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mapContainer,
+.mapContainer div {
+  height: 100%;
+}
+
+#bmap {
+  height: 100%;
+  width: 100%;
+}
+
+.anchorBL {
+  display: none !important;
+}

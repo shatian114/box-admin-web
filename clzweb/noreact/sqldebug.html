@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大数据展示D</title>
+  <link rel="stylesheet" href="/noreact/bower_components/iview/dist/styles/iview.css" />
+  <link rel="stylesheet" href="/noreact/bower_components/jquery-jsonview/dist/jquery.jsonview.css" />
+  <link rel="stylesheet" href="/noreact/css/style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <template>
+      <Card title="查询条件" class="list">
+        模糊查询: &nbsp;
+        <i-input v-model="queryOption.option" placeholder="输入查询参数.." style="width: 500px"></i-input>
+        <i-button type="primary" @click="doQuery()" style="color:#fff;padding:5px 8px">查询</i-button>
+      </Card>
+    </template>
+    <div class="list">
+      <Card title="列表数据" class="list">
+        <Row class="list-row list-header">
+          <i-col span="2">调试</i-col>
+          <i-col span="12">SQL</i-col>
+          <i-col span="4">参数</i-col>
+          <i-col span="2">用时(ms)</i-col>
+          <i-col span="4">返回条数</i-col>
+        </Row>
+        <template v-for="(item,index) of list">
+          <Row class="list-row">
+            <i-col span="2" class="btn-excute">
+              <span class="excuteBtn" v-bind:id="item.log_id" v-on:click="exceute(item)">
+                <Icon size="14" type="arrow-right-b"></Icon>&nbsp;执行
+              </span>
+            </i-col>
+            <i-col span="12" transfer="true">
+              {{item.fsql}}}
+            </i-col>
+            <i-col span="4">{{item.fparams}}</i-col>
+            <i-col span="2">{{item.work_time}}</i-col>
+            <i-col span="4">{{item.returns}}</i-col>
+          </Row>
+        </template>
+      </Card>
+      <div class="page">
+        <Page :total="total" :page-size="len" :current="page" show-total :page-size-opts="[10,20,50,100]" @on-change="pageChange"
+          @on-page-size-change="pagesizeChange"></Page>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+<script type="text/javascript" src="/noreact/bower_components/vue/dist/vue.min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/iview/dist/iview.min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/jquery-jsonview/dist/jquery.jsonview.js"></script>
+<script type="text/javascript" src="/noreact/bower_components/layer/layer.js"></script>
+<script type="text/javascript" src="/noreact/scripts/sqldebug.js"></script>
+
+</html>
