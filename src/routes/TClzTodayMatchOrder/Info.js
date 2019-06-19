@@ -51,7 +51,9 @@ const submitFormLayout = {
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+
   componentDidMount() {
+    console.log('page is ok');
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       dispatch({
@@ -121,7 +123,7 @@ export default class DicManagerInfo extends Component {
         }
       }
     });
-  };
+  }
 
   render() {
     const { submitting, form, loading, base, list } = this.props;
@@ -133,7 +135,7 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="订单id">
+           <FormItem {...formItemLayout} hasFeedback label="订单编号">
 {getFieldDecorator('tClzOrderId', {
  initialValue: info.tClzOrderId || newInfo.tClzOrderId,
   rules: [
@@ -194,15 +196,15 @@ export default class DicManagerInfo extends Component {
   rules: [
     {
       required: true,
-      message: '关联的配菜点id不能缺失!',
-    },{ max: 255,message: '关联的配菜点id必须小于255位!',   },
+      message: '关联的配菜点不能缺失!',
+    },{ max: 255,message: '关联的配菜点必须小于255位!',   },
   ],
  })(<Select allowClear showSearch optionFilterProp="children">
  {
-   queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
+   queryTClzAssignfoodList.map(v => (
      <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
    )
-   ) : ''
+   )
  }
 </Select>)}
  </FormItem>
@@ -217,10 +219,10 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select allowClear showSearch optionFilterProp="children">
  {
-   queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
+   queryTClzDeliveryclerkList.map(v => (
      <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
    )
-   ) : ''
+   )
  }
 </Select>)}
  </FormItem>

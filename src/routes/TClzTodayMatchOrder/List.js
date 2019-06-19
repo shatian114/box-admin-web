@@ -199,9 +199,41 @@ if(!isEmpty(values.end_ordertime)) {
     });
   }
 
+  changeSearchassignfood = (assignfoodid) => {
+    let deliveryclerklist = [];
+    const { queryTClzDeliveryclerkList } = this.props.list;
+    queryTClzDeliveryclerkList.map(o => {
+      if(o.assignfood_id == assignfoodid) {
+        deliveryclerklist.push(o);
+      }
+    });
+    this.props.dispatch({
+      type: 'list/save',
+      payload: {
+        searchqueryTClzDeliveryclerkList: deliveryclerklist,
+      },
+    });
+  }
+
+  changeSetassignfood = (assignfoodid) => {
+    let deliveryclerklist = [];
+    const { queryTClzDeliveryclerkList } = this.props.list;
+    queryTClzDeliveryclerkList.map(o => {
+      if(o.assignfood_id == assignfoodid) {
+        deliveryclerklist.push(o);
+      }
+    });
+    this.props.dispatch({
+      type: 'list/save',
+      payload: {
+        setqueryTClzDeliveryclerkList: deliveryclerklist,
+      },
+    });
+  }
+
   render() {
     const { form, base, list } = this.props;
-    const { queryTClzDeliveryclerkList, queryTClzAssignfoodList  } = list;
+    const { searchqueryTClzDeliveryclerkList, setqueryTClzDeliveryclerkList, queryTClzAssignfoodList } = list;
     const { ordergetstatusdes,orderstatus,ordergetstatus } = base;
     
     const { getFieldDecorator } = form;
@@ -349,7 +381,7 @@ if(!isEmpty(values.end_ordertime)) {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeSearchassignfood} >
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
         <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
@@ -359,7 +391,7 @@ if(!isEmpty(values.end_ordertime)) {
   </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
-      queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
+      searchqueryTClzDeliveryclerkList ? searchqueryTClzDeliveryclerkList.map(v => (
         <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
       )
       ) : ''
@@ -416,7 +448,7 @@ if(!isEmpty(values.end_ordertime)) {
         </Card>
         <Form layout="inline">
           <FormItem label="配菜点">
-            {getFieldDecorator('selectassignfoodname',{initialValue: '', })(<Select style={{width: 200}} allowClear showSearch optionFilterProp="children">
+            {getFieldDecorator('selectassignfoodname',{initialValue: '', })(<Select style={{width: 200}} allowClear showSearch optionFilterProp="children" onChange={this.changeSetassignfood}>
               {
                 queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
                   <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
@@ -428,7 +460,7 @@ if(!isEmpty(values.end_ordertime)) {
           <FormItem label='配送员'>
           {getFieldDecorator('selectdeliveryusername',{initialValue: '', })(<Select style={{width: 200}} allowClear showSearch optionFilterProp="children">
     {
-      queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
+      setqueryTClzDeliveryclerkList ? setqueryTClzDeliveryclerkList.map(v => (
         <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
       )
       ) : ''
