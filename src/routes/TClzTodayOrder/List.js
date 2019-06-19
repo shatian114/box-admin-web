@@ -24,7 +24,7 @@ import Importer from '../../components/Importer';
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzOrder;
-const routerUrl ='/TClzOrder';
+const routerUrl ='/TClzTodayOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
 const DateFormat = 'YYYY-MM-DD HH:mm:ss';

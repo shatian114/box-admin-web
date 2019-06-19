@@ -52,6 +52,10 @@ const submitFormLayout = {
 @Form.create()
 export default class DicManagerInfo extends Component {
 
+  state = {
+    setqueryTClzDeliveryclerkList: [],
+  }
+
   componentDidMount() {
     console.log('page is ok');
     const { dispatch } = this.props;
@@ -125,9 +129,22 @@ export default class DicManagerInfo extends Component {
     });
   }
 
+  changeAssignfood = (assignfoodid) => {
+    let deliveryclerklist = [];
+    const { queryTClzDeliveryclerkList } = this.props.list;
+    queryTClzDeliveryclerkList.map(o => {
+      if(o.assignfood_id === assignfoodid) {
+        deliveryclerklist.push(o);
+      }
+    });
+    this.setState({
+      setqueryTClzDeliveryclerkList: deliveryclerklist,
+    });
+  }
+
   render() {
     const { submitting, form, loading, base, list } = this.props;
-    const { queryTClzDeliveryclerkList, queryTClzAssignfoodList  } = list;
+    const { queryTClzAssignfoodList  } = list;
     const { getFieldDecorator } = form;
     
   const { info, newInfo } = base;
@@ -199,7 +216,7 @@ export default class DicManagerInfo extends Component {
       message: '关联的配菜点不能缺失!',
     },{ max: 255,message: '关联的配菜点必须小于255位!',   },
   ],
- })(<Select allowClear showSearch optionFilterProp="children">
+ })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeAssignfood}>
  {
    queryTClzAssignfoodList.map(v => (
      <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
@@ -219,7 +236,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select allowClear showSearch optionFilterProp="children">
  {
-   queryTClzDeliveryclerkList.map(v => (
+   this.state.setqueryTClzDeliveryclerkList.map(v => (
      <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
    )
    )

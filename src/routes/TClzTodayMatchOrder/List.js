@@ -24,7 +24,7 @@ import Importer from '../../components/Importer';
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzOrder;
-const routerUrl ='/TClzOrder';
+const routerUrl ='/TClzTodayMatchOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
 const DateFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -36,6 +36,7 @@ let selectRecordArr = [];
 @List.create()
 export default class TClzOrderList extends Component {
   state = {
+    setqueryTClzDeliveryclerkList: [],
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
 
@@ -223,11 +224,8 @@ if(!isEmpty(values.end_ordertime)) {
         deliveryclerklist.push(o);
       }
     });
-    this.props.dispatch({
-      type: 'list/save',
-      payload: {
-        setqueryTClzDeliveryclerkList: deliveryclerklist,
-      },
+    this.setState({
+      setqueryTClzDeliveryclerkList: deliveryclerklist,
     });
   }
 
@@ -391,7 +389,7 @@ if(!isEmpty(values.end_ordertime)) {
   </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
-      searchqueryTClzDeliveryclerkList ? searchqueryTClzDeliveryclerkList.map(v => (
+      this.state.setqueryTClzDeliveryclerkList ? searchqueryTClzDeliveryclerkList.map(v => (
         <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
       )
       ) : ''
