@@ -46,7 +46,7 @@ export default {
 		importResTitleArr: [],
 		shengCode: '130000',
 		shiCode: '130100',
-		isEdit: true,
+		isEdit: false,
 		exporting: false,
 		upperId: [],
     newInfo: {},
@@ -178,6 +178,12 @@ export default {
     },
 
     *info({ payload, url, callback }, { call, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          isEdit: true,
+        },
+      });
       const response = yield call(getobj, payload, url);
       if (response && response.code === '200') {
         yield put({
@@ -278,6 +284,12 @@ export default {
       }
     },
     *new({ url, callback, objName }, { call, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          isEdit: false,
+        },
+      });
       const response = yield call(newoObj, url);
       if (response && response.code === '200') {
         const payload = {};
@@ -552,18 +564,14 @@ export default {
         Message.error(response.msg);
       }
     },
-    *uploadImg({payload}, { call, put }) {
+    *uploadImg({payload}, { call }) {
       const response = yield call(getCosSigner, {...payload});
-      if(response) {
-        
-      }
       console.log('get cos signer: ', response);
-    }
+    },
   },
 
   reducers: {
     save(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         ...payload,
@@ -575,6 +583,9 @@ export default {
         ...state,
         newInfo: {},
         info: {},
+        isSelectImg: false,
+        isSelectVideo: false,
+        isEdit: false,
       };
     },
   },

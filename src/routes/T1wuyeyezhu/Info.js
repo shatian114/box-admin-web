@@ -100,7 +100,6 @@ export default class DicManagerInfo extends Component {
       if (!err) {
         let temp = {};
 				const { dispatch } = this.props;
-				console.log(this.props.base.info);
         if (this.props.base.info.t1wuyeyezhuId) {
           dispatch({
             type: 'base/fetch',

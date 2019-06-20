@@ -19,6 +19,8 @@ export default {
     sorter: {},
     exporting: false,
     searching: false,
+    queryTProducttypeList: [], // 实物商品类别
+    queryTProductList: [], // 实物商品
   },
 
   effects: {
@@ -72,10 +74,32 @@ export default {
         type: 'save',
         payload: {
           searching: false,
-        }
+        },
       });
-		},
-		*exportExcel2({payload}, {call, put}) {
+    },
+    *listsaveinfo({ payload }, { call, put}) {
+      const response = yield call(queryList, {
+        page: 1,
+        len: 100000,
+        ...payload,
+      });
+
+      if (response) {
+        // 之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
+        for (let k in response.data) {
+          response[k] = response.data[k];
+        }
+      
+        const saveinfokey = payload.url.split('/').pop();
+        const payload2 = {};
+        payload2[saveinfokey] = response.list;
+        yield put({
+          type: 'save',
+          'payload': payload2,
+        });
+      }
+    },
+		*exportExcel2({payload}, {call}) {
       
 			const temp = {
         page: 1,
@@ -164,7 +188,9 @@ export default {
         },
         url: undefined,
         sorter: {},
+        queryTProducttypeList: [],
+        queryTProductList: [],
       };
-		}
+		},
   },
 };

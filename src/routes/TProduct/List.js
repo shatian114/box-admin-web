@@ -30,7 +30,7 @@ const url = 'TProduct';
 const rowKey = 't_product_id';
 const DateFormat = 'YYYY-MM-DD';
 
-@connect(({ base }) => ({ base }))
+@connect(({ base, list }) => ({ base, list }))
 @Form.create()
 @List.create()
 export default class TProductList extends Component {
@@ -39,7 +39,15 @@ export default class TProductList extends Component {
   };
 
   componentDidMount() {
+    console.log('product page is ok');
     window.addEventListener('resize', this.resize);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TProducttype/queryTProducttypeList',
+      },
+    });
   }
 
   componentWillUnmount() {
@@ -125,7 +133,7 @@ temp = {
 
 
   render() {
-    const { form, base } = this.props;
+    const { form, list } = this.props;
     
     
     const { getFieldDecorator } = form;
@@ -178,13 +186,13 @@ temp = {
           </Row>
         ),
       },
-       {  title: '产品id',   dataIndex: 't_product_id',     width: 150,     sorter: false,      },
- {  title: '产品类型id',   dataIndex: 'producttypeid',     width: 150,     sorter: false,      },
+       {  title: '商品id',   dataIndex: 't_product_id',     width: 150,     sorter: false,      },
+ {  title: '商品类型',   dataIndex: 'producttypename',     width: 150,     sorter: false,      },
+ {  title: '商品名称',   dataIndex: 'productname',     width: 150,     sorter: false,      },
  {  title: '区域标识',   dataIndex: 'zone',     width: 150,     sorter: false,      },
  {  title: '商品编号',   dataIndex: 'productid',     width: 150,     sorter: false,      },
  {  title: '商品排序',   dataIndex: 'orderindex',     width: 150,     sorter: false,      },
- {  title: '商品名称',   dataIndex: 'productname',     width: 150,     sorter: false,      },
- {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 450,     sorter: false,   render: (val, record, index) => {
+ {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false,   render: (val, record, index) => {
     let indexImgArr = val.split(",");
     return <img src={indexImgArr[0]} width={80} height={80} alt="暂无图片" />
   }   },
@@ -212,7 +220,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TProduct/queryTProductList', // 必填,请求url
-      scroll: { x: 3660, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 3360, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -222,10 +230,14 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型id(起始)'>{getFieldDecorator('start_producttypeid',{initialValue: this.props.list.queryMap.start_producttypeid  ? moment(this.props.list.queryMap.start_producttypeid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型id(结束)'>{getFieldDecorator('end_producttypeid',{initialValue: this.props.list.queryMap.end_producttypeid  ? moment(this.props.list.queryMap.end_producttypeid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型'>{getFieldDecorator('producttypeid',{initialValue: this.props.list.queryMap.producttypeid, })
+ (<Select allowClear showSearch dropdownMatchSelectWidth>
+   {
+     list.queryTProducttypeList.map((v, k) => (
+      <Option key={k} value={v.producttypeid}>{v.producttypename}</Option>
+    ))
+   }
+ </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品编号'>{getFieldDecorator('productid',{initialValue: this.props.list.queryMap.productid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品名称'>{getFieldDecorator('productname',{initialValue: this.props.list.queryMap.productname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })

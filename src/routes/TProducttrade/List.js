@@ -29,6 +29,7 @@ const routerUrl ='/TProducttrade';
 const url = 'TProducttrade';
 const rowKey = 't_producttrade_id';
 const DateFormat = 'YYYY-MM-DD';
+const DateTimeFormat = 'YYYY-MM-DD hh:mm:ss';
 
 @connect(({ base }) => ({ base }))
 @Form.create()
@@ -70,6 +71,16 @@ temp = {
   ...temp,
   end_create_date: values.end_create_date.format(DateFormat),
  };
+ if (!isEmpty(values.buytime))
+temp = {
+  ...temp,
+  buytime: values.buytime.format(DateTimeFormat),
+ };
+ if (!isEmpty(values.sendtime))
+ temp = {
+   ...temp,
+   sendtime: values.sendtime.format(DateTimeFormat),
+  };
 
       
       setList({
@@ -112,6 +123,8 @@ temp = {
     const date = {};
     if (values.startDate) date.startDate = values.startDate.format(DateFormat);
     if (values.endDate) date.endDate = values.endDate.format(DateFormat);
+    if (values.buytime) date.buytime = values.buytime.format(DateTimeFormat);
+    if (values.sendtime) date.sendtime = values.sendtime.format(DateTimeFormat);
     dispatch({
         type: `list/exportExcel`,
         payload: {
@@ -178,33 +191,45 @@ temp = {
           </Row>
         ),
       },
-       {  title: '',   dataIndex: 't_producttrade_id',     width: 150,     sorter: false,      },
+       {  title: '订单编号',   dataIndex: 't_producttrade_id',     width: 150,     sorter: false,      },
  {  title: '商品编号',   dataIndex: 'productid',     width: 150,     sorter: false,      },
- {  title: '购买价格',   dataIndex: 'price',     width: 150,     sorter: false,      },
- {  title: '用户账户',   dataIndex: 'userid',     width: 150,     sorter: false,      },
+ {  title: '商品类型',   dataIndex: 'producttypename',     width: 150,     sorter: false,      },
+ {  title: '商品名称',   dataIndex: 'productname',     width: 150,     sorter: false,      },
+ {  title: '购买价格',   dataIndex: 'price',     width: 100,     sorter: false,      },
+ {  title: '用户账户',   dataIndex: 'userid',     width: 300,     sorter: false,      },
+ {  title: '用户昵称',   dataIndex: 'nickname',     width: 150,     sorter: false,      },
+ {  title: '用户真实姓名',   dataIndex: 'realname',     width: 150,     sorter: false,      },
+ {  title: '用户地址',   dataIndex: 'addressdetail',     width: 200,     sorter: false,      },
+ {  title: '用户电话',   dataIndex: 'mobilephone',     width: 150,     sorter: false,      },
+ {  title: '用户邮箱',   dataIndex: 'email',     width: 150,     sorter: false,      },
  {  title: '购买时间',   dataIndex: 'buytime',     width: 150,     sorter: false,      },
- {  title: '是否发货',   dataIndex: 'issend',     width: 150,     sorter: false,      },
+ {  title: '是否发货',   dataIndex: 'issend',     width: 50,     sorter: false,   render: text => (
+   <span>{text == 1 ? '是' : '否'}</span>
+ )  },
  {  title: '发货时间',   dataIndex: 'sendtime',     width: 150,     sorter: false,      },
  {  title: '用户留言',   dataIndex: 'userinfo',     width: 150,     sorter: false,      },
  {  title: '商家留言',   dataIndex: 'shopinfo',     width: 150,     sorter: false,      },
- {  title: '买了几个',   dataIndex: 'num',     width: 150,     sorter: false,      },
- {  title: '总额',   dataIndex: 'total',     width: 150,     sorter: false,      },
- {  title: '',   dataIndex: 'tagindex',     width: 150,     sorter: false,      },
+ {  title: '买了几个',   dataIndex: 'num',     width: 50,     sorter: false,      },
+ {  title: '总额',   dataIndex: 'total',     width: 100,     sorter: false,      },
  {  title: '物流单号等',   dataIndex: 'other',     width: 150,     sorter: false,      },
  {  title: '门店标识',   dataIndex: 'shoptag',     width: 150,     sorter: false,      },
  {  title: '桌号',   dataIndex: 'desktag',     width: 150,     sorter: false,      },
- {  title: '提取编号，一个门店内，一天内不重复',   dataIndex: 'getproductcode',     width: 150,     sorter: false,      },
- {  title: '是否支付',   dataIndex: 'ispaid',     width: 150,     sorter: false,      },
+ {  title: '提取编号',   dataIndex: 'getproductcode',     width: 150,     sorter: false,      },
+ {  title: '是否支付',   dataIndex: 'ispaid',     width: 50,     sorter: false,   render: text => (
+  <span>{text == 1 ? '是' : '否'}</span>
+)   },
  {  title: '收货地址信息',   dataIndex: 'recieveaddress',     width: 150,     sorter: false,      },
- {  title: '订单号',   dataIndex: 'seq',     width: 150,     sorter: false,      },
- {  title: '卖家额外提供的图片',   dataIndex: 'shoppic',     width: 150,     sorter: false,      },
+ {  title: '订单号',   dataIndex: 'seq',     width: 400,     sorter: false,      },
+ {  title: '卖家额外提供的图片',   dataIndex: 'shoppic',     width: 150,     sorter: false,   render: text => (
+  <img src={text} width={80} height={80} alt="暂无图片" />
+)   },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];
 
     const listConfig = {
       url: '/api/TProducttrade/queryTProducttradeList', // 必填,请求url
-      scroll: { x: 3150, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 4010, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -214,33 +239,34 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_producttrade_id',{initialValue: this.props.list.queryMap.t_producttrade_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品编号'>{getFieldDecorator('productid',{initialValue: this.props.list.queryMap.productid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户账户'>{getFieldDecorator('userid',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='购买时间'>{getFieldDecorator('buytime',{initialValue: this.props.list.queryMap.buytime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否发货(起始)'>{getFieldDecorator('start_issend',{initialValue: this.props.list.queryMap.start_issend  ? moment(this.props.list.queryMap.start_issend): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否发货(结束)'>{getFieldDecorator('end_issend',{initialValue: this.props.list.queryMap.end_issend  ? moment(this.props.list.queryMap.end_issend): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='发货时间'>{getFieldDecorator('sendtime',{initialValue: this.props.list.queryMap.sendtime, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='购买时间'>{getFieldDecorator('buytime',{initialValue: this.props.list.queryMap.buytime ? moment(this.props.list.queryMap.buytime) : null, })(<DatePicker showTime format={DateTimeFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否发货'>{getFieldDecorator('issend',{initialValue: this.props.list.queryMap.issend, })
+ (<Select>
+    <Option value=""></Option>
+    <Option value="1">是</Option>
+    <Option value="0">否</Option>
+  </Select>)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='发货时间'>{getFieldDecorator('sendtime',{initialValue: this.props.list.queryMap.sendtime ? moment(this.props.list.queryMap.sendtime) : null, })(<DatePicker showTime format={DateTimeFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户留言'>{getFieldDecorator('userinfo',{initialValue: this.props.list.queryMap.userinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商家留言'>{getFieldDecorator('shopinfo',{initialValue: this.props.list.queryMap.shopinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='买了几个(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='买了几个(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('tagindex',{initialValue: this.props.list.queryMap.tagindex, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物流单号等'>{getFieldDecorator('other',{initialValue: this.props.list.queryMap.other, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='门店标识'>{getFieldDecorator('shoptag',{initialValue: this.props.list.queryMap.shoptag, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='桌号'>{getFieldDecorator('desktag',{initialValue: this.props.list.queryMap.desktag, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='提取编号，一个门店内，一天内不重复'>{getFieldDecorator('getproductcode',{initialValue: this.props.list.queryMap.getproductcode, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否支付(起始)'>{getFieldDecorator('start_ispaid',{initialValue: this.props.list.queryMap.start_ispaid  ? moment(this.props.list.queryMap.start_ispaid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否支付(结束)'>{getFieldDecorator('end_ispaid',{initialValue: this.props.list.queryMap.end_ispaid  ? moment(this.props.list.queryMap.end_ispaid): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='提取编号'>{getFieldDecorator('getproductcode',{initialValue: this.props.list.queryMap.getproductcode, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否支付'>{getFieldDecorator('ispaid',{initialValue: this.props.list.queryMap.ispaid, })
+ (<Select>
+  <Option value=""></Option>
+  <Option value="1">是</Option>
+  <Option value="0">否</Option>
+</Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='收货地址信息'>{getFieldDecorator('recieveaddress',{initialValue: this.props.list.queryMap.recieveaddress, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单号'>{getFieldDecorator('seq',{initialValue: this.props.list.queryMap.seq, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='卖家额外提供的图片'>{getFieldDecorator('shoppic',{initialValue: this.props.list.queryMap.shoppic, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
             </Row>

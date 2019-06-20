@@ -19,6 +19,7 @@ import { isEmpty, geneUuidArr } from '../../utils/utils';
 import {uploadImg, uploadUgc} from '../../utils/uploadImg';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
+import { FormValid } from '../../utils/FormValid';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -63,7 +64,11 @@ export default class DicManagerInfo extends Component {
     dispatch({
 			type: 'list/list',
 			payload: {
-				url: '/api/TProducttype/queryTProducttypeList'
+        url: '/api/TProducttype/queryTProducttypeList',
+        queryMap: {
+          page: 1,
+          len: 100000,
+        },
 			},
 		});
 		let isEdit = this.props.base.isEdit;
@@ -238,7 +243,7 @@ export default class DicManagerInfo extends Component {
       message: '产品类型不能缺失!',
     },{ required: true,message: '产品类型不能缺失!', },
   ],
- })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
+ })(<Select allowClear showSearch dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
   {
     this.props.list.list.map((v, k) => (
       <Option key={k} value={v.producttypeid}>{v.producttypename}</Option>
@@ -308,7 +313,7 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '剩余数量不能缺失!',
-    },{ required: true,message: '剩余数量不能缺失!', },
+    },{ validator:FormValid.onlyNumber },
   ],
  })(<InputNumber min={0} />)}
  </FormItem>
@@ -319,7 +324,7 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '支付的费用不能缺失!',
-    },
+    }, {validator: FormValid.jine}
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>

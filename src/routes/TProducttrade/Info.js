@@ -8,20 +8,23 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
+import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Alert, Upload, message } from 'antd';
+import DelImg from '../../components/DelImg';
+import {uploadImg} from '../../utils/uploadImg';
+import { FormValid } from '../../utils/FormValid';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { isEmpty } from '../../utils/utils';
+import { geneUuidArr } from '../../utils/utils';
+import {webConfig} from '../../utils/Constant';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
-const { TextArea } = Input;
-const DateFormat = 'YYYY-MM-DD';
+const DateTimeFormat = 'YYYY-MM-DD hh:mm:ss';
 const url = 'TProducttrade';
 
 const formItemLayout = {
@@ -42,13 +45,20 @@ const submitFormLayout = {
   },
 };
 
-@connect(({ base, loading }) => ({
+@connect(({ base, list, loading }) => ({
   base,
+  list,
   submitting: loading.effects['base/fetch'] || loading.effects['base/fetchAdd'],
   loading: loading.effects['base/info'] || loading.effects['base/new'] || false,
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+
+  state = {
+    percent: 0,
+    indexImgArr: [],
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
@@ -65,6 +75,12 @@ export default class DicManagerInfo extends Component {
         url,
       });
     }
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TProduct/queryTProductList',
+      },
+    });
   }
 
   componentWillUnmount() {
@@ -76,13 +92,37 @@ export default class DicManagerInfo extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
+    //先上传索引图
+    console.log(this.state.indexImgArr.length);
+    let uuidArr = geneUuidArr(this.state.indexImgArr.length);
+    let tagIndexStr = "";
+    for(let i=0; i<uuidArr.length; i++) {
+      let imgKey = this.props.base.info.tProducttradeId || this.props.base.newInfo.tProducttradeId;
+      imgKey += "_indexTag_" + uuidArr[i] + ".jpg";
+      tagIndexStr += webConfig.tpUriPre + imgKey + ",";
+      uploadImg(this.state.indexImgArr[i].originFileObj, imgKey, v => {
+				if(v){
+          //tagIndexStr += webConfig.tpUriPre + imgKey + ",";
+					console.log('上传成功');
+				}else{
+					console.log('上传失败');
+				}
+			});
+    }
+    this.props.form.setFields({
+      tagindex: {value: tagIndexStr}
+    });
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
         
 
+         values.buytime = values.buytime.format(DateTimeFormat);
+         values.sendtime = values.sendtime.format(DateTimeFormat);
         const { dispatch } = this.props;
-        if (this.props.base.info.id) {
+        if (this.props.base.info.tProducttradeId) {
           dispatch({
             type: 'base/fetch',
             payload: {
@@ -108,8 +148,34 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  //上传商家额外提供的图片
+  uploadChange = (file) => {
+    message.info('开始上传卖家额外提供的图片');
+		this.props.dispatch({
+			type: 'base/save',
+			payload: {
+				isSelectImg: file.fileList.length > 0,
+			},
+		})
+		if(file.fileList.length > 0) {
+			let imgKey = (this.props.base.info.tProducttradeId || this.props.base.newInfo.tProducttradeId)+'.jpg';
+			uploadImg(file.fileList[0].originFileObj, imgKey, v => {
+				if(v){
+					this.props.form.setFields({
+						shoppic: {value: webConfig.tpUriPre + imgKey}
+          });
+          message.success('卖家额外提供的图片上传成功');
+					console.log('上传成功');
+				}else{
+          message.error('卖家额外提供的图片上传失败');
+					console.log('上传失败');
+				}
+			});
+		}
+  }
+
   render() {
-    const { submitting, form, loading, base } = this.props;
+    const { submitting, form, loading, base, list } = this.props;
     const { getFieldDecorator } = form;
     
   const { info, newInfo } = base;
@@ -117,27 +183,33 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
+           <FormItem {...formItemLayout} hasFeedback label="交易单号">
 {getFieldDecorator('tProducttradeId', {
  initialValue: info.tProducttradeId || newInfo.tProducttradeId,
   rules: [
     {
       required: true,
-      message: '不能缺失!',
+      message: '交易单号不能缺失!',
     },
   ],
  })(<Input disabled />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="商品编号">
+ <FormItem {...formItemLayout} hasFeedback label="商品">
 {getFieldDecorator('productid', {
  initialValue: info.productid ||  newInfo.productid,
   rules: [
     {
       required: true,
-      message: '商品编号不能缺失!',
-    },{ max: 40,message: '商品编号必须小于40位!',   },
+      message: '商品不能缺失!',
+    },{ max: 40,message: '商品必须小于40位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Select allowClear showSearch dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
+  {
+    list.queryTProductList.map((v, k) => (
+      <Option key={k} value={v.productid}>{v.productname}</Option>
+    ))
+   }
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="购买价格">
 {getFieldDecorator('price', {
@@ -146,9 +218,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '购买价格不能缺失!',
-    },
+    },{ validator: FormValid.jine }
   ],
- })()}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="用户账户">
 {getFieldDecorator('userid', {
@@ -163,14 +235,14 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="购买时间">
 {getFieldDecorator('buytime', {
- initialValue: info.buytime ||  newInfo.buytime,
+ initialValue: moment(info.buytime ||  newInfo.buytime),
   rules: [
     {
       required: true,
       message: '购买时间不能缺失!',
-    },{ max: 255,message: '购买时间必须小于255位!',   },
+    },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<DatePicker showTime format={DateTimeFormat} placeholder='请输入' />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否发货">
 {getFieldDecorator('issend', {
@@ -181,18 +253,21 @@ export default class DicManagerInfo extends Component {
       message: '是否发货不能缺失!',
     },{ required: true,message: '是否发货不能缺失!', },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+  <Option value={1}>是</Option>
+  <Option value={0}>否</Option>
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="发货时间">
 {getFieldDecorator('sendtime', {
- initialValue: info.sendtime ||  newInfo.sendtime,
+ initialValue: moment(info.sendtime ||  newInfo.sendtime),
   rules: [
     {
       required: true,
       message: '发货时间不能缺失!',
-    },{ max: 255,message: '发货时间必须小于255位!',   },
+    }
   ],
- })(<Input placeholder="请输入" />)}
+ })(<DatePicker showTime format={DateTimeFormat} placeholder='请输入' />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="用户留言">
 {getFieldDecorator('userinfo', {
@@ -216,16 +291,16 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="买了几个">
+ <FormItem {...formItemLayout} hasFeedback label="商品数量">
 {getFieldDecorator('num', {
  initialValue: info.num ||  newInfo.num,
   rules: [
     {
       required: true,
-      message: '买了几个不能缺失!',
-    },{ required: true,message: '买了几个不能缺失!', },
+      message: '商品数量不能缺失!',
+    }, {validator: FormValid.onlyNumber}
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<InputNumber min={0} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="总额">
 {getFieldDecorator('total', {
@@ -234,20 +309,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '总额不能缺失!',
-    },
+    },{validator: FormValid.jine}
   ],
- })()}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="">
-{getFieldDecorator('tagindex', {
- initialValue: info.tagindex ||  newInfo.tagindex,
-  rules: [
-    {
-      required: true,
-      message: '不能缺失!',
-    },{ max: 255,message: '必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
+ })(<Input addonAfter='元' placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="物流单号等">
 {getFieldDecorator('other', {
@@ -282,14 +346,14 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="提取编号，一个门店内，一天内不重复">
+ <FormItem {...formItemLayout} hasFeedback label="提取编号">
 {getFieldDecorator('getproductcode', {
  initialValue: info.getproductcode ||  newInfo.getproductcode,
   rules: [
     {
       required: true,
-      message: '提取编号，一个门店内，一天内不重复不能缺失!',
-    },{ max: 100,message: '提取编号，一个门店内，一天内不重复必须小于100位!',   },
+      message: '提取编号',
+    },{ max: 100,message: '提取编号必须小于100位!',   },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
@@ -300,9 +364,12 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '是否支付不能缺失!',
-    },{ required: true,message: '是否支付不能缺失!', },
+    },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+  <Option value={1}>是</Option>
+  <Option value={0}>否</Option>
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="收货地址信息">
 {getFieldDecorator('recieveaddress', {
@@ -333,9 +400,45 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '卖家额外提供的图片不能缺失!',
-    },{ max: 200,message: '卖家额外提供的图片必须小于200位!',   },
+    },{ max: 400,message: '卖家额外提供的图片必须小于400位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input placeholder="请选择卖家额外提供的图片文件" disabled />)}
+ <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
+						{info.shoppic ? <DelImg goDel={() => {info.shoppic=undefined}} imgUrl={info.shoppic + '?' + Math.random()} /> : ''}
+						<Upload
+              listType="picture-card"
+              onChange={this.uploadChange}
+							disabled={this.props.base.isSelectImg}
+              onChange={this.uploadChange}
+              onRemove={(file) => {this.props.form.setFields({shoppic: undefined}); return true;}}
+							multiple={false}
+            	accept="image/jpg,image/jpeg,image/png"
+							beforeUpload={(file, fileList) => {
+								return false;
+							}}>
+						 选择卖家额外提供的图片
+						</Upload>
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="商品图片索引">
+{getFieldDecorator('tagindex', {
+ initialValue: info.tagindex ||  newInfo.tagindex,
+  rules: [
+    {
+      required: true,
+      message: '商品图片索引不能缺失!',
+    },{ max: 255,message: '商品图片索引必须小于255位!',   },
+  ],
+ })(<Input placeholder="请选择商品索引图" disabled />)}
+  <Upload
+  	onChange={file => {this.setState({indexImgArr: file.fileList});}}
+  	listType="picture-card"
+  	multiple={false}
+  	accept="image/jpg,image/jpeg,image/png"
+  	beforeUpload={(file, fileList) => {
+  		return false;
+  	}}>
+   选择商品索引图
+  </Upload>
  </FormItem>
 
           
