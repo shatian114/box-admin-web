@@ -17,9 +17,9 @@ export default class LoginPage extends Component {
   };
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'login/getCode',
-    });
+    // this.props.dispatch({
+    //   type: 'login/getCode',
+    // });
   }
 
   onTabChange = type => {
@@ -27,9 +27,9 @@ export default class LoginPage extends Component {
   };
 
   handlerefresh = () => {
-    this.props.dispatch({
-      type: 'login/getCode',
-    });
+    // this.props.dispatch({
+    //   type: 'login/getCode',
+    // });
   };
 
   handleSubmit = (err, values) => {

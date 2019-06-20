@@ -93,13 +93,13 @@ export default {
     },
 
     *getCode(_, { call, put }) {
-      const uid = yield call(getVerificationCode);
-      yield put({
-        type: 'save',
-        payload: {
-          uid: uid ? uid.data : null,
-        },
-      });
+      // const uid = yield call(getVerificationCode);
+      // yield put({
+      //   type: 'save',
+      //   payload: {
+      //     uid: uid ? uid.data : null,
+      //   },
+      // });
     },
   },
 

@@ -6,7 +6,7 @@ import { request, requestModels, download, requestCosAuth } from '../utils/reque
 var SERVER_ADDR="";
 
 export async function getVerificationCode() {
-  return request(`${SERVER_ADDR}/auth/getGuestUid`);
+  // return request(`${SERVER_ADDR}/auth/getGuestUid`);
 }
 
 export async function getVerification(params) {

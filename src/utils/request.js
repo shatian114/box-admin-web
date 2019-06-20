@@ -109,12 +109,10 @@ export function request(url, options) {
         return;
       }
       if (status <= 504 && status >= 500) {
-        // dispatch(routerRedux.push('/exception/500'));
         message.error('服务器出错了');
         return;
       }
       if (status >= 404 && status < 422) {
-        // dispatch(routerRedux.push('/exception/404'));
         message.error('请求的链接不存在');
       }
     });
@@ -165,12 +163,10 @@ export function requestModels(url, options) {
           });
           return;
         }
-        // dispatch(routerRedux.push('/exception/500'));
         message.error('服务器出错了');
         return;
       }
       if (status >= 404 && status < 422) {
-        //dispatch(routerRedux.push('/exception/404'));
         message.error('请求的链接不存在');
       }
     });
