@@ -454,11 +454,7 @@ export default class DicManagerInfo extends Component {
  <FormItem {...formItemLayout} hasFeedback label="视频链接">
 {getFieldDecorator('videolink', {
  initialValue: info.videolink ||  newInfo.videolink,
-  rules: [
-    {
-      required: true,
-      message: '视频链接不能缺失!',
-    },{ max: 255,message: '视频链接必须小于255位!',   },
+  rules: [{ max: 255,message: '视频链接必须小于255位!',   },
   ],
  })(<Input disabled placeholder="请选择视频文件" />)}
  <Alert type="warning" showIcon message="提示：只可选择一个视频，如果要重新选择视频，请先删除之前选择的视频" />

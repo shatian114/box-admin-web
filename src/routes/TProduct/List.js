@@ -36,6 +36,7 @@ const DateFormat = 'YYYY-MM-DD';
 export default class TProductList extends Component {
   state = {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
+    searchqueryTProductList: [],
   };
 
   componentDidMount() {
@@ -46,6 +47,12 @@ export default class TProductList extends Component {
       type: 'list/listsaveinfo',
       payload: {
         url: '/api/TProducttype/queryTProducttypeList',
+      },
+    });
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TProduct/queryTProductList',
       },
     });
   }
@@ -131,6 +138,17 @@ temp = {
     });
   };
 
+  changeProducttype = (producttypeid) => {
+    let productlist = [];
+    this.props.list.queryTProductList.map(o => {
+      if(o.producttypeid == producttypeid) {
+        productlist.push(o);
+      }
+    });
+    this.setState({
+      searchqueryTProductList: productlist,
+    });
+  }
 
   render() {
     const { form, list } = this.props;
@@ -186,7 +204,7 @@ temp = {
           </Row>
         ),
       },
-       {  title: '商品id',   dataIndex: 't_product_id',     width: 150,     sorter: false,      },
+       {  title: '商品编号',   dataIndex: 't_product_id',     width: 150,     sorter: false,      },
  {  title: '商品类型',   dataIndex: 'producttypename',     width: 150,     sorter: false,      },
  {  title: '商品名称',   dataIndex: 'productname',     width: 150,     sorter: false,      },
  {  title: '区域标识',   dataIndex: 'zone',     width: 150,     sorter: false,      },
@@ -231,7 +249,7 @@ temp = {
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='产品类型'>{getFieldDecorator('producttypeid',{initialValue: this.props.list.queryMap.producttypeid, })
- (<Select allowClear showSearch dropdownMatchSelectWidth>
+ (<Select allowClear showSearch dropdownMatchSelectWidth onChange={this.changeProducttype}>
    {
      list.queryTProducttypeList.map((v, k) => (
       <Option key={k} value={v.producttypeid}>{v.producttypename}</Option>
@@ -239,7 +257,13 @@ temp = {
    }
  </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品编号'>{getFieldDecorator('productid',{initialValue: this.props.list.queryMap.productid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品名称'>{getFieldDecorator('productname',{initialValue: this.props.list.queryMap.productname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品名称'>{getFieldDecorator('productname',{initialValue: this.props.list.queryMap.productname, })(<Select allowClear showSearch dropdownMatchSelectWidth>
+   {
+     this.state.searchqueryTProductList.map((v, k) => (
+      <Option key={k} value={v.productid}>{v.productname}</Option>
+    ))
+   }
+ </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
