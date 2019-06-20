@@ -253,7 +253,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="区域标识">
 {getFieldDecorator('zone', {
- initialValue: info.zone ||  newInfo.zone,
+ initialValue: info.zone || 320000,
   rules: [
     {
       required: true,
@@ -275,7 +275,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="商品排序">
 {getFieldDecorator('orderindex', {
- initialValue: info.orderindex ||  newInfo.orderindex,
+ initialValue: info.orderindex || 1,
   rules: [
     {
       required: true,
@@ -308,7 +308,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="剩余数量">
 {getFieldDecorator('num', {
- initialValue: info.num ||  newInfo.num,
+ initialValue: info.num || 1000,
   rules: [
     {
       required: true,
@@ -317,13 +317,13 @@ export default class DicManagerInfo extends Component {
   ],
  })(<InputNumber min={0} />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="支付的费用">
+ <FormItem {...formItemLayout} hasFeedback label="价格">
 {getFieldDecorator('price', {
  initialValue: info.price ||  newInfo.price,
   rules: [
     {
       required: true,
-      message: '支付的费用不能缺失!',
+      message: '价格不能缺失!',
     }, {validator: FormValid.jine}
   ],
  })(<Input placeholder="请输入" />)}
@@ -332,16 +332,13 @@ export default class DicManagerInfo extends Component {
 {getFieldDecorator('shoptag', {
  initialValue: info.shoptag ||  newInfo.shoptag,
   rules: [
-    {
-      required: true,
-      message: '门店标识不能缺失!',
-    },{ max: 50,message: '门店标识必须小于50位!',   },
+    { max: 50,message: '门店标识必须小于50位!',   },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否显示实时视频">
 {getFieldDecorator('ishowvideolink', {
- initialValue: info.ishowvideolink ||  newInfo.ishowvideolink || "1",
+ initialValue: info.ishowvideolink || "0",
   rules: [
     {
       required: true,
@@ -369,7 +366,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否置顶">
 {getFieldDecorator('istop', {
- initialValue: info.istop ||  newInfo.istop || "1",
+ initialValue: info.istop || "0",
   rules: [
     {
       required: true,
@@ -425,7 +422,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否要填写桌号信息">
 {getFieldDecorator('isneeddesktag', {
- initialValue: info.isneeddesktag ||  newInfo.isneeddesktag || "1",
+ initialValue: info.isneeddesktag || "0",
   rules: [
     {
       required: true,
@@ -439,7 +436,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否放到首页">
 {getFieldDecorator('isatmain', {
- initialValue: info.isatmain ||  newInfo.isatmain || "1",
+ initialValue: info.isatmain || "0",
   rules: [
     {
       required: true,
@@ -496,16 +493,16 @@ export default class DicManagerInfo extends Component {
 						 选择商品主图
 						</Upload>
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="商品图片索引">
+ <FormItem {...formItemLayout} hasFeedback label="产品辅图">
 {getFieldDecorator('tagindex', {
  initialValue: info.tagindex ||  newInfo.tagindex,
   rules: [
     {
       required: true,
-      message: '商品图片索引不能缺失!',
-    },{ max: 255,message: '商品图片索引必须小于255位!',   },
+      message: '产品辅图不能缺失!',
+    },{ max: 255,message: '产品辅图必须小于255位!',   },
   ],
- })(<Input placeholder="请选择商品索引图" disabled />)}
+ })(<Input placeholder="请选择产品辅图" disabled />)}
   <Upload
   	onChange={file => {this.setState({indexImgArr: file.fileList}); console.log(file.fileList.length);}}
   	listType="picture-card"
@@ -514,7 +511,7 @@ export default class DicManagerInfo extends Component {
   	beforeUpload={(file, fileList) => {
   		return false;
   	}}>
-   选择商品索引图
+   选择产品辅图
   </Upload>
  </FormItem>
 

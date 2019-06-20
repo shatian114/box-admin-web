@@ -210,9 +210,16 @@ temp = {
  {  title: '区域标识',   dataIndex: 'zone',     width: 150,     sorter: false,      },
  {  title: '商品编号',   dataIndex: 'productid',     width: 150,     sorter: false,      },
  {  title: '商品排序',   dataIndex: 'orderindex',     width: 150,     sorter: false,      },
+ {  title: '产品主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,   render: (val, record, index) => (
+  <img src={val} width={80} height={80} alt="暂无图片" />
+)   },
  {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false,   render: (val, record, index) => {
+   if(!val) {
+     return <span>暂无图片</span>
+   }else{
     let indexImgArr = val.split(",");
     return <img src={indexImgArr[0]} width={80} height={80} alt="暂无图片" />
+   }
   }   },
  {  title: '剩余数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
  {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,      },
@@ -229,9 +236,6 @@ temp = {
  {  title: '是否需要输入完整收货地址',   dataIndex: 'isneeduseraddress',     width: 180,     sorter: false,      render: viewBoolean   },
  {  title: '是否要填写桌号信息',   dataIndex: 'isneeddesktag',     width: 150,     sorter: false,      render: viewBoolean   },
  {  title: '是否放到首页',   dataIndex: 'isatmain',     width: 150,     sorter: false,     render: viewBoolean    },
- {  title: '产品主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,   render: (val, record, index) => (
-   <img src={val} width={80} height={80} alt="暂无图片" />
- )   },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];
