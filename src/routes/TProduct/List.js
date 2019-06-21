@@ -21,6 +21,7 @@ import { isEmpty, viewBoolean } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import ListButtonGroup from '../../components/ListButtonGroup';
+import { FormValid } from '../../utils/FormValid';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -268,9 +269,9 @@ temp = {
     ))
    }
  </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num, rules: [{validator: FormValid.onlyNumber}] })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num, rules: [{validator: FormValid.onlyNumber}] })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
             </Row>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>

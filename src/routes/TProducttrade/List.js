@@ -251,9 +251,9 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='发货时间'>{getFieldDecorator('sendtime',{initialValue: this.props.list.queryMap.sendtime ? moment(this.props.list.queryMap.sendtime) : null, })(<DatePicker showTime format={DateTimeFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户留言'>{getFieldDecorator('userinfo',{initialValue: this.props.list.queryMap.userinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商家留言'>{getFieldDecorator('shopinfo',{initialValue: this.props.list.queryMap.shopinfo, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num  ? moment(this.props.list.queryMap.start_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(起始)'>{getFieldDecorator('start_num',{initialValue: this.props.list.queryMap.start_num, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物流单号等'>{getFieldDecorator('other',{initialValue: this.props.list.queryMap.other, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='门店标识'>{getFieldDecorator('shoptag',{initialValue: this.props.list.queryMap.shoptag, })(<Input placeholder='请输入' />)} </FormItem> </Col>

@@ -326,7 +326,7 @@ export default class DicManagerInfo extends Component {
       message: '价格不能缺失!',
     }, {validator: FormValid.jine}
   ],
- })(<Input placeholder="请输入" />)}
+ })(<InputNumber placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="门店标识">
 {getFieldDecorator('shoptag', {
@@ -448,26 +448,6 @@ export default class DicManagerInfo extends Component {
  <Option value="0">否</Option>
 </Select>)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="视频链接">
-{getFieldDecorator('videolink', {
- initialValue: info.videolink ||  newInfo.videolink,
-  rules: [{ max: 255,message: '视频链接必须小于255位!',   },
-  ],
- })(<Input disabled placeholder="请选择视频文件" />)}
- <Alert type="warning" showIcon message="提示：只可选择一个视频，如果要重新选择视频，请先删除之前选择的视频" />
-  <Upload
-  	disabled={this.props.base.isSelectVideo}
-    onChange={this.uploadVideo}
-    onRemove={(file) => {this.props.form.setFields({videolink: undefined}); return true;}}
-  	listType="picture-card"
-  	multiple={false}
-  	beforeUpload={(file, fileList) => {
-  		return false;
-  	}}>
-   选择视频文件
-  </Upload>
-  <Progress percent={this.state.percent} />
- </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="产品主图">
 {getFieldDecorator('mainpic', {
  initialValue: info.mainpic ||  newInfo.mainpic,
@@ -497,10 +477,7 @@ export default class DicManagerInfo extends Component {
 {getFieldDecorator('tagindex', {
  initialValue: info.tagindex ||  newInfo.tagindex,
   rules: [
-    {
-      required: true,
-      message: '产品辅图不能缺失!',
-    },{ max: 255,message: '产品辅图必须小于255位!',   },
+    { max: 255,message: '产品辅图必须小于255位!',   },
   ],
  })(<Input placeholder="请选择产品辅图" disabled />)}
   <Upload
@@ -514,7 +491,26 @@ export default class DicManagerInfo extends Component {
    选择产品辅图
   </Upload>
  </FormItem>
-
+ <FormItem {...formItemLayout} hasFeedback label="视频链接">
+{getFieldDecorator('videolink', {
+ initialValue: info.videolink ||  newInfo.videolink,
+  rules: [{ max: 255,message: '视频链接必须小于255位!',   },
+  ],
+ })(<Input disabled placeholder="请选择视频文件" />)}
+ <Alert type="warning" showIcon message="提示：只可选择一个视频，如果要重新选择视频，请先删除之前选择的视频" />
+  <Upload
+  	disabled={this.props.base.isSelectVideo}
+    onChange={this.uploadVideo}
+    onRemove={(file) => {this.props.form.setFields({videolink: undefined}); return true;}}
+  	listType="picture-card"
+  	multiple={false}
+  	beforeUpload={(file, fileList) => {
+  		return false;
+  	}}>
+   选择视频文件
+  </Upload>
+  <Progress percent={this.state.percent} />
+ </FormItem>
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button
