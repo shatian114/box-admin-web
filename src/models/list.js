@@ -268,6 +268,14 @@ export default {
         },
         url: undefined,
         sorter: {},
+        queryTClzAssignfoodList: [],    // 配菜点tlis
+        queryTClzDeliveryclerkList: [], //配送员list
+        searchqueryTClzDeliveryclerkList: [], //搜索的配送员list
+        setqueryTClzDeliveryclerkList: [], //设置的配送员list
+        queryTClzFoodList: [], //菜品list
+        queryTClzOrderList: [], //订单list
+        queryTClzBigtypeList: [], //菜品大类list
+        queryTClzSmalltypeList: [], //菜品小类list
       };
 		}
   },

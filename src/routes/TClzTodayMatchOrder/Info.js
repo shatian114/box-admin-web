@@ -265,21 +265,6 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否生效">
-{getFieldDecorator('orderstatus', {
- initialValue: info.orderstatus ||  newInfo.orderstatus,
-  rules: [
-    {
-      required: true,
-      message: '是否生效不能缺失!',
-    },
-  ],
- })(<Select showSearch allowClear  placeholder='是否生效' >
- <Option value=""></Option>
-  <Option value="0">不生效</Option>
-  <Option value="1">生效</Option>
-  </Select>)}
- </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="获取方式">
 {getFieldDecorator('gettype', {
  initialValue: info.gettype ||  newInfo.gettype,

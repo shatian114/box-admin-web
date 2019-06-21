@@ -398,13 +398,6 @@ if(!isEmpty(values.end_ordertime)) {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(
-<Select showSearch allowClear placeholder='是否生效' >
-<Option value=""></Option>
- <Option value="0">不生效</Option>
- <Option value="1">生效</Option>
- </Select>
-)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
   <Option value=""></Option>
   <Option value="1">自提</Option>
@@ -428,7 +421,6 @@ if(!isEmpty(values.end_ordertime)) {
  <Option value="10">配送签收失败退回过期销毁</Option>
  </Select>
 )} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单描述'> {getFieldDecorator('ordergetstatusdes', { initialValue: this.props.list.queryMap.ordergetstatusdes,})(<Input />)} </FormItem> </Col>
               
              
             </Row>

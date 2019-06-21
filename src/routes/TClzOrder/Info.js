@@ -51,6 +51,11 @@ const submitFormLayout = {
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+
+  state = {
+    gettype: '',
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
@@ -122,6 +127,18 @@ export default class DicManagerInfo extends Component {
       }
     });
   };
+
+  changeGettype = (gettype) => {
+    this.setState({
+      'gettype': gettype,
+    });
+    if(gettype === '1') {
+      this.props.form.setFieldsValue({
+        tClzDeliveryclerkId: '',
+        tClzUseraddressId: '',
+      });
+    }
+  }
 
   render() {
     const { submitting, form, loading, base, list } = this.props;
@@ -211,11 +228,11 @@ export default class DicManagerInfo extends Component {
  initialValue: info.tClzDeliveryclerkId ||  newInfo.tClzDeliveryclerkId,
   rules: [
     {
-      required: true,
-      message: '关联的配送员id不能缺失!',
-    },{ max: 255,message: '关联的配送员id必须小于255位!',   },
+      required: (this.state.gettype !== '1'),
+      message: '关联的配送员不能缺失!',
+    },{ max: 255,message: '关联的配送员必须小于255位!',   },
   ],
- })(<Select allowClear showSearch optionFilterProp="children">
+ })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
  {
    queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
      <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
@@ -229,11 +246,11 @@ export default class DicManagerInfo extends Component {
  initialValue: info.tClzUseraddressId ||  newInfo.tClzUseraddressId,
   rules: [
     {
-      required: true,
+      required: (this.state.gettype !== '1'),
       message: '买家用户指定的配送地址不能缺失!',
     },{ max: 255,message: '买家用户指定的配送地址必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input placeholder="请输入" disabled={this.state.gettype==='1'}/>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="订单获取状态补充描述">
 {getFieldDecorator('ordergetstatusdes', {
@@ -270,8 +287,7 @@ export default class DicManagerInfo extends Component {
       message: '获取方式',
     },{ max: 255,message: '获取方式',   },
   ],
- })(<Select>
-  <Option value=""></Option>
+ })(<Select showSearch allowClear onChange={this.changeGettype}>
   <Option value="1">自提</Option>
   <Option value="2">配送</Option>
 </Select>)}

@@ -36,6 +36,7 @@ const DateFormat2 = 'YYYY-MM-DD';
 export default class TClzOrderList extends Component {
   state = {
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
+    gettype: '' // 配送方式，如果是自提，则让配送员控件为不可选
   };
 
   componentDidMount() {
@@ -167,6 +168,18 @@ if(!isEmpty(values.end_ordertime)) {
 
   openOrderDatail = (record) => {
     window.open(window.location.href + "?component=TClzOrderDatail&id=" + record[rowKey]);
+  }
+
+  changeGettype = (gettype) => {
+    this.setState({
+      'gettype': gettype,
+    });
+    if(gettype === '1') {
+      this.props.form.setFieldsValue({
+        deliveryusername: '',
+        receiveraddress: '',
+      });
+    }
   }
 
   render() {
@@ -322,7 +335,7 @@ if(!isEmpty(values.end_ordertime)) {
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
     {
       queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
         <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
@@ -330,7 +343,7 @@ if(!isEmpty(values.end_ordertime)) {
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' disabled={this.state.gettype==='1'}/>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null})(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否生效'> {getFieldDecorator('orderstatus', { initialValue: this.props.list.queryMap.orderstatus,})(
@@ -340,8 +353,7 @@ if(!isEmpty(values.end_ordertime)) {
  <Option value="1">生效</Option>
  </Select>
 )} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
-  <Option value=""></Option>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear showSearch onChange={this.changeGettype}>
   <Option value="1">自提</Option>
   <Option value="2">配送</Option>
 </Select>)} </FormItem> </Col>
