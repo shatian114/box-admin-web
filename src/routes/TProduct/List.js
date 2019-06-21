@@ -226,9 +226,13 @@ temp = {
  {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,      },
  {  title: '支付的费用',   dataIndex: 'price',     width: 150,     sorter: false,      },
  {  title: '是否显示实时视频',   dataIndex: 'ishowvideolink',     width: 150,     sorter: false,   render: viewBoolean   },
- {  title: '视频链接',   dataIndex: 'videolink',     width: 150,     sorter: false,   render: (val, record, index) => (
-   <a href={val} target="_blank">查看视频</a>
-    )   },
+ {  title: '视频链接',   dataIndex: 'videolink',     width: 150,     sorter: false,   render: (val, record, index) => {
+   if(val && val.length > 0) {
+     return <a href={val} target="_blank">查看视频</a>;
+   }else{
+     return <span>无视频</span>;
+   }
+ }    },
  {  title: '是否审核过',   dataIndex: 'ispassed',     width: 150,     sorter: false,       render: viewBoolean  },
  {  title: '是否置顶',   dataIndex: 'istop',     width: 150,     sorter: false,      render: viewBoolean   },
  {  title: '门店标识',   dataIndex: 'shoptag',     width: 150,     sorter: false,      },

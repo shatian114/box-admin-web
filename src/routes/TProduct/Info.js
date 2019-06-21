@@ -236,7 +236,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="产品类型">
 {getFieldDecorator('producttypeid', {
- initialValue: info.producttypeid ||  '请选择',
+ initialValue: info.producttypeid ||  '',
   rules: [
     {
       required: true,
@@ -253,7 +253,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="区域标识">
 {getFieldDecorator('zone', {
- initialValue: info.zone || 320000,
+ initialValue: info.zone || '320000',
   rules: [
     {
       required: true,
@@ -330,7 +330,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="门店标识">
 {getFieldDecorator('shoptag', {
- initialValue: info.shoptag ||  newInfo.shoptag,
+ initialValue: info.shoptag || newInfo.shoptag || '',
   rules: [
     { max: 50,message: '门店标识必须小于50位!',   },
   ],
@@ -477,7 +477,7 @@ export default class DicManagerInfo extends Component {
 {getFieldDecorator('tagindex', {
  initialValue: info.tagindex ||  newInfo.tagindex,
   rules: [
-    { max: 255,message: '产品辅图必须小于255位!',   },
+    { max: 65535,message: '产品辅图必须小于65535位!',   },
   ],
  })(<Input placeholder="请选择产品辅图" disabled />)}
   <Upload
@@ -493,7 +493,7 @@ export default class DicManagerInfo extends Component {
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="视频链接">
 {getFieldDecorator('videolink', {
- initialValue: info.videolink ||  newInfo.videolink,
+ initialValue: info.videolink || newInfo.videolink || '',
   rules: [{ max: 255,message: '视频链接必须小于255位!',   },
   ],
  })(<Input disabled placeholder="请选择视频文件" />)}

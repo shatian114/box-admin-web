@@ -34,7 +34,8 @@ export const FormValid =
   },
   onlyNumber: (rule, value, callback) => {
     const reg = /^\d*$/;
-    if (reg.test(value)) {
+    console.log(value);
+    if (reg.test(value) || value === '' || value === null || value === undefined) {
       callback();
     } else {
       callback('只能是数字');
@@ -42,7 +43,7 @@ export const FormValid =
   },
   jine: (rule, value, callback) => {
     const reg = /^\d*\.{0,1}\d{0,2}$/;
-    if (reg.test(value) || value === '' || value === null) {
+    if (reg.test(value) || value === '' || value === null || value === undefined) {
       callback();
     } else {
       callback('必须是合法金额');
