@@ -16,6 +16,7 @@ import Operate from '../../components/Oprs';
 import { FormValid } from '../../utils/FormValid';
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
+import {ordergetstatusArr} from "../../utils/Constant";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -200,7 +201,7 @@ export default class DicManagerInfo extends Component {
  })(<Select allowClear showSearch optionFilterProp="children">
  {
    queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-     <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+     <Option key={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
    )
    ) : ''
  }
@@ -218,7 +219,7 @@ export default class DicManagerInfo extends Component {
  })(<Select allowClear showSearch optionFilterProp="children">
  {
    queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
-     <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
+     <Option key={v.t_clz_deliveryclerk_id}>{`${v.username}=>${v.deliveryclerkadress}`}</Option>
    )
    ) : ''
  }
@@ -234,32 +235,6 @@ export default class DicManagerInfo extends Component {
     },{ max: 255,message: '买家用户指定的配送地址必须小于255位!',   },
   ],
  })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="订单获取状态补充描述">
-{getFieldDecorator('ordergetstatusdes', {
- initialValue: info.ordergetstatusdes ||  newInfo.ordergetstatusdes,
-  rules: [
-    {
-      required: true,
-      message: '订单获取状态补充描述不能缺失!',
-    },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否生效">
-{getFieldDecorator('orderstatus', {
- initialValue: info.orderstatus ||  newInfo.orderstatus,
-  rules: [
-    {
-      required: true,
-      message: '是否生效不能缺失!',
-    },
-  ],
- })(<Select showSearch allowClear  placeholder='是否生效' >
- <Option value=""></Option>
-  <Option value="0">不生效</Option>
-  <Option value="1">生效</Option>
-  </Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="获取方式">
 {getFieldDecorator('gettype', {
@@ -287,16 +262,11 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select showSearch allowClear  placeholder='订单获取状态' >
  <Option value=""></Option>
-<Option value="1">下单成功等调配</Option>
-<Option value="2">调配好等自提</Option>
-<Option value="3">自提成功</Option>
-<Option value="4">自提延期保留</Option>
-<Option value="5">自提延期过期销毁</Option>
-<Option value="6">调配好等配送</Option>
-<Option value="7">配送中等签收</Option>
-<Option value="8">配送签收成功</Option>
-<Option value="9">配送签收失败退回保留</Option>
-<Option value="10">配送签收失败退回过期销毁</Option>
+  {
+    ordergetstatusArr.map((v, i) => (
+      <Option key={i} value={(i+1).toString()}>{v}</Option>
+    ))
+  }
 </Select>)}
  </FormItem>
 

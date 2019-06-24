@@ -16,6 +16,7 @@ import Operate from '../../components/Oprs';
 import { FormValid } from '../../utils/FormValid';
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
+import { ordergetstatusdesArr, ordergetstatusArr } from "../../utils/Constant";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -53,37 +54,33 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
 
   state = {
+    setqueryTClzDeliveryclerkList: [],
+    useraddressList: [],
     gettype: '',
+    isEdit: false,
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+      this.setState({
+        isEdit: true,
+      });
       dispatch({
         type: 'base/info',
         payload: {
           id: this.props.location.state.id,
         },
         url,
+        callback: this.getParentInfo, // 先获取信息，再获取需要的父参数
       });
     } else {
       dispatch({
         type: 'base/new',
         url,
+        callback: this.getParentInfo,
       });
     }
-    dispatch({
-      type: 'list/listsaveinfo',
-      payload: {
-        url: '/api/TClzAssignfood/queryTClzAssignfoodList',
-      },
-    });
-    dispatch({
-      type: 'list/listsaveinfo',
-      payload: {
-        url: '/api/TClzDeliveryclerk/queryTClzDeliveryclerkList',
-      },
-    });
   }
 
   componentWillUnmount() {
@@ -93,14 +90,56 @@ export default class DicManagerInfo extends Component {
     });
   }
 
+  getParentInfo = () => {
+
+    // 先判断获取方式，设置对应的参数
+    this.changeGettype(this.props.base.info.gettype);
+    const { dispatch } = this.props;
+    // 先获取配菜点，再获取配送员
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzAssignfood/queryTClzAssignfoodList',
+      },
+      callback: () => {
+        dispatch({
+          type: 'list/listsaveinfo',
+          payload: {
+            url: '/api/TClzDeliveryclerk/queryTClzDeliveryclerkList',
+          },
+        });
+      },
+    });
+    // 先获取用户，再获取用户地址
+    dispatch({
+      type: 'list/listsaveinfo',
+      payload: {
+        url: '/api/TClzUser/queryTClzUserList',
+      },
+      callback: () => {
+        dispatch({
+          type: 'list/listsaveinfo',
+          payload: {
+            url: '/api/TClzUseraddress/queryTClzUseraddressList',
+            userid: this.props.base.info.userid,
+          },
+          callback: this.setUseraddreddList,
+        });
+      },
+    });
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let temp = {};
+        let temp = {
+          ordergetstatusdes: ordergetstatusdesArr[values.ordergetstatus - 1],
+        };
         let valuesTemp = values;
         valuesTemp.ordertime = moment(values.ordertime._d).format('YYYY-MM-DD HH:mm:ss');
         valuesTemp.orderdate = moment(values.orderdate._d).format('YYYY-MM-DD');
+        console.log(temp, values, valuesTemp);
         const { dispatch } = this.props;
         if (this.props.base.info.tClzOrderId) {
           dispatch({
@@ -113,12 +152,17 @@ export default class DicManagerInfo extends Component {
             url,
           });
         } else {
+          // 如果是新建，并且时间是17点后，则将orderdate设置为第二天
+          if(moment().format("HH") > 16) {
+            valuesTemp.orderdate = moment(values.orderdate._d).add(1, 'days').format('YYYY-MM-DD')
+          }
           dispatch({
             type: 'base/fetchAdd',
             payload: {
               ...this.props.base.newInfo,
               ...valuesTemp,
                   ...temp,
+              orderstatus: '1',
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -128,16 +172,68 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  changeSetassignfood = (assignfoodid) => {
+    let deliveryclerklist = [];
+    const { queryTClzDeliveryclerkList } = this.props.list;
+    queryTClzDeliveryclerkList.map(o => {
+      if(o && (o.assignfood_id == assignfoodid)) {
+        deliveryclerklist.push(o);
+      }
+    });
+    this.setState({
+      setqueryTClzDeliveryclerkList: deliveryclerklist,
+    });
+  }
+
   changeGettype = (gettype) => {
     this.setState({
       'gettype': gettype,
     });
-    if(gettype === '1') {
-      this.props.form.setFieldsValue({
-        tClzDeliveryclerkId: '',
-        tClzUseraddressId: '',
-      });
+    // 新建则固定为1，修改的时候可改
+    if (this.props.base.info.tClzOrderId){
+      if(gettype === '1') {
+        this.props.form.setFieldsValue({
+          tClzDeliveryclerkId: '',
+          tClzUseraddressId: '',
+          ordergetstatus: '2',
+        });
+      }
+      if(gettype === '2') {
+        this.props.form.setFieldsValue({
+          ordergetstatus: '6',
+        });
+      }
     }
+
+  }
+
+  changeUserid = (userid) => {
+    this.setUseraddreddList(userid);
+  }
+
+  setUseraddreddList = (userid) => {
+    const useraddressList = [];
+    // 筛选出选中用户的地址和默认地址
+    let defaultUseraddressid = this.props.base.info.tClzUseraddressId;
+    this.props.list.queryTClzUseraddressList.map(v => {
+      if(v.userid === userid) {
+        useraddressList.push(v);
+        if(v.isdefault === '1' && !defaultUseraddressid && defaultUseraddressid !== '') {
+          defaultUseraddressid = v.t_clz_useraddress_id;
+        }
+      }
+    });
+
+    // 如果没有默认地址，并且地址列表不为空，则将第一个地址作为默认地址
+    if(!defaultUseraddressid && useraddressList.length > 0) {
+      defaultUseraddressid = useraddressList[0].t_clz_useraddress_id;
+    }
+    this.setState({
+      'useraddressList': useraddressList,
+    });
+    this.props.form.setFieldsValue({
+      tClzUseraddressId: defaultUseraddressid,
+    });
   }
 
   render() {
@@ -161,16 +257,40 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input disabled />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="用户id(微信id)">
+ <FormItem {...formItemLayout} hasFeedback label="用户">
 {getFieldDecorator('userid', {
  initialValue: info.userid ||  newInfo.userid,
   rules: [
     {
       required: true,
-      message: '用户id(微信id)不能缺失!',
-    },{ max: 255,message: '用户id(微信id)必须小于255位!',   },
+      message: '用户不能缺失!',
+    },{ max: 255,message: '用户必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Select showSearch allowClear onChange={this.changeUserid} disabled={this.state.isEdit}>
+  {
+    this.props.list.queryTClzUserList.map(v => (
+      <Option key={v.userid} value={v.userid}>{v.nickname}</Option>
+    ))
+  }
+</Select>)}
+ </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="买家指定的送货地址">
+{getFieldDecorator('tClzUseraddressId', {
+ initialValue: info.tClzUseraddressId || newInfo.tClzUseraddressId,
+  rules: [
+    {
+      required:  this.state.gettype!=='1',
+      message: '买家指定的送货地址不能缺失!',
+    },{ max: 255,message: '买家指定的送货地址必须小于255位!',   },
+  ],
+ })(<Select showSearch allowClear disabled={this.state.gettype==='1'}>
+   <Option key='0' value=''></Option>
+  {
+    this.state.useraddressList.map(v => (
+      <Option key={v.t_clz_useraddress_id} value={v.t_clz_useraddress_id}>{v.recieveaddress}</Option>
+    ))
+  }
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="本订单总金额">
 {getFieldDecorator('totalamount', {
@@ -205,6 +325,23 @@ export default class DicManagerInfo extends Component {
   ],
  })(<DatePicker showTime format='YYYY-MM-DD' placeholder='请输入' />)}
  </FormItem>
+          {
+            !this.state.isEdit ? <FormItem {...formItemLayout} hasFeedback label="获取方式">
+              {getFieldDecorator('gettype', {
+                initialValue: info.gettype ||  newInfo.gettype,
+                rules: [
+                  {
+                    required: true,
+                    message: '获取方式',
+                  },{ max: 255,message: '获取方式',   },
+                ],
+              })(<Select showSearch allowClear onChange={this.changeGettype}>
+                <Option value="1">自提</Option>
+                <Option value="2">配送</Option>
+              </Select>)}
+            </FormItem> : ''
+          }
+
  <FormItem {...formItemLayout} hasFeedback label="配菜点">
 {getFieldDecorator('tClzAssignfoodId', {
  initialValue: info.tClzAssignfoodId ||  newInfo.tClzAssignfoodId,
@@ -214,10 +351,10 @@ export default class DicManagerInfo extends Component {
       message: '关联的配菜点id不能缺失!',
     },{ max: 255,message: '关联的配菜点id必须小于255位!',   },
   ],
- })(<Select allowClear showSearch optionFilterProp="children">
+ })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeSetassignfood}>
  {
    queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-     <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+     <Option key={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
    )
    ) : ''
  }
@@ -234,88 +371,33 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
  {
-   queryTClzDeliveryclerkList ? queryTClzDeliveryclerkList.map(v => (
-     <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
+   this.state.setqueryTClzDeliveryclerkList.map(v => (
+     <Option key={v.t_clz_deliveryclerk_id}>{`${v.username}=>${v.deliveryclerkadress}`}</Option>
    )
-   ) : ''
+   )
  }
 </Select>)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="买家用户指定的配送地址">
-{getFieldDecorator('tClzUseraddressId', {
- initialValue: info.tClzUseraddressId ||  newInfo.tClzUseraddressId,
-  rules: [
-    {
-      required: (this.state.gettype !== '1'),
-      message: '买家用户指定的配送地址不能缺失!',
-    },{ max: 255,message: '买家用户指定的配送地址必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" disabled={this.state.gettype==='1'}/>)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="订单获取状态补充描述">
-{getFieldDecorator('ordergetstatusdes', {
- initialValue: info.ordergetstatusdes ||  newInfo.ordergetstatusdes,
-  rules: [
-    {
-      required: true,
-      message: '订单获取状态补充描述不能缺失!',
-    },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否生效">
-{getFieldDecorator('orderstatus', {
- initialValue: info.orderstatus ||  newInfo.orderstatus,
-  rules: [
-    {
-      required: true,
-      message: '是否生效不能缺失!',
-    },
-  ],
- })(<Select showSearch allowClear  placeholder='是否生效' >
- <Option value=""></Option>
-  <Option value="0">不生效</Option>
-  <Option value="1">生效</Option>
-  </Select>)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="获取方式">
-{getFieldDecorator('gettype', {
- initialValue: info.gettype ||  newInfo.gettype,
-  rules: [
-    {
-      required: true,
-      message: '获取方式',
-    },{ max: 255,message: '获取方式',   },
-  ],
- })(<Select showSearch allowClear onChange={this.changeGettype}>
-  <Option value="1">自提</Option>
-  <Option value="2">配送</Option>
-</Select>)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="订单获取状态">
-{getFieldDecorator('ordergetstatus', {
- initialValue: info.ordergetstatus ||  newInfo.ordergetstatus,
-  rules: [
-    {
-      required: true,
-      message: '订单获取状态不能缺失!',
-    },
-  ],
- })(<Select showSearch allowClear  placeholder='订单获取状态' >
- <Option value=""></Option>
-<Option value="1">下单成功等调配</Option>
-<Option value="2">调配好等自提</Option>
-<Option value="3">自提成功</Option>
-<Option value="4">自提延期保留</Option>
-<Option value="5">自提延期过期销毁</Option>
-<Option value="6">调配好等配送</Option>
-<Option value="7">配送中等签收</Option>
-<Option value="8">配送签收成功</Option>
-<Option value="9">配送签收失败退回保留</Option>
-<Option value="10">配送签收失败退回过期销毁</Option>
-</Select>)}
- </FormItem>
-
+          {
+            <FormItem {...formItemLayout} hasFeedback label="订单获取状态">
+              {getFieldDecorator('ordergetstatus', {
+                initialValue: info.ordergetstatus ||  newInfo.ordergetstatus || '1',
+                rules: [
+                  {
+                    required: true,
+                    message: '订单获取状态不能缺失!',
+                  },
+                ],
+              })(<Select showSearch allowClear  placeholder='订单获取状态' disabled={!this.state.isEdit} >
+                <Option value=""></Option>
+                {
+                  ordergetstatusArr.map((v, i) => (
+                    <Option key={i} value={(i+1).toString()}>{v}</Option>
+                  ))
+                }
+              </Select>)}
+            </FormItem>
+          }
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button

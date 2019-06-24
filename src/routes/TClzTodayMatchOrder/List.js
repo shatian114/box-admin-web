@@ -17,14 +17,14 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
+import { webConfig, formItemLayout, formItemGrid, ordergetstatusArr } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzOrder;
-const routerUrl ='/TClzTodayMatchOrder';
+const routerUrl ='/TClzOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
 const DateFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -36,13 +36,14 @@ let selectRecordArr = [];
 @List.create()
 export default class TClzOrderList extends Component {
   state = {
+    gettype: '',
     setqueryTClzDeliveryclerkList: [],
     scrollY: document.body.clientHeight > 768 ? 430 + document.body.clientHeight - 768 : 430,
   };
 
   componentDidMount() {
     window.addEventListener('resize', this.resize);
-    const { dispatch } = this.props;
+    const { dispatch, form } = this.props;
     dispatch({
       type: 'list/listsaveinfo',
       payload: {
@@ -112,14 +113,9 @@ if(!isEmpty(values.end_ordertime)) {
 }
 
  let orderdate = moment().format(DateFormat2);
- if(moment().format("HH") > 16) {
-   orderdate = moment().add(1, 'days').format("YYYY-MM-DD");
- }
-
-      
       setList({
         current: 1,
-        queryMap: { ...values, ...temp, start_orderdate: orderdate, end_orderdate: orderdate },
+        queryMap: { ...values, ...temp, start_orderdate: orderdate, end_orderdate: orderdate, gettype: '2' },
       });
     });
   };
@@ -128,11 +124,19 @@ if(!isEmpty(values.end_ordertime)) {
   handleFormReset = () => {
     const { form, list } = this.props;
     const { setList } = list;
+    form.resetFields();
+    let orderdate = moment().format(DateFormat2);
     setList({
       current: 1,
-      queryMap: {},
+      queryMap: {
+        start_orderdate: orderdate,
+        end_orderdate: orderdate,
+        gettype: '2',
+        ordergetstatus: '1',
+        t_clz_assignfood_id: '',
+        t_clz_deliveryclerk_id: '',
+      },
     });
-    form.resetFields();
   };
 
   // 删除后调用list
@@ -162,12 +166,12 @@ if(!isEmpty(values.end_ordertime)) {
     if (values.start_ordertime) date.start_ordertime = values.start_ordertime.format(DateFormat);
     if (values.end_ordertime) date.end_ordertime = values.end_ordertime.format(DateFormat);
     dispatch({
-        type: `list/exportExcel`,
+        type: `list/exportTodayMatchOrderExcel`,
         payload: {
-        filename: '订单.xls',
+        filename: '当日订单和配菜点匹配.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
@@ -204,7 +208,7 @@ if(!isEmpty(values.end_ordertime)) {
     let deliveryclerklist = [];
     const { queryTClzDeliveryclerkList } = this.props.list;
     queryTClzDeliveryclerkList.map(o => {
-      if(o.assignfood_id == assignfoodid) {
+      if(o &&(o.assignfood_id == assignfoodid)) {
         deliveryclerklist.push(o);
       }
     });
@@ -220,13 +224,25 @@ if(!isEmpty(values.end_ordertime)) {
     let deliveryclerklist = [];
     const { queryTClzDeliveryclerkList } = this.props.list;
     queryTClzDeliveryclerkList.map(o => {
-      if(o.assignfood_id == assignfoodid) {
+      if(o && (o.assignfood_id == assignfoodid)) {
         deliveryclerklist.push(o);
       }
     });
     this.setState({
       setqueryTClzDeliveryclerkList: deliveryclerklist,
     });
+  }
+
+  changeGettype = (gettype) => {
+    this.setState({
+      'gettype': gettype,
+    });
+    if(gettype === '1') {
+      this.props.form.setFieldsValue({
+        selectdeliveryusername: '',
+        deliveryusername: '',
+      });
+    }
   }
 
   render() {
@@ -256,7 +272,7 @@ if(!isEmpty(values.end_ordertime)) {
         align: 'center',
         render: (text, record) => (
           <Row gutter={8}>
-            <Col span={8}>
+            <Col span={12}>
               <Operate operateName="UPDATE">
                 <Link
                   to={{
@@ -270,21 +286,8 @@ if(!isEmpty(values.end_ordertime)) {
                 </Link>
               </Operate>
             </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
-                <Button
-                  type="danger"
-                  icon="delete"
-                  ghost
-                  size="small"
-                  onClick={() => showConfirm(record)}
-                >
-                  删除
-                </Button>
-              </Operate>
-            </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
+            <Col span={12}>
+              <Operate operateName="UPDATE">
                 <Button
                   type="primary"
                   icon="info"
@@ -296,6 +299,19 @@ if(!isEmpty(values.end_ordertime)) {
                 </Button>
               </Operate>
             </Col>
+            {/* <Col span={8}>
+              <Operate operateName="DELETE">
+                <Button
+                  type="danger"
+                  icon="delete"
+                  ghost
+                  size="small"
+                  onClick={() => showConfirm(record)}
+                >
+                  删除
+                </Button>
+              </Operate>
+            </Col> */}
           </Row>
         ),
       },
@@ -307,45 +323,13 @@ if(!isEmpty(values.end_ordertime)) {
         <span>{text === '1' ? '自提' : '配送'}</span>
       )   },
       {  title: '订单获取状态',   dataIndex: 'ordergetstatus',     width: 150,     sorter: false,  render: text => {
-        let showInfo = '';
-       switch(text) {
-         case "1":
-            showInfo = "下单成功等调配";
-            break;
-         case "2":
-            showInfo = "调配好等自提";
-            break;
-         case "3":
-           showInfo = "自提成功";
-           break;
-         case "4":
-             showInfo = "自提延期保留";
-             break;
-         case "5":
-           showInfo = "自提延期过期销毁";
-           break;
-         case "6":
-             showInfo = "调配好等配送";
-             break;
-         case "7":
-           showInfo = "配送中等签收";
-           break;
-         case "8":
-           showInfo = "配送签收成功";
-           break;
-         case "9":
-           showInfo = "配送签收失败退回保留";
-           break;
-         case "10":
-           showInfo = "配送签收失败退回过期销毁";
-           break;
-        }
         return (
-          <span>{showInfo}</span>
+          <span>{ordergetstatusArr[text-1]}</span>
         )
       },     },
       {  title: '配菜点',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
       {  title: '配送员',   dataIndex: 'deliveryusername',     width: 150,     sorter: false,      },
+      {  title: '配送员地址',   dataIndex: 'deliveryclerkadress',     width: 150,     sorter: false,      },
       {  title: '配送地址',   dataIndex: 'recieveaddress',     width: 150,     sorter: false,      },
  {  title: '订单描述',   dataIndex: 'ordergetstatusdes',     width: 150,     sorter: false,       },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
@@ -357,16 +341,13 @@ if(!isEmpty(values.end_ordertime)) {
     ];
 
     let orderdate = moment().format("YYYY-MM-DD");
-    if(moment().format("HH") > 16) {
-      orderdate = moment(new Date()).add(1, 'days').format("YYYY-MM-DD");
-    }
 
     const listConfig = {
-      url: '/api/TClzOrder/queryTClzOrderList', // 必填,请求url
-      scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
+      url: '/api/TClzOrder/queryTClzOrder2List', // 必填,请求url
+      scroll: { x: 2290, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
-      queryMap: { start_orderdate: orderdate, end_orderdate: orderdate, ordergetstatus: '1' },
+      queryMap: { start_orderdate: orderdate, end_orderdate: orderdate, ordergetstatus: '1', gettype: '2', t_clz_assignfood_id: '', t_clz_deliveryclerk_id: '' },
       rowSelection: {onChange: (selectedRowKeys, selectRows) => {
         selectRecordArr = selectRows;
       }},
@@ -377,20 +358,22 @@ if(!isEmpty(values.end_ordertime)) {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch} >
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单编号'>{getFieldDecorator('t_clz_order_id',{initialValue: this.props.list.queryMap.t_clz_order_id || '', })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='用户姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.userid, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeSearchassignfood} >
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id || '', })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeSearchassignfood} >
+    <Option key="1" value=""></Option>
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-        <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+        <Option key={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
       )
       ) : ''
     }
   </Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('deliveryusername',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id, })(<Select allowClear showSearch optionFilterProp="children">
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送员'>{getFieldDecorator('t_clz_deliveryclerk_id',{initialValue: this.props.list.queryMap.t_clz_deliveryclerk_id || '', })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
+    <Option key="1" value=""></Option>
     {
       this.state.setqueryTClzDeliveryclerkList ? searchqueryTClzDeliveryclerkList.map(v => (
-        <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
+        <Option key={v.t_clz_deliveryclerk_id}>{`${v.username}=>${v.deliveryclerkadress}`}</Option>
       )
       ) : ''
     }
@@ -398,29 +381,11 @@ if(!isEmpty(values.end_ordertime)) {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送地址'>{getFieldDecorator('receiveraddress',{initialValue: this.props.list.queryMap.t_clz_useraddress_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
-  <Option value=""></Option>
-  <Option value="1">自提</Option>
-  <Option value="2">配送</Option>
-</Select>)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime? moment(this.props.list.queryMap.start_ordertime) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='下单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime ? moment(this.props.list.queryMap.end_ordertime) : null, })(<DatePicker showTime format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(), })(<DatePicker disabled format={DateFormat2} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(), })(<DatePicker disabled format={DateFormat2} placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单获取状态'> {getFieldDecorator('ordergetstatus', { initialValue: this.props.list.queryMap.ordergetstatus,})(
-  <Select showSearch allowClear placeholder='订单获取状态' optionFilterProp="children">
- <Option value="1">下单成功等调配</Option>
- <Option value="2">调配好等自提</Option>
- <Option value="3">自提成功</Option>
- <Option value="4">自提延期保留</Option>
- <Option value="5">自提延期过期销毁</Option>
- <Option value="6">调配好等配送</Option>
- <Option value="7">配送中等签收</Option>
- <Option value="8">配送签收成功</Option>
- <Option value="9">配送签收失败退回保留</Option>
- <Option value="10">配送签收失败退回过期销毁</Option>
- </Select>
-)} </FormItem> </Col>
+
               
              
             </Row>
@@ -436,28 +401,33 @@ if(!isEmpty(values.end_ordertime)) {
             </Row>
           </Form>
         </Card>
-        <Form layout="inline">
-          <FormItem label="配菜点">
-            {getFieldDecorator('selectassignfoodname',{initialValue: '', })(<Select style={{width: 200}} allowClear showSearch optionFilterProp="children" onChange={this.changeSetassignfood}>
+        <Form>
+          <FormItem label="配菜点" labelCol={{span: 3}} wrapperCol={{span: 21}}>
+            {getFieldDecorator('selectassignfoodname',{initialValue: '', })(<Select allowClear showSearch optionFilterProp="children" onChange={this.changeSetassignfood}>
               {
                 queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-                  <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+                  <Option key={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
                 )
                 ) : ''
               }
             </Select>)}
           </FormItem>
-          <FormItem label='配送员'>
-          {getFieldDecorator('selectdeliveryusername',{initialValue: '', })(<Select style={{width: 200}} allowClear showSearch optionFilterProp="children">
+          <FormItem label='配送员' labelCol={{span: 3}} wrapperCol={{span: 21}}>
+          {getFieldDecorator('selectdeliveryusername',{initialValue: '', })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
     {
-      setqueryTClzDeliveryclerkList ? setqueryTClzDeliveryclerkList.map(v => (
-        <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
+      this.state.setqueryTClzDeliveryclerkList.map(v => (
+        <Option key={v.t_clz_deliveryclerk_id}>{`${v.username}=>${v.deliveryclerkadress}`}</Option>
       )
-      ) : ''
+      )
     }
   </Select>)} </FormItem>
   <FormItem>
-    <Button onClick={this.setDeliveryList} loading={this.props.setting}>设置</Button>
+    <Row>
+      <Col span={3}></Col>
+      <Col>
+        <Button onClick={this.setDeliveryList} loading={this.props.setting}>设置</Button>
+      </Col>
+    </Row>
   </FormItem>
         </Form>
         <List {...listConfig} />

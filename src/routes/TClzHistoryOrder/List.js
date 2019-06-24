@@ -17,14 +17,14 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
+import {webConfig, formItemLayout, formItemGrid, ordergetstatusArr} from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzOrder;
-const routerUrl ='/TClzHistoryOrder';
+const routerUrl ='/TClzOrder';
 const url = 'TClzOrder';
 const rowKey = 't_clz_order_id';
 const DateFormat = 'YYYY-MM-DD';
@@ -140,10 +140,10 @@ if(!isEmpty(values.end_orderdate)) {
     dispatch({
         type: `list/exportExcel`,
         payload: {
-        filename: '订单.xls',
+        filename: '历史订单管理和统计.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
@@ -180,7 +180,7 @@ if(!isEmpty(values.end_orderdate)) {
         align: 'center',
         render: (text, record) => (
           <Row gutter={8}>
-            <Col span={8}>
+            <Col span={12}>
               <Operate operateName="UPDATE">
                 <Link
                   to={{
@@ -194,21 +194,8 @@ if(!isEmpty(values.end_orderdate)) {
                 </Link>
               </Operate>
             </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
-                <Button
-                  type="danger"
-                  icon="delete"
-                  ghost
-                  size="small"
-                  onClick={() => showConfirm(record)}
-                >
-                  删除
-                </Button>
-              </Operate>
-            </Col>
-            <Col span={8}>
-              <Operate operateName="DELETE">
+            <Col span={12}>
+              <Operate operateName="UPDATE">
                 <Button
                   type="primary"
                   icon="info"
@@ -220,6 +207,19 @@ if(!isEmpty(values.end_orderdate)) {
                 </Button>
               </Operate>
             </Col>
+            {/* <Col span={8}>
+              <Operate operateName="DELETE">
+                <Button
+                  type="danger"
+                  icon="delete"
+                  ghost
+                  size="small"
+                  onClick={() => showConfirm(record)}
+                >
+                  删除
+                </Button>
+              </Operate>
+            </Col> */}
           </Row>
         ),
       },
@@ -231,45 +231,13 @@ if(!isEmpty(values.end_orderdate)) {
         <span>{text === '1' ? '自提' : '配送'}</span>
       )   },
       {  title: '订单获取状态',   dataIndex: 'ordergetstatus',     width: 150,     sorter: false,  render: text => {
-        let showInfo = '';
-       switch(text) {
-         case "1":
-            showInfo = "下单成功等调配";
-            break;
-         case "2":
-            showInfo = "调配好等自提";
-            break;
-         case "3":
-           showInfo = "自提成功";
-           break;
-         case "4":
-             showInfo = "自提延期保留";
-             break;
-         case "5":
-           showInfo = "自提延期过期销毁";
-           break;
-         case "6":
-             showInfo = "调配好等配送";
-             break;
-         case "7":
-           showInfo = "配送中等签收";
-           break;
-         case "8":
-           showInfo = "配送签收成功";
-           break;
-         case "9":
-           showInfo = "配送签收失败退回保留";
-           break;
-         case "10":
-           showInfo = "配送签收失败退回过期销毁";
-           break;
-        }
         return (
-          <span>{showInfo}</span>
+          <span>{ordergetstatusArr[text-1]}</span>
         )
       },     },
       {  title: '配菜点',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
       {  title: '配送员',   dataIndex: 'deliveryusername',     width: 150,     sorter: false,      },
+      {  title: '配送员地址',   dataIndex: 'deliveryclerkadress',     width: 150,     sorter: false,      },
       {  title: '配送地址',   dataIndex: 'recieveaddress',     width: 150,     sorter: false,      },
  {  title: '订单描述',   dataIndex: 'ordergetstatusdes',     width: 150,     sorter: false,       },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
@@ -285,7 +253,7 @@ if(!isEmpty(values.end_orderdate)) {
 
     const listConfig = {
       url: '/api/TClzOrder/queryTClzOrderList', // 必填,请求url
-      scroll: { x: 1750, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 2290, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
       queryMap: { start_orderdate: orderdate7, end_orderdate: orderdate },

@@ -57,7 +57,6 @@ export default class DicManagerInfo extends Component {
   }
 
   componentDidMount() {
-    console.log('page is ok');
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       dispatch({
@@ -96,6 +95,7 @@ export default class DicManagerInfo extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let temp = {};
@@ -140,6 +140,21 @@ export default class DicManagerInfo extends Component {
     this.setState({
       setqueryTClzDeliveryclerkList: deliveryclerklist,
     });
+  }
+
+  changeGettype = (gettype) => {
+    this.setState({
+      'gettype': gettype,
+    });
+    if(gettype === '1') {
+      this.props.form.setFieldsValue({ordergetstatus: '2'})
+      this.props.form.setFieldsValue({
+        tClzDeliveryclerkId: '',
+      });
+    }
+    if(gettype === '2') {
+      this.props.form.setFieldsValue({ordergetstatus: '6'})
+    }
   }
 
   render() {
@@ -230,11 +245,11 @@ export default class DicManagerInfo extends Component {
  initialValue: info.tClzDeliveryclerkId ||  newInfo.tClzDeliveryclerkId,
   rules: [
     {
-      required: true,
+      required: (this.state.gettype==='2'),
       message: '关联的配送员id不能缺失!',
     },{ max: 255,message: '关联的配送员id必须小于255位!',   },
   ],
- })(<Select allowClear showSearch optionFilterProp="children">
+ })(<Select allowClear showSearch optionFilterProp="children" disabled={this.state.gettype==='1'}>
  {
    this.state.setqueryTClzDeliveryclerkList.map(v => (
      <Option key={v.t_clz_deliveryclerk_id}>{v.username}</Option>
@@ -254,17 +269,6 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="订单获取状态补充描述">
-{getFieldDecorator('ordergetstatusdes', {
- initialValue: info.ordergetstatusdes ||  newInfo.ordergetstatusdes,
-  rules: [
-    {
-      required: true,
-      message: '订单获取状态补充描述不能缺失!',
-    },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="获取方式">
 {getFieldDecorator('gettype', {
  initialValue: info.gettype ||  newInfo.gettype,
@@ -274,8 +278,7 @@ export default class DicManagerInfo extends Component {
       message: '获取方式',
     },{ max: 255,message: '获取方式',   },
   ],
- })(<Select>
-  <Option value=""></Option>
+ })(<Select showSearch allowClear onChange={this.changeGettype}>
   <Option value="1">自提</Option>
   <Option value="2">配送</Option>
 </Select>)}

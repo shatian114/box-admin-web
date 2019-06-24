@@ -124,8 +124,8 @@ temp = {
         payload: {
         filename: '配送员.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
@@ -192,6 +192,7 @@ temp = {
  {  title: '密码',   dataIndex: 'userpassword',     width: 150,     sorter: false,      },
  {  title: '联系电话',   dataIndex: 'userphone',     width: 150,     sorter: false,      },
  {  title: '姓名',   dataIndex: 'username',     width: 150,     sorter: false,      },
+ {  title: '地址',   dataIndex: 'deliveryclerkadress',     width: 150,     sorter: false,      },
  {  title: '描述',   dataIndex: 'userdesc',     width: 150,     sorter: false,      },
  {  title: '配送单价',   dataIndex: 'userprice',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
@@ -200,7 +201,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzDeliveryclerk/queryTClzDeliveryclerkList', // 必填,请求url
-      scroll: { x: 1350, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 1660, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -223,6 +224,7 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='密码'>{getFieldDecorator('userpassword',{initialValue: this.props.list.queryMap.userpassword, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='联系电话'>{getFieldDecorator('userphone',{initialValue: this.props.list.queryMap.userphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.username, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地址'>{getFieldDecorator('deliveryclerkadress',{initialValue: this.props.list.queryMap.deliveryclerkadress, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='描述'>{getFieldDecorator('userdesc',{initialValue: this.props.list.queryMap.userdesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送单价(起始)'>{getFieldDecorator('start_userprice',{initialValue: this.props.list.queryMap.start_userprice  ? moment(this.props.list.queryMap.start_userprice): null, rules: [{ validator: FormValid.jine}] })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>

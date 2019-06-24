@@ -129,8 +129,8 @@ temp = {
         payload: {
         filename: '菜品.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
@@ -219,7 +219,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzFood/queryTClzFoodList', // 必填,请求url
-      scroll: { x: 1200, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 1360, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };

@@ -17,7 +17,7 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import {webConfig, formItemLayout, formItemGrid, ordergetstatusArr} from '../../utils/Constant';
+import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 
@@ -139,9 +139,9 @@ if(!isEmpty(values.end_orderdate)) {
     if (values.start_orderdate) date.start_orderdate = values.start_orderdate.format(DateFormat);
     if (values.end_orderdate) date.end_orderdate = values.end_orderdate.format(DateFormat);
     dispatch({
-        type: `list/exportTomorrowExcel`,
+        type: `list/exportFoodDeliveryDatailExcel`,
         payload: {
-          filename: '次日菜量需求管理和统计.xls',
+          filename: '配菜点菜品统计.xls',
           queryMap: { ...values, ...date } || {},
           ...values,
           ...date,
@@ -175,6 +175,9 @@ if(!isEmpty(values.end_orderdate)) {
     };
 
     const columns = [
+
+        {  title: '配菜点编号',   dataIndex: 't_clz_assignfood_id',     width: 100,     sorter: false,      },
+      {  title: '配菜点名称',   dataIndex: 'assignfoodname',     width: 100,     sorter: false,      },
        {  title: '菜品大类',   dataIndex: 'bigtypename',     width: 100,     sorter: false,      },
        {  title: '菜品小类',   dataIndex: 'samlltypename',     width: 100,     sorter: false,      },
        {  title: '菜品',   dataIndex: 'foodname',     width: 100,     sorter: false,      },
@@ -185,8 +188,8 @@ if(!isEmpty(values.end_orderdate)) {
     ];
 
     const listConfig = {
-      url: '/api/TClzOrder/queryTClzFoodDatailList', // 必填,请求url
-      scroll: { x: 700, y: this.state.scrollY }, // 可选配置,同antd table
+      url: '/api/TClzOrder/queryTClzFoodDeliveryDatailList', // 必填,请求url
+      scroll: { x: 900, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
       queryMap: { start_orderdate: moment().format("YYYY-MM-DD"), end_orderdate: moment().format("YYYY-MM-DD") },
@@ -200,11 +203,6 @@ if(!isEmpty(values.end_orderdate)) {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(起始)'>{getFieldDecorator('start_orderdate',{initialValue: moment(this.props.list.queryMap.start_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单日期(结束)'>{getFieldDecorator('end_orderdate',{initialValue: moment(this.props.list.queryMap.end_orderdate), })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='获取方式'>{getFieldDecorator('gettype',{initialValue: this.props.list.queryMap.gettype, })(<Select allowClear>
-  <Option value=""></Option>
-  <Option value="1">自提</Option>
-  <Option value="2">配送</Option>
-</Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点'>{getFieldDecorator('t_clz_assignfood_id',{initialValue: this.props.list.queryMap.t_clz_assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (

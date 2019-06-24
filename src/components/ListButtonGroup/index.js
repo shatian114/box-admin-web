@@ -25,9 +25,9 @@ export default class ListButtonGroup extends Component {
         <Button className={styles.searchBtn} icon="search" type="primary" htmlType="submit" loading={this.props.list.searching}>
           查询
         </Button>
-        <Button className={styles.resetBtn} icon="sync" onClick={this.props.handleFormReset}>
-          重置
-        </Button>
+        {/*<Button className={styles.resetBtn} icon="sync" onClick={this.props.handleFormReset}>*/}
+          {/*重置*/}
+        {/*</Button>*/}
         <Operate operateName="NEW">
           <Button
             icon="plus"

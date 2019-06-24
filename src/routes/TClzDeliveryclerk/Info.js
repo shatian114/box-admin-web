@@ -173,6 +173,17 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
+ <FormItem {...formItemLayout} hasFeedback label="地址">
+{getFieldDecorator('deliveryclerkadress', {
+ initialValue: info.deliveryclerkadress ||  newInfo.deliveryclerkadress,
+  rules: [
+    {
+      required: true,
+      message: '地址不能缺失!',
+    },{ max: 255,message: '地址必须小于255位!',   },
+  ],
+ })(<Input placeholder="请输入" />)}
+ </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="联系电话">
 {getFieldDecorator('userphone', {
  initialValue: info.userphone ||  newInfo.userphone,

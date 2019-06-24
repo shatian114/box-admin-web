@@ -116,10 +116,10 @@ temp = {
         payload: {
         filename: '配菜点.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
-        });
+      });
     });
   };
 
@@ -205,7 +205,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzAssignfood/queryTClzAssignfoodList', // 必填,请求url
-      scroll: { x: 3300, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 3460, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };

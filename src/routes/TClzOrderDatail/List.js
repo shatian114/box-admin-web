@@ -30,6 +30,7 @@ const routerUrl ='/TClzOrderDatail';
 const url = 'TClzOrderDatail';
 const rowKey = 't_clz_order_datail_id';
 const DateFormat = 'YYYY-MM-DD';
+const TimeFormat = 'YYYY-MM-DD hh:mm:ss';
 
 @connect(({ base, list }) => ({ base, list }))
 @Form.create()
@@ -104,7 +105,16 @@ temp = {
   ...temp,
   end_create_date: values.end_create_date.format(DateFormat),
  };
-
+      if (!isEmpty(values.end_ordertime))
+        temp = {
+          ...temp,
+          end_ordertime: values.end_ordertime.format(TimeFormat),
+        };
+      if (!isEmpty(values.start_ordertime))
+        temp = {
+          ...temp,
+          start_ordertime: values.start_ordertime.format(TimeFormat),
+        };
       
       setList({
         current: 1,
@@ -151,13 +161,12 @@ temp = {
         payload: {
         filename: '订单明细.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
   };
-
 
   render() {
     const { form, list } = this.props;
@@ -213,7 +222,7 @@ temp = {
           </Row>
         ),
       },
-       {  title: '',   dataIndex: 't_clz_order_datail_id',     width: 150,     sorter: false,      },
+       {  title: '订单详情id',   dataIndex: 't_clz_order_datail_id',     width: 150,     sorter: false,      },
  {  title: '订单id',   dataIndex: 't_clz_order_id',     width: 150,     sorter: false,      },
  {  title: '菜品id',   dataIndex: 't_clz_food_id',     width: 150,     sorter: false,      },
  {  title: '菜品大类',   dataIndex: 'bigtypename',     width: 150,     sorter: false,      },
@@ -229,7 +238,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzOrderDatail/queryTClzOrderDatailList', // 必填,请求url
-      scroll: { x: 1050, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 1810, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
       queryMap: this.getQueryMap(),
@@ -261,6 +270,8 @@ temp = {
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='数量(结束)'>{getFieldDecorator('end_foodnum',{initialValue: this.props.list.queryMap.end_foodnum  ? moment(this.props.list.queryMap.end_foodnum): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单时间(起始)'>{getFieldDecorator('start_ordertime',{initialValue: this.props.list.queryMap.start_ordertime ? moment(this.props.list.queryMap.start_ordertime) : null, })(<DatePicker showTime format={TimeFormat} placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='订单时间(结束)'>{getFieldDecorator('end_ordertime',{initialValue: this.props.list.queryMap.end_ordertime? moment(this.props.list.queryMap.end_ordertime) : null, })(<DatePicker showTime format={TimeFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 

@@ -116,10 +116,10 @@ temp = {
     dispatch({
         type: `list/exportExcel`,
         payload: {
-        filename: '大类.xls',
+        filename: '菜品大类.xls',
         queryMap: { ...values, ...date } || {},
+          ...values, ...date,
         },
-        ...values, ...date,
         url,
         });
     });
@@ -189,7 +189,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TClzBigtype/queryTClzBigtypeList', // 必填,请求url
-      scroll: { x: 600, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 760, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };

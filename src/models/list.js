@@ -2,7 +2,7 @@ import { queryList } from '../services/list';
 import { message } from 'antd';
 import {s2ab} from '../utils/utils';
 import xlsx from 'xlsx';
-import { exportExcel, exportTomorrowExcel, setDeliveryList } from '../services/api';
+import { exportExcel, exportTomorrowExcel, exportFoodDeliveryDatailExcel, exportTodayMatchExcel, setDeliveryList } from '../services/api';
 
 export default {
   namespace: 'list',
@@ -30,6 +30,8 @@ export default {
     queryTClzOrderList: [], //订单list
     queryTClzBigtypeList: [], //菜品大类list
     queryTClzSmalltypeList: [], //菜品小类list
+    queryTClzUserList: [], // 客户的用户信息list
+    queryTClzUseraddressList: [], // 客户的地址list
   },
 
   effects: {
@@ -89,11 +91,14 @@ export default {
         },
       });
     },
-    *listsaveinfo({ payload }, { call, put}) {
+    *listsaveinfo({ payload, callback }, { call, put}) {
       const response = yield call(queryList, {
         page: 1,
         len: 100000,
         ...payload,
+        queryMap: {
+          ...payload.queryMap,
+        },
       });
 
       if (response) {
@@ -101,57 +106,20 @@ export default {
         for (let k in response.data) {
           response[k] = response.data[k];
         }
-      
+
         const saveinfokey = payload.url.split('/').pop();
-        switch (saveinfokey) {
-          case 'queryTClzAssignfoodList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzAssignfoodList: response.list,
-              },
-            });
-            break;
-          case 'queryTClzDeliveryclerkList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzDeliveryclerkList: response.list,
-              },
-            });
-            break;
-          case 'queryTClzFoodList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzFoodList: response.list,
-              },
-            });
-            break;
-          case 'queryTClzOrderList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzOrderList: response.list,
-              },
-            });
-            break;
-          case 'queryTClzBigtypeList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzBigtypeList: response.list,
-              },
-            });
-            break;
-          case 'queryTClzSmalltypeList':
-            yield put({
-              type: 'save',
-              payload: {
-                queryTClzSmalltypeList: response.list,
-              },
-            });
-            break;
+        const payload2 = {};
+        payload2[saveinfokey] = response.list;
+        yield put({
+          type: 'save',
+          'payload': payload2,
+        });
+        if(callback) {
+          if(saveinfokey === 'queryTClzUseraddressList') {
+            callback(payload.userid);
+          }else{
+            callback();
+          }
         }
       }
     },
@@ -209,9 +177,40 @@ export default {
         type: 'save',
         payload: {
           exporting: true,
-        }
+        },
       });
       yield call(exportExcel, payload, url);
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: false,
+        }
+      });
+    },
+
+    *exportFoodDeliveryDatailExcel({ payload, url }, { call, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: true,
+        },
+      });
+      yield call(exportFoodDeliveryDatailExcel, payload, url);
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: false,
+        }
+      });
+    },
+    *exportTodayMatchOrderExcel({ payload, url }, { call, put }) {
+      yield put({
+        type: 'save',
+        payload: {
+          exporting: true,
+        },
+      });
+      yield call(exportTodayMatchExcel, payload, url);
       yield put({
         type: 'save',
         payload: {
@@ -276,6 +275,8 @@ export default {
         queryTClzOrderList: [], //订单list
         queryTClzBigtypeList: [], //菜品大类list
         queryTClzSmalltypeList: [], //菜品小类list
+        queryTClzUserList: [], // 客户的用户信息list
+        queryTClzUseraddressList: [], // 客户的地址list
       };
 		}
   },

@@ -209,6 +209,20 @@ export async function exportExcel(params, url) {
   });
 }
 
+export async function exportFoodDeliveryDatailExcel(params, url) {
+  return download(`${SERVER_ADDR}/api/${url}/exportTClzFoodDeliveryDatailList`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function exportTodayMatchExcel(params, url) {
+  return download(`${SERVER_ADDR}/api/${url}/exportExcel2`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function exportTomorrowExcel(params, url) {
   return download(`${SERVER_ADDR}/api/${url}/exportdetaillistExcel`, {
     method: 'POST',
