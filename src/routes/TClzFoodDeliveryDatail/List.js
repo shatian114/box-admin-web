@@ -39,7 +39,7 @@ export default class TClzOrderList extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.resize);
-    const { dispatch } = this.props;
+    const { dispatch, form } = this.props;
     dispatch({
       type: 'list/listsaveinfo',
       payload: {
@@ -51,6 +51,12 @@ export default class TClzOrderList extends Component {
       payload: {
         url: '/api/TClzDeliveryclerk/queryTClzDeliveryclerkList',
       },
+    });
+    // 统计的是前一天的
+    let orderdateTmp = moment().subtract(1, 'days');
+    form.setFieldsValue({
+      start_orderdate: orderdateTmp,
+      end_orderdate: orderdateTmp,
     });
   }
 
@@ -192,7 +198,7 @@ if(!isEmpty(values.end_orderdate)) {
       scroll: { x: 900, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
-      queryMap: { start_orderdate: moment().format("YYYY-MM-DD"), end_orderdate: moment().format("YYYY-MM-DD") },
+      queryMap: { start_orderdate: moment().subtract(1, 'days').format("YYYY-MM-DD"), end_orderdate: moment().subtract(1, 'days').format("YYYY-MM-DD") },
     };
 
     return (

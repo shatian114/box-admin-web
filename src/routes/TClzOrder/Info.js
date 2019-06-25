@@ -16,7 +16,7 @@ import Operate from '../../components/Oprs';
 import { FormValid } from '../../utils/FormValid';
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
-import { ordergetstatusdesArr, ordergetstatusArr } from "../../utils/Constant";
+import { ordergetstatusArr } from "../../utils/Constant";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -133,20 +133,18 @@ export default class DicManagerInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let temp = {
-          ordergetstatusdes: ordergetstatusdesArr[values.ordergetstatus - 1],
-        };
+        // let temp = {
+        //   ordergetstatusdes: ordergetstatusdesArr[values.ordergetstatus - 1],
+        // };
         let valuesTemp = values;
         valuesTemp.ordertime = moment(values.ordertime._d).format('YYYY-MM-DD HH:mm:ss');
         valuesTemp.orderdate = moment(values.orderdate._d).format('YYYY-MM-DD');
-        console.log(temp, values, valuesTemp);
         const { dispatch } = this.props;
         if (this.props.base.info.tClzOrderId) {
           dispatch({
             type: 'base/fetch',
             payload: {
               ...valuesTemp,
-                  ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -161,7 +159,6 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...valuesTemp,
-                  ...temp,
               orderstatus: '1',
             },
             callback: () => dispatch(routerRedux.goBack()),
@@ -189,22 +186,6 @@ export default class DicManagerInfo extends Component {
     this.setState({
       'gettype': gettype,
     });
-    // 新建则固定为1，修改的时候可改
-    if (this.props.base.info.tClzOrderId){
-      if(gettype === '1') {
-        this.props.form.setFieldsValue({
-          tClzDeliveryclerkId: '',
-          tClzUseraddressId: '',
-          ordergetstatus: '2',
-        });
-      }
-      if(gettype === '2') {
-        this.props.form.setFieldsValue({
-          ordergetstatus: '6',
-        });
-      }
-    }
-
   }
 
   changeUserid = (userid) => {
