@@ -219,7 +219,7 @@ temp = {
      return <span>暂无图片</span>
    }else{
     let indexImgArr = val.split(",");
-    return <img src={indexImgArr[0]} width={80} height={80} alt="暂无图片" />
+    return <img src={`${indexImgArr[0]}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
    }
   }   },
  {  title: '剩余数量',   dataIndex: 'num',     width: 150,     sorter: false,      },

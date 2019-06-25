@@ -15,7 +15,7 @@ import { routerRedux } from 'dva/router';
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { isEmpty, geneUuidArr } from '../../utils/utils';
+import { isEmpty, geneUuidArr, delArrEle } from '../../utils/utils';
 import {uploadImg, uploadUgc} from '../../utils/uploadImg';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
@@ -57,7 +57,7 @@ export default class DicManagerInfo extends Component {
 
   state = {
     percent: 0,
-    indexImgArr: []
+    indexImgArr: [],
   }
   componentDidMount() {
     const { dispatch } = this.props;
@@ -106,14 +106,17 @@ export default class DicManagerInfo extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    let tagindexArr = [];
+    if(this.props.base.isEdit) {
+      tagindexArr = this.props.base.info.tagindex.split(',');
+    }
     //先上传索引图
     console.log(this.state.indexImgArr.length);
     let uuidArr = geneUuidArr(this.state.indexImgArr.length);
-    let tagIndexStr = "";
     for(let i=0; i<uuidArr.length; i++) {
       let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
       imgKey += "_indexTag_" + uuidArr[i] + ".jpg";
-      tagIndexStr += webConfig.tpUriPre + imgKey + ",";
+      tagindexArr.push(webConfig.tpUriPre + imgKey);
       uploadImg(this.state.indexImgArr[i].originFileObj, imgKey, v => {
 				if(v){
           //tagIndexStr += webConfig.tpUriPre + imgKey + ",";
@@ -123,6 +126,7 @@ export default class DicManagerInfo extends Component {
 				}
 			});
     }
+    const tagIndexStr = tagindexArr.join(',');
     console.log("索引图: ", tagIndexStr);
     this.props.form.setFields({
       tagindex: {value: tagIndexStr}
@@ -131,7 +135,6 @@ export default class DicManagerInfo extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
-        
 
         const { dispatch } = this.props;
         if (this.props.base.info.zone) {
@@ -183,10 +186,24 @@ export default class DicManagerInfo extends Component {
 		}
   }
 
-  //上传视频
+  // 删除辅图
+  delTagIndex = (imgUrl) => {
+    let tagIndexArr = this.props.form.getFieldValue('tagindex').split(',');
+    tagIndexArr = delArrEle(tagIndexArr, imgUrl);
+    const infoTmp = this.props.base.info;
+    infoTmp.tagindex = tagIndexArr.join(',');
+    this.props.dispatch({
+      type: 'base/save',
+      payload: {
+        info: infoTmp,
+      },
+    });
+  }
+
+  // 上传视频
   uploadVideo = (file) => {
     this.setState({
-      percent: 0
+      percent: 0,
     });
 		this.props.dispatch({
 			type: 'base/save',
@@ -197,8 +214,13 @@ export default class DicManagerInfo extends Component {
 		if(file.fileList.length > 0) {
       uploadUgc(file.fileList[0].originFileObj, this.progressCall).then(res => {
         console.log("视频上传成功：", res);
-        this.props.form.setFields({
-          videolink: {value: res.video.url}
+        const infoTmp = this.props.base.info;
+        infoTmp.videolink = res.video.url;
+        this.props.dispatch({
+          type: 'base/save',
+          payload: {
+            info: infoTmp,
+          },
         });
       }).then(err => {
         console.log('上传视频错误：', err);
@@ -480,6 +502,14 @@ export default class DicManagerInfo extends Component {
     { max: 65535,message: '产品辅图必须小于65535位!',   },
   ],
  })(<Input placeholder="请选择产品辅图" disabled />)}
+   {
+     info.tagindex ? info.tagindex.split(',').map(v => {
+        if(v && v.length > 0) {
+          return <DelImg key={v} goDel={this.delTagIndex} imgUrl={`${v}`} />
+        }
+       }
+     ) : ''
+   }
   <Upload
   	onChange={file => {this.setState({indexImgArr: file.fileList}); console.log(file.fileList.length);}}
   	listType="picture-card"
@@ -497,7 +527,10 @@ export default class DicManagerInfo extends Component {
   rules: [{ max: 255,message: '视频链接必须小于255位!',   },
   ],
  })(<Input disabled placeholder="请选择视频文件" />)}
- <Alert type="warning" showIcon message="提示：只可选择一个视频，如果要重新选择视频，请先删除之前选择的视频" />
+ <Alert type="warning" showIcon message="提示：只可选择一个视频，重新上传的视频会覆盖之前的视频" />
+   {
+     info.videolink && info.videolink.length > 0 ? <a href={info.videolink} target="_blank">查看视频</a> : ''
+   }
   <Upload
   	disabled={this.props.base.isSelectVideo}
     onChange={this.uploadVideo}
