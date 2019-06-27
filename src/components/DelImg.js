@@ -1,9 +1,29 @@
 import React, { PureComponent } from 'react';
 import { Icon } from 'antd';
+import { getPiclink } from "../utils/utils";
 
 class DelImg extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      imgUrl: '',
+    }
+  }
+
+  componentDidMount = () => {
+    this.isgetpiclink();
+  }
+
+  isgetpiclink = async () => {
+    if (this.props.istagindex) {
+      this.setState({
+        imgUrl: await getPiclink(this.props.imgUrl),
+      });
+    }else{
+      this.setState({
+        imgUrl: this.props.imgUrl,
+      });
+    }
   }
 
   render() {
@@ -19,7 +39,7 @@ class DelImg extends PureComponent {
           height="102px"
           width="auto"
           style={{ zIndex: 99, paddingRight: '8px' }}
-          src={`${this.props.imgUrl}?${Math.random()}`}
+          src={`${this.state.imgUrl}?${Math.random()}`}
           alt="暂无图片"
         />
       </div>

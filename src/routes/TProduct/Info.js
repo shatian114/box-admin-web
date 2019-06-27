@@ -6,6 +6,7 @@
  * @Description: 字典详情
  */
 
+import { newoObj, addobj, deleteobj } from "../../services/api";
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Alert, Upload, Progress } from 'antd';
@@ -56,6 +57,7 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
 
   state = {
+    submitting: false,
     percent: 0,
     indexImgArr: [],
   }
@@ -103,33 +105,51 @@ export default class DicManagerInfo extends Component {
     });
   }
 
-  handleSubmit = e => {
+  delImgKeyArr = [];
+
+  handleSubmit = async e => {
     e.preventDefault();
+    this.setState({
+      submitting: true,
+    });
 
     let tagindexArr = [];
-    if(this.props.base.isEdit) {
+    if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
       tagindexArr = this.props.base.info.tagindex.split(',');
+      // 删除tagindex
+      console.log('delImgKeyArr: ', this.delImgKeyArr);
+      for (let i=0; i<this.delImgKeyArr.length; i+=1) {
+        await deleteobj({
+          id: this.delImgKeyArr[i],
+        }, 'TPicture');
+      }
     }
-    //先上传索引图
-    console.log(this.state.indexImgArr.length);
-    let uuidArr = geneUuidArr(this.state.indexImgArr.length);
-    for(let i=0; i<uuidArr.length; i++) {
+    // 先上传索引图
+    console.log('need up img num: ', this.state.indexImgArr.length);
+    const uuidArr = geneUuidArr(this.state.indexImgArr.length);
+    for(let i=0; i<uuidArr.length; i+=1) {
       let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
-      imgKey += "_indexTag_" + uuidArr[i] + ".jpg";
-      tagindexArr.push(webConfig.tpUriPre + imgKey);
-      uploadImg(this.state.indexImgArr[i].originFileObj, imgKey, v => {
-				if(v){
-          //tagIndexStr += webConfig.tpUriPre + imgKey + ",";
-					console.log('上传成功');
-				}else{
-					console.log('上传失败');
-				}
-			});
+      imgKey += `_indexTag_${uuidArr[i]}.jpg`;
+      // tagindexArr.push(webConfig.tpUriPre + imgKey);
+      const upImgRes = await uploadImg(this.state.indexImgArr[i].originFileObj, imgKey);
+      if (upImgRes) {
+        let response = await newoObj('TPicture');
+        if (response && response.code.startsWith('2')) {
+          response = await addobj({
+            ...response.data,
+            tagindex: imgKey,
+            piclink: webConfig.tpUriPre + imgKey,
+          }, 'TPicture');
+          if(response && response.code.startsWith('2')) {
+            tagindexArr.push(response.data.tPictureId)
+          }
+        }
+      }
     }
     const tagIndexStr = tagindexArr.join(',');
-    console.log("索引图: ", tagIndexStr);
+    console.log("索引图: ", tagindexArr.length);
     this.props.form.setFields({
-      tagindex: {value: tagIndexStr}
+      tagindex: {value: tagIndexStr},
     });
 
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -160,6 +180,10 @@ export default class DicManagerInfo extends Component {
           });
         }
       }
+    });
+
+    this.setState({
+      submitting: false,
     });
   };
 
@@ -198,6 +222,8 @@ export default class DicManagerInfo extends Component {
         info: infoTmp,
       },
     });
+    console.log('del: ', imgUrl);
+    this.delImgKeyArr.push(imgUrl);
   }
 
   // 上传视频
@@ -505,15 +531,15 @@ export default class DicManagerInfo extends Component {
    {
      info.tagindex ? info.tagindex.split(',').map(v => {
         if(v && v.length > 0) {
-          return <DelImg key={v} goDel={this.delTagIndex} imgUrl={`${v}`} />
+          return <DelImg key={v} goDel={this.delTagIndex} imgUrl={`${v}`} istagindex />
         }
        }
      ) : ''
    }
   <Upload
-  	onChange={file => {this.setState({indexImgArr: file.fileList}); console.log(file.fileList.length);}}
+  	onChange={file => {this.setState({indexImgArr: file.fileList});}}
   	listType="picture-card"
-  	multiple={false}
+  	multiple
   	accept="image/jpg,image/jpeg,image/png"
   	beforeUpload={(file, fileList) => {
   		return false;
@@ -558,7 +584,7 @@ export default class DicManagerInfo extends Component {
                 style={{ marginLeft: 12 }}
                 type="primary"
                 htmlType="submit"
-                loading={submitting}
+                loading={this.state.submitting}
               >
                 保存
               </Button>

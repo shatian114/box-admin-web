@@ -1,8 +1,8 @@
 import { queryList } from '../services/list';
 import { message } from 'antd';
-import {s2ab} from '../utils/utils';
+import {getPiclink2, getPiclink, s2ab} from '../utils/utils';
 import xlsx from 'xlsx';
-import { exportExcel } from '../services/api';
+import {exportExcel, getobj} from '../services/api';
 
 export default {
   namespace: 'list',
@@ -50,10 +50,25 @@ export default {
       };
       const response = yield call(queryList, temp);
       if (response) {
-        //之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
-        for (let k in response.data) {
+        // 之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
+        for (const k in response.data) {
           response[k] = response.data[k];
 				}
+        // 遍历list，如果里面有tagindex，需要将tagindex换成piclink
+        for(let i=0; i<response.list.length; i+=1) {
+          console.log(response.list[i].tagindex);
+          if (response.list[i].tagindex && response.list[i].tagindex.length > 0) {
+            const idArr = response.list[i].tagindex.split(',');
+            const tagindexArr = [];
+            for (let j=0; j<idArr.length; j+=1) {
+              const piclink = yield call(getPiclink2, idArr[j])
+              console.log('piclink: ', piclink);
+              tagindexArr.push(piclink);
+            }
+            response.list[i].tagindex = tagindexArr.join(',');
+          }
+        }
+        console.log(response);
 
         yield put({
           type: 'save',

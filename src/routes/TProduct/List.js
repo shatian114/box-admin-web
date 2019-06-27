@@ -17,7 +17,7 @@ import styles from '../../styles/list.less';
 
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
-import { isEmpty, viewBoolean } from '../../utils/utils';
+import { isEmpty, viewBoolean, getPiclink, getPiclink2 } from '../../utils/utils';
 import { formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import ListButtonGroup from '../../components/ListButtonGroup';
@@ -41,7 +41,6 @@ export default class TProductList extends Component {
   };
 
   componentDidMount() {
-    console.log('product page is ok');
     window.addEventListener('resize', this.resize);
     const { dispatch } = this.props;
     dispatch({
@@ -151,6 +150,10 @@ temp = {
     });
   }
 
+  filterTagindex = () => {
+
+  }
+
   render() {
     const { form, list } = this.props;
     
@@ -214,11 +217,11 @@ temp = {
  {  title: '产品主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,   render: (val, record, index) => (
   <img src={val} width={80} height={80} alt="暂无图片" />
 )   },
- {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false,   render: (val, record, index) => {
+ {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false, render: (val, record, index) => {
    if(!val) {
      return <span>暂无图片</span>
    }else{
-    let indexImgArr = val.split(",");
+    const indexImgArr = val.split(",");
     return <img src={`${indexImgArr[0]}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
    }
   }   },

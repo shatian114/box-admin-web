@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { getobj } from '../services/api';
+
 const UUID = require('uuidjs');
 
 const DateFormat = 'YYYY-MM-DD';
@@ -299,12 +301,12 @@ export function s2ab(s) {
 	}
 }
 
-//表格里面显示是否
+// 表格里面显示是否
 export function viewBoolean(val, record, index) {
   return <span>{val == "1" ? "是" : "否"}</span>;
 }
 
-//根据值来删除数组元素
+// 根据值来删除数组元素
 export function delArrEle(arr, val) {
   if (arr.indexOf(val) !== -1) {
     arr.splice(arr.indexOf(val), 1);
@@ -312,11 +314,35 @@ export function delArrEle(arr, val) {
   return arr;
 }
 
-//生成uuid数组
+// 生成uuid数组
 export function geneUuidArr(arrNum) {
-  let uuidArr = [];
-  for (let i = 0; i < arrNum; i++) {
+  const uuidArr = [];
+  for (let i = 0; i < arrNum; i+=1) {
     uuidArr.push(UUID.generate());
   }
   return uuidArr;
+}
+
+// 根据t_picture里面的id获取piclink
+export async function getPiclink(t_picture_id) {
+  const response = await getobj({
+    id: t_picture_id,
+  }, 'TPicture');
+  if (response && response.code.startsWith('2')){
+    return response.data.piclink;
+  }
+  return '';
+}
+
+// 根据t_picture里面的id获取piclink
+export function getPiclink2(t_picture_id) {
+  return new Promise(async resolve => {
+    const response = await getobj({
+      id: t_picture_id,
+    }, 'TPicture');
+    if (response && response.code.startsWith('2') && response.data){
+     resolve(response.data.piclink);
+    }
+    resolve('')
+  });
 }
