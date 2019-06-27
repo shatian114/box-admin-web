@@ -54,6 +54,30 @@ export default {
         for (const k in response.data) {
           response[k] = response.data[k];
 				}
+
+        yield put({
+          type: 'save',
+          payload: {
+            list: response.list,
+            total: response.totalitem,
+            pagination: {
+              current: page,
+              pageSize: len,
+            },
+            queryMap: query || {},
+            url: path,
+            sorter: columnSorter,
+            searching: false,
+          },
+        });
+        yield put({
+          type: 'filtertagindex',
+          'response': response,
+        });
+      }
+    },
+    *filtertagindex({response}, {call, put}) {
+      if (response.list[0] && response.list[0].tagindex) {
         // 遍历list，如果里面有tagindex，需要将tagindex换成piclink
         for(let i=0; i<response.list.length; i+=1) {
           console.log(response.list[i].tagindex);
@@ -68,29 +92,13 @@ export default {
             response.list[i].tagindex = tagindexArr.join(',');
           }
         }
-        console.log(response);
-
         yield put({
           type: 'save',
           payload: {
             list: response.list,
-            total: response.totalitem,
-            pagination: {
-              current: page,
-              pageSize: len,
-            },
-            queryMap: query || {},
-            url: path,
-            sorter: columnSorter,
           },
         });
       }
-      yield put({
-        type: 'save',
-        payload: {
-          searching: false,
-        },
-      });
     },
     *listsaveinfo({ payload }, { call, put}) {
       const response = yield call(queryList, {
