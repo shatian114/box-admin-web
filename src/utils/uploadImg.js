@@ -20,7 +20,7 @@ var cos = new COS({
 });
 
 export function uploadImg(img, imgPath) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     cos.putObject(
       {
         Bucket: webConfig.Bucket,
@@ -31,21 +31,10 @@ export function uploadImg(img, imgPath) {
       function(err, data) {
         if (data) {
           resolve(true)
-          //图片上传成功
-          //console.log('upload code: ', data);
         } else {
-          reject(false);
-          //图片上传失败
-          console.log('img upload fail');
-          for (var k in err) {
-            if (typeof err[k] == 'Object') {
-              for (var k2 in err[k]) {
-                console.log(k2 + ': ' + err[k][k2]);
-              }
-            } else {
-              console.log(k + ': ' + err[k]);
-            }
-          }
+          resolve(false);
+          // 图片上传失败
+          console.log('img upload fail: ', err);
         }
       }
     );
