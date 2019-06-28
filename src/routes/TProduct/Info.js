@@ -64,15 +64,11 @@ export default class DicManagerInfo extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-			type: 'list/list',
-			payload: {
+      type: 'list/listsaveinfo',
+      payload: {
         url: '/api/TProducttype/queryTProducttypeList',
-        queryMap: {
-          page: 1,
-          len: 100000,
-        },
-			},
-		});
+      },
+    });
 		let isEdit = this.props.base.isEdit;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
       isEdit = true;
@@ -187,26 +183,24 @@ export default class DicManagerInfo extends Component {
     });
   };
 
-  //上传主图
-  uploadChange = (file) => {
+  // 上传主图
+  uploadChange = async (file) => {
 		this.props.dispatch({
 			type: 'base/save',
 			payload: {
-				isSelectImg: file.fileList.length > 0
-			}
-		})
+				isSelectImg: file.fileList.length > 0,
+			},
+		});
 		if(file.fileList.length > 0) {
-			let imgKey = (this.props.base.info.tProductId || this.props.base.newInfo.tProductId)+'.jpg';
-			uploadImg(file.fileList[0].originFileObj, imgKey, v => {
-				if(v){
-					this.props.form.setFields({
-						mainpic: {value: webConfig.tpUriPre + imgKey}
-					});
-					console.log('上传成功');
-				}else{
-					console.log('上传失败');
-				}
-			});
+			const imgKey = `${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
+			if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
+        this.props.form.setFields({
+          mainpic: {value: webConfig.tpUriPre + imgKey}
+        });
+        console.log('上传成功');
+      }else {
+        console.log('上传失败');
+      }
 		}
   }
 
@@ -293,7 +287,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select allowClear showSearch dropdownMatchSelectWidth={true} disabled={this.props.base.isEdit}>
   {
-    this.props.list.list.map((v, k) => (
+    this.props.list.queryTProducttypeList.map((v, k) => (
       <Option key={k} value={v.producttypeid}>{v.producttypename}</Option>
     ))
    }

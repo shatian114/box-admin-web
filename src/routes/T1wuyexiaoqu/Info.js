@@ -154,25 +154,23 @@ export default class DicManagerInfo extends Component {
 		});
 	}
 
-	uploadChange = (file) => {
+	uploadChange = async (file) => {
 		this.props.dispatch({
 			type: 'base/save',
 			payload: {
-				isSelectImg: file.fileList.length > 0
-			}
+				isSelectImg: file.fileList.length > 0,
+			},
 		})
 		if(file.fileList.length > 0) {
-			let imgKey = (this.props.base.info.t1wuyexiaoquId || this.props.base.newInfo.t1wuyexiaoquId)+'.jpg';
-			uploadImg(file.fileList[0].originFileObj, imgKey, v => {
-				if(v){
-					this.props.form.setFields({
-						piclink: {value: webConfig.tpUriPre + imgKey}
-					})
-					console.log('上传成功');
-				}else{
-					console.log('上传失败');
-				}
-			});
+			const imgKey = `${this.props.base.info.t1wuyexiaoquId || this.props.base.newInfo.t1wuyexiaoquId}.jpg`;
+      if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
+        this.props.form.setFields({
+          piclink: {value: webConfig.tpUriPre + imgKey},
+        });
+        console.log('上传成功');
+      }else{
+        console.log('上传失败');
+      }
 		}
 	}
 
