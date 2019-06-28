@@ -214,17 +214,17 @@ temp = {
  {  title: '区域标识',   dataIndex: 'zone',     width: 150,     sorter: false,      },
  {  title: '商品编号',   dataIndex: 'productid',     width: 150,     sorter: false,      },
  {  title: '商品排序',   dataIndex: 'orderindex',     width: 150,     sorter: false,      },
- {  title: '产品主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,   render: (val, record, index) => (
-  <img src={val} width={80} height={80} alt="暂无图片" />
+ {  title: '产品主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,   render: (val) => (
+   <img src={`${val}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
 )   },
- {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false, render: (val, record, index) => {
-   if(!val) {
-     return <span>暂无图片</span>
-   }else{
-    const indexImgArr = val.split(",");
-    return <img src={`${indexImgArr[0]}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
-   }
-  }   },
+ // {  title: '商品图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false, render: (val, record, index) => {
+ //   if(!val) {
+ //     return <span>暂无图片</span>
+ //   }else{
+ //    const indexImgArr = val.split(",");
+ //    return <img src={`${indexImgArr[0]}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
+ //   }
+ //  }   },
  {  title: '剩余数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
  {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,      },
  {  title: '支付的费用',   dataIndex: 'price',     width: 150,     sorter: false,      },

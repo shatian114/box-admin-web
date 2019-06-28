@@ -79,6 +79,15 @@ export default class DicManagerInfo extends Component {
         },
         url,
       });
+      dispatch({
+        type: 'list/listsaveinfo',
+        payload: {
+          url: '/api/TPicture/queryTPictureList',
+          queryMap: {
+            tagindex: this.props.location.state.id,
+          },
+        },
+      });
     } else {
       isEdit = false;
       dispatch({
@@ -89,8 +98,8 @@ export default class DicManagerInfo extends Component {
     dispatch({
 			type: 'base/save',
 			payload: {
-				isEdit
-			}
+				isEdit,
+			},
 		});
   }
 
@@ -109,9 +118,7 @@ export default class DicManagerInfo extends Component {
       submitting: true,
     });
 
-    let tagindexArr = [];
     if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
-      tagindexArr = this.props.base.info.tagindex.split(',');
       // 删除tagindex
       console.log('delImgKeyArr: ', this.delImgKeyArr);
       for (let i=0; i<this.delImgKeyArr.length; i+=1) {
@@ -123,6 +130,7 @@ export default class DicManagerInfo extends Component {
     // 先上传索引图
     console.log('need up img num: ', this.state.indexImgArr.length);
     const uuidArr = geneUuidArr(this.state.indexImgArr.length);
+    // 获取newobj的tagidnex
     for(let i=0; i<uuidArr.length; i+=1) {
       let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
       imgKey += `_indexTag_${uuidArr[i]}.jpg`;
@@ -131,23 +139,19 @@ export default class DicManagerInfo extends Component {
       if (upImgRes) {
         let response = await newoObj('TPicture');
         if (response && response.code.startsWith('2')) {
+          const { tPictureId}  = response.data;
           response = await addobj({
-            ...response.data,
-            tagindex: imgKey,
+            'tPictureId': tPictureId,
+            tagindex: this.props.form.getFieldValue('tProductId'),
             piclink: webConfig.tpUriPre + imgKey,
           }, 'TPicture');
-          if(response && response.code.startsWith('2')) {
-            tagindexArr.push(response.data.tPictureId)
-          }
         }
       }
     }
-    const tagIndexStr = tagindexArr.join(',');
-    console.log("索引图: ", tagindexArr.length);
-    this.props.form.setFields({
-      tagindex: {value: tagIndexStr},
+2
+    this.props.form.setFieldsValue({
+      tagindex: this.props.form.getFieldValue('tProductId'),
     });
-
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
@@ -183,6 +187,18 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  // 删除主图
+  delMainpic = () => {
+    const { info } = this.props.base;
+    info.mainpic = undefined;
+    this.props.dispatch({
+      type: 'base/save',
+      payload: {
+        'info': info,
+      },
+    });
+  }
+
   // 上传主图
   uploadChange = async (file) => {
 		this.props.dispatch({
@@ -205,19 +221,16 @@ export default class DicManagerInfo extends Component {
   }
 
   // 删除辅图
-  delTagIndex = (imgUrl) => {
-    let tagIndexArr = this.props.form.getFieldValue('tagindex').split(',');
-    tagIndexArr = delArrEle(tagIndexArr, imgUrl);
-    const infoTmp = this.props.base.info;
-    infoTmp.tagindex = tagIndexArr.join(',');
+  delTagIndex = (imgUrl, imgIndex) => {
+    let { queryTPictureList } = this.props.list;
+    this.delImgKeyArr.push(queryTPictureList[imgIndex].t_picture_id);
+    delete queryTPictureList[imgIndex];
     this.props.dispatch({
-      type: 'base/save',
+      type: 'list/save',
       payload: {
-        info: infoTmp,
+        'queryTPictureList': queryTPictureList,
       },
     });
-    console.log('del: ', imgUrl);
-    this.delImgKeyArr.push(imgUrl);
   }
 
   // 上传视频
@@ -257,7 +270,7 @@ export default class DicManagerInfo extends Component {
   };
 
   render() {
-    const { submitting, form, loading, base } = this.props;
+    const { submitting, form, loading, base, list } = this.props;
     const { getFieldDecorator } = form;
     
   const { info, newInfo } = base;
@@ -501,9 +514,9 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请选择商品主图文件" disabled />)}
  <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
-						{info.mainpic ? <DelImg goDel={() => {info.mainpic=undefined}} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
+						{info.mainpic ? <DelImg goDel={this.delMainpic} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
 						<Upload
-							disabled={this.props.base.isSelectImg}
+							disabled={this.props.base.info.mainpic}
               onChange={this.uploadChange}
               onRemove={(file) => {this.props.form.setFields({mainpic: undefined}); return true;}}
 							listType="picture-card"
@@ -523,12 +536,9 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请选择产品辅图" disabled />)}
    {
-     info.tagindex ? info.tagindex.split(',').map(v => {
-        if(v && v.length > 0) {
-          return <DelImg key={v} goDel={this.delTagIndex} imgUrl={`${v}`} istagindex />
-        }
-       }
-     ) : ''
+     list.queryTPictureList.map((v, index) => (
+      <DelImg key={v.t_picture_id} goDel={this.delTagIndex} imgUrl={`${v.piclink}`} imgIndex={index} />
+     ))
    }
   <Upload
   	onChange={file => {this.setState({indexImgArr: file.fileList});}}

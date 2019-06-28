@@ -8,14 +8,18 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, InputNumber, Button, Spin, Select,DatePicker } from 'antd';
+import {Form, Input, InputNumber, Button, Spin, Select, DatePicker, Alert, Upload} from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { isEmpty } from '../../utils/utils';
+import {geneUuidArr, isEmpty} from '../../utils/utils';
+import DelImg from "../../components/DelImg";
+import {uploadImg} from "../../utils/uploadImg";
+import {webConfig} from "../../utils/Constant";
+import {addobj, deleteobj, newoObj} from "../../services/api";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -42,13 +46,22 @@ const submitFormLayout = {
   },
 };
 
-@connect(({ base, loading }) => ({
+@connect(({ list, base, loading }) => ({
+  list,
   base,
   submitting: loading.effects['base/fetch'] || loading.effects['base/fetchAdd'],
   loading: loading.effects['base/info'] || loading.effects['base/new'] || false,
 }))
 @Form.create()
 export default class DicManagerInfo extends Component {
+
+  state = {
+    submitting: false,
+    indexImgArr: [],
+  }
+
+  delImgKeyArr = [];
+
   componentDidMount() {
     const { dispatch } = this.props;
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
@@ -58,6 +71,17 @@ export default class DicManagerInfo extends Component {
           id: this.props.location.state.id,
         },
         url,
+        callback: () => {
+          dispatch({
+            type: 'list/listsaveinfo',
+            payload: {
+              url: '/api/TPicture/queryTPictureList',
+              queryMap: {
+                tagindex: this.props.base.info.tagindex,
+              },
+            },
+          });
+        }
       });
     } else {
       dispatch({
@@ -74,7 +98,45 @@ export default class DicManagerInfo extends Component {
     });
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
+    this.setState({
+      submitting: true,
+    });
+
+    if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
+      // 删除tagindex
+      console.log('delImgKeyArr: ', this.delImgKeyArr);
+      for (let i=0; i<this.delImgKeyArr.length; i+=1) {
+        await deleteobj({
+          id: this.delImgKeyArr[i],
+        }, 'TPicture');
+      }
+    }
+    // 先上传索引图
+    console.log('need up img num: ', this.state.indexImgArr.length);
+    const uuidArr = geneUuidArr(this.state.indexImgArr.length);
+    // 获取newobj的tagidnex
+    for(let i=0; i<uuidArr.length; i+=1) {
+      let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
+      imgKey = `arroundshopandservice_${imgKey}_indexTag_${uuidArr[i]}.jpg`;
+      // tagindexArr.push(webConfig.tpUriPre + imgKey);
+      const upImgRes = await uploadImg(this.state.indexImgArr[i].originFileObj, imgKey);
+      if (upImgRes) {
+        let response = await newoObj('TPicture');
+        if (response && response.code.startsWith('2')) {
+          const { tPictureId}  = response.data;
+          response = await addobj({
+            'tPictureId': tPictureId,
+            tagindex: `arroundshopandservice_${this.props.form.getFieldValue('tProductId')}`,
+            piclink: webConfig.tpUriPre + imgKey,
+          }, 'TPicture');
+        }
+      }
+    }
+    2
+    this.props.form.setFieldsValue({
+      tagindex: this.props.form.getFieldValue('tProductId'),
+    });
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -108,8 +170,54 @@ export default class DicManagerInfo extends Component {
     });
   };
 
+  // 删除主图
+  delMainpic = () => {
+    const { info } = this.props.base;
+    info.mainpic = undefined;
+    this.props.dispatch({
+      type: 'base/save',
+      payload: {
+        'info': info,
+      },
+    });
+  }
+
+  // 上传主图
+  uploadChange = async (file) => {
+    this.props.dispatch({
+      type: 'base/save',
+      payload: {
+        isSelectImg: file.fileList.length > 0,
+      },
+    });
+    if(file.fileList.length > 0) {
+      const imgKey = `${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
+      if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
+        this.props.form.setFields({
+          mainpic: {value: webConfig.tpUriPre + imgKey}
+        });
+        console.log('上传成功');
+      }else {
+        console.log('上传失败');
+      }
+    }
+  }
+
+  // 删除辅图
+  delTagIndex = (imgUrl, imgIndex) => {
+    let { queryTPictureList } = this.props.list;
+    this.delImgKeyArr.push(queryTPictureList[imgIndex].t_picture_id);
+    delete queryTPictureList[imgIndex];
+    this.props.dispatch({
+      type: 'list/save',
+      payload: {
+        'queryTPictureList': queryTPictureList,
+      },
+    });
+  }
+
   render() {
-    const { submitting, form, loading, base } = this.props;
+    const { submitting, form, loading, base, list } = this.props;
     const { getFieldDecorator } = form;
     
   const { info, newInfo } = base;
@@ -158,17 +266,6 @@ export default class DicManagerInfo extends Component {
       required: true,
       message: '实体店描述不能缺失!',
     },{ max: 255,message: '实体店描述必须小于255位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="图片索引">
-{getFieldDecorator('tagindex', {
- initialValue: info.tagindex ||  newInfo.tagindex,
-  rules: [
-    {
-      required: true,
-      message: '图片索引不能缺失!',
-    },{ max: 255,message: '图片索引必须小于255位!',   },
   ],
  })(<Input placeholder="请输入" />)}
  </FormItem>
@@ -260,6 +357,17 @@ export default class DicManagerInfo extends Component {
   ],
  })(<InputNumber min={0} disabled />)}
  </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="地址">
+            {getFieldDecorator('address', {
+              initialValue: info.address ||  newInfo.address,
+              rules: [
+                {
+                  required: true,
+                  message: '地址不能缺失!',
+                },{ max: 500,message: '地址必须小于500位!',   },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="店铺主图">
 {getFieldDecorator('mainpic', {
  initialValue: info.mainpic ||  newInfo.mainpic,
@@ -269,19 +377,48 @@ export default class DicManagerInfo extends Component {
       message: '店铺主图不能缺失!',
     },{ max: 500,message: '店铺主图必须小于500位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input placeholder="请输入" disabled />)}
+   <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
+   {info.mainpic ? <DelImg goDel={this.delMainpic} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
+   <Upload
+     disabled={this.props.base.info.mainpic}
+     onChange={this.uploadChange}
+     onRemove={(file) => {this.props.form.setFields({mainpic: undefined}); return true;}}
+     listType="picture-card"
+     multiple={false}
+     accept="image/jpg,image/jpeg,image/png"
+     beforeUpload={(file, fileList) => {
+       return false;
+     }}>
+     选择店铺主图
+   </Upload>
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="地址">
-{getFieldDecorator('address', {
- initialValue: info.address ||  newInfo.address,
-  rules: [
-    {
-      required: true,
-      message: '地址不能缺失!',
-    },{ max: 500,message: '地址必须小于500位!',   },
-  ],
- })(<Input placeholder="请输入" />)}
- </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="图片索引">
+            {getFieldDecorator('tagindex', {
+              initialValue: info.tagindex ||  newInfo.tagindex,
+              rules: [
+                {
+                  required: true,
+                  message: '图片索引不能缺失!',
+                },{ max: 255,message: '图片索引必须小于255位!',   },
+              ],
+            })(<Input placeholder="请输入" disabled />)}
+            {
+              list.queryTPictureList.map((v, index) => (
+                <DelImg key={v.t_picture_id} goDel={this.delTagIndex} imgUrl={`${v.piclink}`} imgIndex={index} />
+              ))
+            }
+            <Upload
+              onChange={file => {this.setState({indexImgArr: file.fileList});}}
+              listType="picture-card"
+              multiple
+              accept="image/jpg,image/jpeg,image/png"
+              beforeUpload={(file, fileList) => {
+                return false;
+              }}>
+              选择索引图
+            </Upload>
+          </FormItem>
 
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>

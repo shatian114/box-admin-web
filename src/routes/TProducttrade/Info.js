@@ -6,6 +6,7 @@
  * @Description: 字典详情
  */
 
+import  { queryList} from "../../services/list";
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, InputNumber, Button, Spin, Select,DatePicker, Alert, Upload, message } from 'antd';
@@ -18,8 +19,9 @@ import { routerRedux } from 'dva/router';
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { geneUuidArr } from '../../utils/utils';
+import { geneUuidArr, getPiclinkList } from '../../utils/utils';
 import {webConfig} from '../../utils/Constant';
+import {addobj, deleteobj, newoObj} from "../../services/api";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -54,9 +56,16 @@ const submitFormLayout = {
 @Form.create()
 export default class DicManagerInfo extends Component {
 
+  delImgKeyArr = []
+
   state = {
+    addtagindexArr: [],
+    addshoppicArr: [],
+    submitting: false,
     percent: 0,
     indexImgArr: [],
+    tagindexArr: [],
+    shoppicArr: [],
   }
 
   componentDidMount() {
@@ -68,6 +77,12 @@ export default class DicManagerInfo extends Component {
           id: this.props.location.state.id,
         },
         url,
+        callback: async () => {
+          this.setState({
+            tagindexArr: await getPiclinkList('tagindex', this.props.base.info.tagindex),
+            shoppicArr: await getPiclinkList('tagindex', this.props.base.info.shoppic),
+          });
+        },
       });
     } else {
       dispatch({
@@ -90,35 +105,69 @@ export default class DicManagerInfo extends Component {
     });
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
+    this.setState({
+      submitting: true,
+    });
 
-    //先上传索引图
-    console.log(this.state.indexImgArr.length);
-    let uuidArr = geneUuidArr(this.state.indexImgArr.length);
-    let tagIndexStr = "";
-    for(let i=0; i<uuidArr.length; i++) {
+    if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
+      // 删除tagindex和shoppic
+      console.log('delImgKeyArr: ', this.delImgKeyArr);
+      for (let i=0; i<this.delImgKeyArr.length; i+=1) {
+        await deleteobj({
+          id: this.delImgKeyArr[i],
+        }, 'TPicture');
+      }
+    }
+    // 先上传索引图
+    console.log('need up img num: ', this.state.addtagindexArr.length);
+    let uuidArr = geneUuidArr(this.state.addtagindexArr.length);
+    // 获取newobj的tagidnex
+    for(let i=0; i<uuidArr.length; i+=1) {
       let imgKey = this.props.base.info.tProducttradeId || this.props.base.newInfo.tProducttradeId;
-      imgKey += "_indexTag_" + uuidArr[i] + ".jpg";
-      tagIndexStr += webConfig.tpUriPre + imgKey + ",";
-      uploadImg(this.state.indexImgArr[i].originFileObj, imgKey, v => {
-				if(v){
-          //tagIndexStr += webConfig.tpUriPre + imgKey + ",";
-					console.log('上传成功');
-				}else{
-					console.log('上传失败');
-				}
-			});
+      imgKey = `tProducttrade${imgKey}_indexTag_${uuidArr[i]}.jpg`;
+      const upImgRes = await uploadImg(this.state.addtagindexArr[i].originFileObj, imgKey);
+      if (upImgRes) {
+        let response = await newoObj('TPicture');
+        if (response && response.code.startsWith('2')) {
+          const { tPictureId}  = response.data;
+          response = await addobj({
+            'tPictureId': tPictureId,
+            tagindex: `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`,
+            piclink: webConfig.tpUriPre + imgKey,
+          }, 'TPicture');
+        }
+      }
+    }
+    // 上商家额外提供的图片
+    console.log('need up img num: ', this.state.addshoppicArr.length);
+     uuidArr = geneUuidArr(this.state.addshoppicArr.length);
+    // 获取newobj的tagidnex
+    for(let i=0; i<uuidArr.length; i+=1) {
+      let imgKey = this.props.base.info.tProducttradeId || this.props.base.newInfo.tProducttradeId;
+      imgKey = `tProducttrade${imgKey}_shoppic_${uuidArr[i]}.jpg`;
+      const upImgRes = await uploadImg(this.state.addshoppicArr[i].originFileObj, imgKey);
+      if (upImgRes) {
+        let response = await newoObj('TPicture');
+        if (response && response.code.startsWith('2')) {
+          const { tPictureId}  = response.data;
+          response = await addobj({
+            'tPictureId': tPictureId,
+            tagindex: `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`,
+            piclink: webConfig.tpUriPre + imgKey,
+          }, 'TPicture');
+        }
+      }
     }
     this.props.form.setFields({
-      tagindex: {value: tagIndexStr}
+      tagindex: {value: `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`},
+      shoppic: {value: `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`},
     });
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
          let temp = {};
-        
-
          values.buytime = values.buytime.format(DateTimeFormat);
          values.sendtime = values.sendtime.format(DateTimeFormat);
         const { dispatch } = this.props;
@@ -146,9 +195,32 @@ export default class DicManagerInfo extends Component {
         }
       }
     });
+    this.setState({
+      submitting: false,
+    });
   };
 
-  //上传商家额外提供的图片
+  // 删除辅图
+  delTagIndex = (imgUrl, imgIndex) => {
+    let tagindexArr = this.state.tagindexArr;
+    this.delImgKeyArr.push(tagindexArr[imgIndex].t_picture_id);
+    delete tagindexArr[imgIndex];
+    this.setState({
+      'tagindexArr': tagindexArr,
+    });
+  }
+
+  // 删除商家额外提供的图片
+  delShoppic = (imgUrl, imgIndex) => {
+    let shoppicArr = this.state.shoppicArr;
+    this.delImgKeyArr.push(shoppicArr[imgIndex].t_picture_id);
+    delete shoppicArr[imgIndex];
+    this.setState({
+      'shoppicArr': shoppicArr,
+    });
+  }
+
+  // 上传商家额外提供的图片
   uploadChange = (file) => {
     message.info('开始上传卖家额外提供的图片');
 		this.props.dispatch({
@@ -403,19 +475,19 @@ export default class DicManagerInfo extends Component {
     },{ max: 400,message: '卖家额外提供的图片必须小于400位!',   },
   ],
  })(<Input placeholder="请选择卖家额外提供的图片文件" disabled />)}
- <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
-						{info.shoppic ? <DelImg goDel={() => {info.shoppic=undefined}} imgUrl={info.shoppic + '?' + Math.random()} /> : ''}
+   {
+     this.state.shoppicArr.map((v, index) => (
+       <DelImg key={v.t_picture_id} goDel={this.delShoppic} imgUrl={`${v.piclink}`} imgIndex={index} />
+     ))
+   }
 						<Upload
+              onChange={file => {this.setState({addshoppicArr: file.fileList});}}
               listType="picture-card"
-              onChange={this.uploadChange}
-							disabled={this.props.base.isSelectImg}
-              onChange={this.uploadChange}
-              onRemove={(file) => {this.props.form.setFields({shoppic: undefined}); return true;}}
-							multiple={false}
-            	accept="image/jpg,image/jpeg,image/png"
-							beforeUpload={(file, fileList) => {
-								return false;
-							}}>
+              multiple
+              accept="image/jpg,image/jpeg,image/png"
+              beforeUpload={(file, fileList) => {
+                return false;
+              }}>
 						 选择卖家额外提供的图片
 						</Upload>
  </FormItem>
@@ -429,14 +501,19 @@ export default class DicManagerInfo extends Component {
     },{ max: 255,message: '商品图片索引必须小于255位!',   },
   ],
  })(<Input placeholder="请选择商品索引图" disabled />)}
+   {
+     this.state.tagindexArr.map((v, index) => (
+       <DelImg key={v.t_picture_id} goDel={this.delTagIndex} imgUrl={`${v.piclink}`} imgIndex={index} />
+     ))
+   }
   <Upload
-  	onChange={file => {this.setState({indexImgArr: file.fileList});}}
-  	listType="picture-card"
-  	multiple={false}
-  	accept="image/jpg,image/jpeg,image/png"
-  	beforeUpload={(file, fileList) => {
-  		return false;
-  	}}>
+    onChange={file => {this.setState({addtagindexArr: file.fileList});}}
+    listType="picture-card"
+    multiple
+    accept="image/jpg,image/jpeg,image/png"
+    beforeUpload={(file, fileList) => {
+      return false;
+    }}>
    选择商品索引图
   </Upload>
  </FormItem>
@@ -455,7 +532,7 @@ export default class DicManagerInfo extends Component {
                 style={{ marginLeft: 12 }}
                 type="primary"
                 htmlType="submit"
-                loading={submitting}
+                loading={this.state.submitting}
               >
                 保存
               </Button>

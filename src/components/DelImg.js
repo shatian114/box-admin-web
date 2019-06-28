@@ -30,7 +30,7 @@ class DelImg extends PureComponent {
     return (
       <div style={{ position: 'relative', float: 'left' }}>
         <Icon
-          onClick={this.props.goDel.bind(this, this.props.imgUrl)}
+          onClick={this.props.goDel.bind(this, this.props.imgUrl, this.props.imgIndex)}
           size="small"
           type="delete"
           style={{ zIndex: 100, position: 'absolute', right: '5px', top: '5px' }}

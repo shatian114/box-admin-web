@@ -21,6 +21,7 @@ export default {
     searching: false,
     queryTProducttypeList: [], // 实物商品类别
     queryTProductList: [], // 实物商品
+    queryTPictureList: [], // 索引图
   },
 
   effects: {
@@ -70,10 +71,10 @@ export default {
             searching: false,
           },
         });
-        yield put({
-          type: 'filtertagindex',
-          'response': response,
-        });
+        // yield put({
+        //   type: 'filtertagindex',
+        //   'response': response,
+        // });
       }
     },
     *filtertagindex({response}, {call, put}) {
@@ -179,7 +180,7 @@ export default {
         type: 'save',
         payload: {
           exporting: true,
-        }
+        },
       });
       yield call(exportExcel, payload, url);
       yield put({
@@ -213,6 +214,7 @@ export default {
         sorter: {},
         queryTProducttypeList: [],
         queryTProductList: [],
+        queryTPictureList: [],
       };
 		},
   },

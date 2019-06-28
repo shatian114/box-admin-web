@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { getobj } from '../services/api';
+import {queryList} from "../services/list";
 
 const UUID = require('uuidjs');
 
@@ -345,4 +346,22 @@ export function getPiclink2(t_picture_id) {
     }
     resolve('')
   });
+}
+
+// 根据字段名获取对应的piclink的list
+export async function getPiclinkList(fieldName, fieldValue) {
+  if (fieldValue && fieldValue.length > 0) {
+    const queryMap = {};
+    queryMap[fieldName] = fieldValue;
+    const response = await queryList({
+      page: 1,
+      len:1000,
+      'queryMap': queryMap,
+      url: '/api/TPicture/queryTPictureList',
+    });
+    if (response && response.code.startsWith('2')) {
+      return response.data.list;
+    }
+  }
+  return [];
 }
