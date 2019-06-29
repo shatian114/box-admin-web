@@ -50,6 +50,8 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
 
   state = {
+    isEdit: false,
+    mainpicFile: [],
     uploading: false,
     mapPoint: {
       lat: '116.446238',
@@ -72,6 +74,9 @@ export default class DicManagerInfo extends Component {
       },
     });
     if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+      this.setState({
+        isEdit: true,
+      });
       dispatch({
         type: 'base/info',
         payload: {
@@ -80,6 +85,9 @@ export default class DicManagerInfo extends Component {
         url,
       });
     } else {
+      this.setState({
+        isEdit: false,
+      });
       dispatch({
         type: 'base/new',
         url,
@@ -145,6 +153,15 @@ export default class DicManagerInfo extends Component {
 		if(file.fileList.length > 0) {
       this.setState({
         uploading: true,
+        mainpicFile: [file.fileList[file.fileList.length-1]],
+      });
+      const { info } = this.props.base;
+      info.foodpiclink = undefined;
+      this.props.dispatch({
+        type: 'base/save',
+        payload: {
+          'info': info,
+        },
       });
 			const imgKey = `${(this.props.base.info.tClzFoodId || this.props.base.newInfo.tClzFoodId)}.jpg`;
 			uploadImg(file.fileList[0].originFileObj, imgKey).then( v => {
@@ -208,7 +225,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input disabled />)}
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="关联的大类">
+          {!this.state.isEdit ? <FormItem {...formItemLayout} hasFeedback label="关联的大类">
 {getFieldDecorator('tClzBigtypeId', {
  initialValue: info.tClzBigtypeId ||  newInfo.tClzBigtypeId,
   rules: [
@@ -217,14 +234,14 @@ export default class DicManagerInfo extends Component {
       message: '关联的大类不能缺失!',
     },{ max: 255,message: '关联的大类必须小于255位!',   },
   ],
- })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzBigtypeId} showSearch onChange={this.changeBigtype}>
+ })(<Select dropdownMatchSelectWidth  showSearch onChange={this.changeBigtype}>
   {
     this.props.list.queryTClzBigtypeList.map((v, k) => (
       <Option key={k} value={v.t_clz_bigtype_id}>{v.typename}</Option>
     ))
    }
 </Select>)}
- </FormItem>
+ </FormItem> : ''}
  <FormItem {...formItemLayout} hasFeedback label="关联的小类">
 {getFieldDecorator('tClzSmalltypeId', {
  initialValue: info.tClzSmalltypeId ||  newInfo.tClzSmalltypeId,
@@ -306,7 +323,7 @@ export default class DicManagerInfo extends Component {
             {info.foodpiclink ? <DelImg goDel={this.goDel} imgUrl={info.foodpiclink + '?' + Math.random()} /> : ''}
             <Spin spinning={this.state.uploading} tip='图片上传中...'>
               <Upload
-						  	disabled={this.props.form.getFieldValue("foodpiclink")}
+						  	fileList={this.state.mainpicFile}
 						  	onChange={this.uploadChange}
 						  	listType="picture-card"
 						  	multiple={false}

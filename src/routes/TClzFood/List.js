@@ -211,7 +211,7 @@ temp = {
  {  title: '菜的单价',   dataIndex: 'foodprice',     width: 150,     sorter: false,      },
  {  title: '单位',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
  {  title: '菜的图片',   dataIndex: 'foodpiclink',     width: 150,     sorter: false,   render: (text) => (
-  <img src={`${text}?${Math.random}`} width={80} height={80} alt="暂无图片" />
+  <img src={`${text}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
  )   },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
