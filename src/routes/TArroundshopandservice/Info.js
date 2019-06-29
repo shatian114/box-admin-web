@@ -56,6 +56,8 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
 
   state = {
+    mainpicFile: [],
+    addtagindexArr: [],
     submitting: false,
     indexImgArr: [],
   }
@@ -99,27 +101,31 @@ export default class DicManagerInfo extends Component {
   }
 
   handleSubmit = async e => {
+    e.preventDefault();
     this.setState({
       submitting: true,
     });
+    const { info, newInfo } = this.props.base;
+    // 计算索引图
+    let tagindex = '';
+    if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+      tagindex = info.tagindex && info.tagindex.length > 0 ? info.tagindex : `arroundshopandservice_${info.tArroundshopandserviceId}`;
+    }else{
+      tagindex = `arroundshopandservice_${newInfo.tArroundshopandserviceId}`;
+    }
 
-    if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
-      // 删除tagindex
-      console.log('delImgKeyArr: ', this.delImgKeyArr);
-      for (let i=0; i<this.delImgKeyArr.length; i+=1) {
-        await deleteobj({
-          id: this.delImgKeyArr[i],
-        }, 'TPicture');
-      }
+    // 删除tagindex
+    for (let i=0; i<this.delImgKeyArr.length; i+=1) {
+      await deleteobj({
+        id: this.delImgKeyArr[i],
+      }, 'TPicture');
     }
     // 先上传索引图
-    console.log('need up img num: ', this.state.indexImgArr.length);
     const uuidArr = geneUuidArr(this.state.indexImgArr.length);
     // 获取newobj的tagidnex
     for(let i=0; i<uuidArr.length; i+=1) {
-      let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
-      imgKey = `arroundshopandservice_${imgKey}_indexTag_${uuidArr[i]}.jpg`;
-      // tagindexArr.push(webConfig.tpUriPre + imgKey);
+      let imgKey = this.props.base.info.tArroundshopandserviceId || this.props.base.newInfo.tArroundshopandserviceId;
+      imgKey += `arroundshopandservice_${uuidArr[i]}.jpg`;
       const upImgRes = await uploadImg(this.state.indexImgArr[i].originFileObj, imgKey);
       if (upImgRes) {
         let response = await newoObj('TPicture');
@@ -127,29 +133,27 @@ export default class DicManagerInfo extends Component {
           const { tPictureId}  = response.data;
           response = await addobj({
             'tPictureId': tPictureId,
-            tagindex: `arroundshopandservice_${this.props.form.getFieldValue('tProductId')}`,
+            'tagindex': tagindex,
             piclink: webConfig.tpUriPre + imgKey,
           }, 'TPicture');
         }
       }
     }
-    2
+
     this.props.form.setFieldsValue({
-      tagindex: this.props.form.getFieldValue('tProductId'),
+      'tagindex': tagindex,
     });
-    e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-         let temp = {};
-        
+        let temp = {};
 
         const { dispatch } = this.props;
-        if (this.props.base.info.id) {
+        if (this.props.base.info.zone) {
           dispatch({
             type: 'base/fetch',
             payload: {
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
@@ -160,13 +164,17 @@ export default class DicManagerInfo extends Component {
             payload: {
               ...this.props.base.newInfo,
               ...values,
-                  ...temp,
+              ...temp,
             },
             callback: () => dispatch(routerRedux.goBack()),
             url,
           });
         }
       }
+    });
+
+    this.setState({
+      submitting: false,
     });
   };
 
@@ -191,7 +199,18 @@ export default class DicManagerInfo extends Component {
       },
     });
     if(file.fileList.length > 0) {
-      const imgKey = `${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
+      this.setState({
+        mainpicFile: [file.fileList[file.fileList.length-1]],
+      });
+      const { info } = this.props.base;
+      info.mainpic = undefined;
+      this.props.dispatch({
+        type: 'base/save',
+        payload: {
+          'info': info,
+        },
+      });
+      const imgKey = `arroundshopandservice${this.props.base.info.tArroundshopandserviceId || this.props.base.newInfo.tArroundshopandserviceId}.jpg`;
       if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
         this.props.form.setFields({
           mainpic: {value: webConfig.tpUriPre + imgKey}
@@ -225,7 +244,7 @@ export default class DicManagerInfo extends Component {
     return (
       <Spin size="large" spinning={loading}>
         <Form onSubmit={this.handleSubmit}>
-           <FormItem {...formItemLayout} hasFeedback label="">
+           <FormItem {...formItemLayout} hasFeedback label="店铺id">
 {getFieldDecorator('tArroundshopandserviceId', {
  initialValue: info.tArroundshopandserviceId || newInfo.tArroundshopandserviceId,
   rules: [
@@ -309,9 +328,12 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '是否审核过不能缺失!',
-    },{ required: true,message: '是否审核过不能缺失!', },
+    },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+  <Option value={1}>是</Option>
+  <Option value={0}>否</Option>
+</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="纬度">
 {getFieldDecorator('lat', {
@@ -342,9 +364,9 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '排序不能缺失!',
-    },{ required: true,message: '排序不能缺失!', },
+    }
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<InputNumber min={0} />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否置顶">
 {getFieldDecorator('istop', {
@@ -353,9 +375,12 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '是否置顶不能缺失!',
-    },{ required: true,message: '是否置顶不能缺失!', },
+    },
   ],
- })(<InputNumber min={0} disabled />)}
+ })(<Select>
+  <Option value={1}>是</Option>
+  <Option value={0}>否</Option>
+</Select>)}
  </FormItem>
           <FormItem {...formItemLayout} hasFeedback label="地址">
             {getFieldDecorator('address', {
@@ -381,8 +406,8 @@ export default class DicManagerInfo extends Component {
    <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
    {info.mainpic ? <DelImg goDel={this.delMainpic} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
    <Upload
-     disabled={this.props.base.info.mainpic}
      onChange={this.uploadChange}
+     fileList={this.state.mainpicFile}
      onRemove={(file) => {this.props.form.setFields({mainpic: undefined}); return true;}}
      listType="picture-card"
      multiple={false}
@@ -434,7 +459,7 @@ export default class DicManagerInfo extends Component {
                 style={{ marginLeft: 12 }}
                 type="primary"
                 htmlType="submit"
-                loading={submitting}
+                loading={this.state.submitting}
               >
                 保存
               </Button>

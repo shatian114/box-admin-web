@@ -178,11 +178,13 @@ temp = {
           </Row>
         ),
       },
-       {  title: '',   dataIndex: 't_arroundshopandservice_id',     width: 150,     sorter: false,      },
+       {  title: '店铺id',   dataIndex: 't_arroundshopandservice_id',     width: 150,     sorter: false,      },
  {  title: '区域标识',   dataIndex: 'zone',     width: 150,     sorter: false,      },
+      {  title: '店铺主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,     render: (val) => {
+            return <img src={`${val}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
+        }  },
  {  title: '实体店名称',   dataIndex: 'shopname',     width: 150,     sorter: false,      },
  {  title: '实体店描述',   dataIndex: 'shopdesc',     width: 150,     sorter: false,      },
- {  title: '图片索引',   dataIndex: 'tagindex',     width: 150,     sorter: false,      },
  {  title: '地图位置',   dataIndex: 'maplink',     width: 150,     sorter: false,      },
  {  title: '联系手机',   dataIndex: 'mobilephone',     width: 150,     sorter: false,      },
  {  title: '座机',   dataIndex: 'telephone',     width: 150,     sorter: false,      },
@@ -191,7 +193,6 @@ temp = {
  {  title: '经度',   dataIndex: 'lng',     width: 150,     sorter: false,      },
  {  title: '排序',   dataIndex: 'orderindex',     width: 150,     sorter: false,      },
  {  title: '是否置顶',   dataIndex: 'istop',     width: 150,     sorter: false,      },
- {  title: '店铺主图',   dataIndex: 'mainpic',     width: 150,     sorter: false,      },
  {  title: '地址',   dataIndex: 'address',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
@@ -199,7 +200,7 @@ temp = {
 
     const listConfig = {
       url: '/api/TArroundshopandservice/queryTArroundshopandserviceList', // 必填,请求url
-      scroll: { x: 2400, y: this.state.scrollY }, // 可选配置,同antd table
+      scroll: { x: 2410, y: this.state.scrollY }, // 可选配置,同antd table
       rowKey, // 必填,行key
       columns, // 必填,行配置
     };
@@ -209,29 +210,24 @@ temp = {
         <Card bordered={false} style={{ marginBottom: 24 }} hoverable>
           <Form onSubmit={this.handleSearch}>
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label=''>{getFieldDecorator('t_arroundshopandservice_id',{initialValue: this.props.list.queryMap.t_arroundshopandservice_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+              <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='店铺id'>{getFieldDecorator('t_arroundshopandservice_id',{initialValue: this.props.list.queryMap.t_arroundshopandservice_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='区域标识'>{getFieldDecorator('zone',{initialValue: this.props.list.queryMap.zone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='实体店名称'>{getFieldDecorator('shopname',{initialValue: this.props.list.queryMap.shopname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='实体店描述'>{getFieldDecorator('shopdesc',{initialValue: this.props.list.queryMap.shopdesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='图片索引'>{getFieldDecorator('tagindex',{initialValue: this.props.list.queryMap.tagindex, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地图位置'>{getFieldDecorator('maplink',{initialValue: this.props.list.queryMap.maplink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='联系手机'>{getFieldDecorator('mobilephone',{initialValue: this.props.list.queryMap.mobilephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='座机'>{getFieldDecorator('telephone',{initialValue: this.props.list.queryMap.telephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否审核过(起始)'>{getFieldDecorator('start_ispassed',{initialValue: this.props.list.queryMap.start_ispassed  ? moment(this.props.list.queryMap.start_ispassed): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否审核过(结束)'>{getFieldDecorator('end_ispassed',{initialValue: this.props.list.queryMap.end_ispassed  ? moment(this.props.list.queryMap.end_ispassed): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否审核过'>{getFieldDecorator('ispassed',{initialValue: this.props.list.queryMap.ispassed, })
+ (<Select showSearch allowClear>
+   <Option value='1'>是</Option>
+   <Option value='0'>否</Option>
+ </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='纬度'>{getFieldDecorator('lat',{initialValue: this.props.list.queryMap.lat, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='经度'>{getFieldDecorator('lng',{initialValue: this.props.list.queryMap.lng, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='排序(起始)'>{getFieldDecorator('start_orderindex',{initialValue: this.props.list.queryMap.start_orderindex  ? moment(this.props.list.queryMap.start_orderindex): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='排序(结束)'>{getFieldDecorator('end_orderindex',{initialValue: this.props.list.queryMap.end_orderindex  ? moment(this.props.list.queryMap.end_orderindex): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否置顶(起始)'>{getFieldDecorator('start_istop',{initialValue: this.props.list.queryMap.start_istop  ? moment(this.props.list.queryMap.start_istop): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否置顶(结束)'>{getFieldDecorator('end_istop',{initialValue: this.props.list.queryMap.end_istop  ? moment(this.props.list.queryMap.end_istop): null, })
- (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='店铺主图'>{getFieldDecorator('mainpic',{initialValue: this.props.list.queryMap.mainpic, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否置顶'>{getFieldDecorator('istop',{initialValue: this.props.list.queryMap.istop, })
+ (<Select showSearch allowClear>
+   <Option value='1'>是</Option>
+   <Option value='0'>否</Option>
+ </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地址'>{getFieldDecorator('address',{initialValue: this.props.list.queryMap.address, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>

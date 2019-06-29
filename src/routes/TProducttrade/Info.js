@@ -111,6 +111,17 @@ export default class DicManagerInfo extends Component {
       submitting: true,
     });
 
+    const { info, newInfo } = this.props.base;
+    // 计算索引图
+    let tagindex = '', shoppic = '';
+    if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+      tagindex = info.tagindex && info.tagindex.length > 0 ? info.tagindex : `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`;
+      shoppic = info.shoppic && info.shoppic.length > 0 ? info.shoppic : `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`;
+    }else{
+      tagindex = `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`;
+      shoppic = `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`;
+    }
+
     if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
       // 删除tagindex和shoppic
       console.log('delImgKeyArr: ', this.delImgKeyArr);
@@ -121,7 +132,6 @@ export default class DicManagerInfo extends Component {
       }
     }
     // 先上传索引图
-    console.log('need up img num: ', this.state.addtagindexArr.length);
     let uuidArr = geneUuidArr(this.state.addtagindexArr.length);
     // 获取newobj的tagidnex
     for(let i=0; i<uuidArr.length; i+=1) {
@@ -134,14 +144,13 @@ export default class DicManagerInfo extends Component {
           const { tPictureId}  = response.data;
           response = await addobj({
             'tPictureId': tPictureId,
-            tagindex: `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`,
+            tagindex: tagindex,
             piclink: webConfig.tpUriPre + imgKey,
           }, 'TPicture');
         }
       }
     }
     // 上商家额外提供的图片
-    console.log('need up img num: ', this.state.addshoppicArr.length);
      uuidArr = geneUuidArr(this.state.addshoppicArr.length);
     // 获取newobj的tagidnex
     for(let i=0; i<uuidArr.length; i+=1) {
@@ -154,15 +163,16 @@ export default class DicManagerInfo extends Component {
           const { tPictureId}  = response.data;
           response = await addobj({
             'tPictureId': tPictureId,
-            tagindex: `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`,
+            tagindex: shoppic,
             piclink: webConfig.tpUriPre + imgKey,
           }, 'TPicture');
         }
       }
     }
-    this.props.form.setFields({
-      tagindex: {value: `tProducttrade_tagindex_${this.props.form.getFieldValue('tProducttradeId')}`},
-      shoppic: {value: `tProducttrade_shoppic_${this.props.form.getFieldValue('tProducttradeId')}`},
+
+    this.props.form.setFieldsValue({
+      'tagindex': tagindex,
+      'shoppic': shoppic,
     });
 
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -218,32 +228,6 @@ export default class DicManagerInfo extends Component {
     this.setState({
       'shoppicArr': shoppicArr,
     });
-  }
-
-  // 上传商家额外提供的图片
-  uploadChange = (file) => {
-    message.info('开始上传卖家额外提供的图片');
-		this.props.dispatch({
-			type: 'base/save',
-			payload: {
-				isSelectImg: file.fileList.length > 0,
-			},
-		})
-		if(file.fileList.length > 0) {
-			let imgKey = (this.props.base.info.tProducttradeId || this.props.base.newInfo.tProducttradeId)+'.jpg';
-			uploadImg(file.fileList[0].originFileObj, imgKey, v => {
-				if(v){
-					this.props.form.setFields({
-						shoppic: {value: webConfig.tpUriPre + imgKey}
-          });
-          message.success('卖家额外提供的图片上传成功');
-					console.log('上传成功');
-				}else{
-          message.error('卖家额外提供的图片上传失败');
-					console.log('上传失败');
-				}
-			});
-		}
   }
 
   render() {
@@ -323,13 +307,27 @@ export default class DicManagerInfo extends Component {
     {
       required: true,
       message: '是否发货不能缺失!',
-    },{ required: true,message: '是否发货不能缺失!', },
+    },
   ],
  })(<Select>
   <Option value={1}>是</Option>
   <Option value={0}>否</Option>
 </Select>)}
  </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="是否支付">
+            {getFieldDecorator('ispaid', {
+              initialValue: info.ispaid ||  newInfo.ispaid,
+              rules: [
+                {
+                  required: true,
+                  message: '是否支付不能缺失!',
+                },
+              ],
+            })(<Select>
+              <Option value={1}>是</Option>
+              <Option value={0}>否</Option>
+            </Select>)}
+          </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="发货时间">
 {getFieldDecorator('sendtime', {
  initialValue: moment(info.sendtime ||  newInfo.sendtime),
@@ -428,20 +426,6 @@ export default class DicManagerInfo extends Component {
     },{ max: 100,message: '提取编号必须小于100位!',   },
   ],
  })(<Input placeholder="请输入" />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否支付">
-{getFieldDecorator('ispaid', {
- initialValue: info.ispaid ||  newInfo.ispaid,
-  rules: [
-    {
-      required: true,
-      message: '是否支付不能缺失!',
-    },
-  ],
- })(<Select>
-  <Option value={1}>是</Option>
-  <Option value={0}>否</Option>
-</Select>)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="收货地址信息">
 {getFieldDecorator('recieveaddress', {

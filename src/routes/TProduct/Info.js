@@ -16,7 +16,7 @@ import { routerRedux } from 'dva/router';
 import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
-import { isEmpty, geneUuidArr, delArrEle } from '../../utils/utils';
+import {isEmpty, geneUuidArr, delArrEle, getPiclinkList} from '../../utils/utils';
 import {uploadImg, uploadUgc} from '../../utils/uploadImg';
 import DelImg from '../../components/DelImg';
 import {webConfig} from '../../utils/Constant';
@@ -57,9 +57,13 @@ const submitFormLayout = {
 export default class DicManagerInfo extends Component {
 
   state = {
+    mainpicFile: undefined,
+    videoFile: undefined,
+    addtagindexArr: [],
+    tagindexArr: [],
+    indexImgArr: [],
     submitting: false,
     percent: 0,
-    indexImgArr: [],
   }
   componentDidMount() {
     const { dispatch } = this.props;
@@ -78,14 +82,10 @@ export default class DicManagerInfo extends Component {
           id: this.props.location.state.id,
         },
         url,
-      });
-      dispatch({
-        type: 'list/listsaveinfo',
-        payload: {
-          url: '/api/TPicture/queryTPictureList',
-          queryMap: {
-            tagindex: this.props.location.state.id,
-          },
+        callback: async () => {
+          this.setState({
+            tagindexArr: await getPiclinkList('tagindex', this.props.base.info.tagindex),
+          });
         },
       });
     } else {
@@ -117,10 +117,17 @@ export default class DicManagerInfo extends Component {
     this.setState({
       submitting: true,
     });
+    const { info, newInfo } = this.props.base;
+    // 计算索引图
+    let tagindex = '';
+    if (this.props.base.info.id || (this.props.location.state && this.props.location.state.id)) {
+      tagindex = info.tagindex && info.tagindex.length > 0 ? info.tagindex : `tproduct_${info.tProductId}`;
+    }else{
+      tagindex = `tproduct_${newInfo.tProductId}`;
+    }
 
     if(this.props.base.isEdit && this.props.base.info.tagindex.length > 0) {
       // 删除tagindex
-      console.log('delImgKeyArr: ', this.delImgKeyArr);
       for (let i=0; i<this.delImgKeyArr.length; i+=1) {
         await deleteobj({
           id: this.delImgKeyArr[i],
@@ -128,12 +135,11 @@ export default class DicManagerInfo extends Component {
       }
     }
     // 先上传索引图
-    console.log('need up img num: ', this.state.indexImgArr.length);
     const uuidArr = geneUuidArr(this.state.indexImgArr.length);
     // 获取newobj的tagidnex
     for(let i=0; i<uuidArr.length; i+=1) {
       let imgKey = this.props.base.info.tProductId || this.props.base.newInfo.tProductId;
-      imgKey += `_indexTag_${uuidArr[i]}.jpg`;
+      imgKey += `_tproduct_${uuidArr[i]}.jpg`;
       // tagindexArr.push(webConfig.tpUriPre + imgKey);
       const upImgRes = await uploadImg(this.state.indexImgArr[i].originFileObj, imgKey);
       if (upImgRes) {
@@ -142,15 +148,15 @@ export default class DicManagerInfo extends Component {
           const { tPictureId}  = response.data;
           response = await addobj({
             'tPictureId': tPictureId,
-            tagindex: this.props.form.getFieldValue('tProductId'),
+            'tagindex': tagindex,
             piclink: webConfig.tpUriPre + imgKey,
           }, 'TPicture');
         }
       }
     }
-2
+
     this.props.form.setFieldsValue({
-      tagindex: this.props.form.getFieldValue('tProductId'),
+      'tagindex': tagindex,
     });
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -208,10 +214,21 @@ export default class DicManagerInfo extends Component {
 			},
 		});
 		if(file.fileList.length > 0) {
-			const imgKey = `${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
+		  this.setState({
+        mainpicFile: [file.fileList[file.fileList.length-1]],
+      });
+      const { info } = this.props.base;
+      info.mainpic = undefined;
+      this.props.dispatch({
+        type: 'base/save',
+        payload: {
+          'info': info,
+        },
+      });
+			const imgKey = `tproduct_${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
 			if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
         this.props.form.setFields({
-          mainpic: {value: webConfig.tpUriPre + imgKey}
+          mainpic: {value: webConfig.tpUriPre + imgKey},
         });
         console.log('上传成功');
       }else {
@@ -222,14 +239,11 @@ export default class DicManagerInfo extends Component {
 
   // 删除辅图
   delTagIndex = (imgUrl, imgIndex) => {
-    let { queryTPictureList } = this.props.list;
-    this.delImgKeyArr.push(queryTPictureList[imgIndex].t_picture_id);
-    delete queryTPictureList[imgIndex];
-    this.props.dispatch({
-      type: 'list/save',
-      payload: {
-        'queryTPictureList': queryTPictureList,
-      },
+    let tagindexArr = this.state.tagindexArr;
+    this.delImgKeyArr.push(tagindexArr[imgIndex].t_picture_id);
+    delete tagindexArr[imgIndex];
+    this.setState({
+      'tagindexArr': tagindexArr,
     });
   }
 
@@ -245,6 +259,17 @@ export default class DicManagerInfo extends Component {
 			}
 		})
 		if(file.fileList.length > 0) {
+      this.setState({
+        videoFile: [file.fileList[file.fileList.length-1]],
+      });
+      const { info } = this.props.base;
+      info.videolink = undefined;
+      this.props.dispatch({
+        type: 'base/save',
+        payload: {
+          'info': info,
+        },
+      });
       uploadUgc(file.fileList[0].originFileObj, this.progressCall).then(res => {
         console.log("视频上传成功：", res);
         const infoTmp = this.props.base.info;
@@ -513,10 +538,10 @@ export default class DicManagerInfo extends Component {
     },{ max: 400,message: '产品主图必须小于400位!',   },
   ],
  })(<Input placeholder="请选择商品主图文件" disabled />)}
- <Alert type="warning" showIcon message="提示：只可选择一张图片，如果要重新选择图片，请先删除之前选择的图片" />
+ <Alert type="warning" showIcon message="提示：只可选择一张图片，重新选择的图片会覆盖之前的图片" />
 						{info.mainpic ? <DelImg goDel={this.delMainpic} imgUrl={info.mainpic + '?' + Math.random()} /> : ''}
 						<Upload
-							disabled={this.props.base.info.mainpic}
+              fileList={this.state.mainpicFile}
               onChange={this.uploadChange}
               onRemove={(file) => {this.props.form.setFields({mainpic: undefined}); return true;}}
 							listType="picture-card"
@@ -536,7 +561,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请选择产品辅图" disabled />)}
    {
-     list.queryTPictureList.map((v, index) => (
+     this.state.tagindexArr.map((v, index) => (
       <DelImg key={v.t_picture_id} goDel={this.delTagIndex} imgUrl={`${v.piclink}`} imgIndex={index} />
      ))
    }
@@ -559,10 +584,10 @@ export default class DicManagerInfo extends Component {
  })(<Input disabled placeholder="请选择视频文件" />)}
  <Alert type="warning" showIcon message="提示：只可选择一个视频，重新上传的视频会覆盖之前的视频" />
    {
-     info.videolink && info.videolink.length > 0 ? <a href={info.videolink} target="_blank">查看视频</a> : ''
+     info.videolink && info.videolink.length > 0 ? <div><a href={info.videolink} target="_blank">查看视频</a></div> : ''
    }
   <Upload
-  	disabled={this.props.base.isSelectVideo}
+  	fileList={this.state.videoFile}
     onChange={this.uploadVideo}
     onRemove={(file) => {this.props.form.setFields({videolink: undefined}); return true;}}
   	listType="picture-card"
@@ -588,7 +613,7 @@ export default class DicManagerInfo extends Component {
                 style={{ marginLeft: 12 }}
                 type="primary"
                 htmlType="submit"
-                loading={this.state.submitting}
+                loading={this.state.submitting || submitting}
               >
                 保存
               </Button>
