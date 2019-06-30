@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {Form, Input, InputNumber, Button, Spin, Select, DatePicker, Alert, Upload} from 'antd';
+import {Form, Input, InputNumber, Button, Spin, Select, Alert, Upload} from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 
@@ -17,6 +17,7 @@ import Operate from '../../components/Oprs';
 import '../../utils/utils.less';
 import {geneUuidArr, isEmpty} from '../../utils/utils';
 import DelImg from "../../components/DelImg";
+import QQMap from "../../components/QQMap";
 import {uploadImg} from "../../utils/uploadImg";
 import {webConfig} from "../../utils/Constant";
 import {addobj, deleteobj, newoObj} from "../../services/api";
@@ -335,6 +336,42 @@ export default class DicManagerInfo extends Component {
   <Option value={0}>否</Option>
 </Select>)}
  </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="排序">
+            {getFieldDecorator('orderindex', {
+              initialValue: info.orderindex ||  newInfo.orderindex,
+              rules: [
+                {
+                  required: true,
+                  message: '排序不能缺失!',
+                }
+              ],
+            })(<InputNumber min={0} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="是否置顶">
+            {getFieldDecorator('istop', {
+              initialValue: info.istop ||  newInfo.istop,
+              rules: [
+                {
+                  required: true,
+                  message: '是否置顶不能缺失!',
+                },
+              ],
+            })(<Select>
+              <Option value={1}>是</Option>
+              <Option value={0}>否</Option>
+            </Select>)}
+          </FormItem>
+          <FormItem {...formItemLayout} hasFeedback label="地址">
+            {getFieldDecorator('address', {
+              initialValue: info.address ||  newInfo.address,
+              rules: [
+                {
+                  required: true,
+                  message: '地址不能缺失!',
+                },{ max: 500,message: '地址必须小于500位!',   },
+              ],
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="纬度">
 {getFieldDecorator('lat', {
  initialValue: info.lat ||  newInfo.lat,
@@ -356,43 +393,9 @@ export default class DicManagerInfo extends Component {
     },{ max: 255,message: '经度必须小于255位!',   },
   ],
  })(<Input placeholder="请输入" />)}
+   <Alert type="warning" showIcon message="提示：请点击下面的地图，可自动设置经度和纬度" />
+   <QQMap form={this.props.form} latFieldName='lat' lngFieldName='lng' lng={info.longitude} lat={info.latitude} />
  </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="排序">
-{getFieldDecorator('orderindex', {
- initialValue: info.orderindex ||  newInfo.orderindex,
-  rules: [
-    {
-      required: true,
-      message: '排序不能缺失!',
-    }
-  ],
- })(<InputNumber min={0} />)}
- </FormItem>
- <FormItem {...formItemLayout} hasFeedback label="是否置顶">
-{getFieldDecorator('istop', {
- initialValue: info.istop ||  newInfo.istop,
-  rules: [
-    {
-      required: true,
-      message: '是否置顶不能缺失!',
-    },
-  ],
- })(<Select>
-  <Option value={1}>是</Option>
-  <Option value={0}>否</Option>
-</Select>)}
- </FormItem>
-          <FormItem {...formItemLayout} hasFeedback label="地址">
-            {getFieldDecorator('address', {
-              initialValue: info.address ||  newInfo.address,
-              rules: [
-                {
-                  required: true,
-                  message: '地址不能缺失!',
-                },{ max: 500,message: '地址必须小于500位!',   },
-              ],
-            })(<Input placeholder="请输入" />)}
-          </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="店铺主图">
 {getFieldDecorator('mainpic', {
  initialValue: info.mainpic ||  newInfo.mainpic,
@@ -459,7 +462,7 @@ export default class DicManagerInfo extends Component {
                 style={{ marginLeft: 12 }}
                 type="primary"
                 htmlType="submit"
-                loading={this.state.submitting}
+                loading={this.state.submitting || submitting}
               >
                 保存
               </Button>
