@@ -179,12 +179,16 @@ export default {
           exporting: true,
         },
       });
-      yield call(exportExcel, payload, url);
+      const payloadTmp = {
+        ...payload,
+        ...payload.queryMap,
+      };
+      yield call(exportExcel, payloadTmp, url);
       yield put({
         type: 'save',
         payload: {
           exporting: false,
-        }
+        },
       });
     },
 
