@@ -128,7 +128,8 @@ export default {
 			const temp = {
         page: 1,
         len: 100000,
-        queryMap: payload.queryMap,
+        // queryMap: payload.queryMap,
+        ...payload.queryMap,
         url: payload.url,
         columnProp: undefined,
         columnOrder: undefined,
@@ -182,12 +183,16 @@ export default {
           exporting: true,
         },
       });
-      yield call(exportExcel, payload, url);
+      const payloadTmp = {
+        ...payload,
+        ...payload.queryMap,
+      };
+      yield call(exportExcel, payloadTmp, url);
       yield put({
         type: 'save',
         payload: {
           exporting: false,
-        }
+        },
       });
     },
     
