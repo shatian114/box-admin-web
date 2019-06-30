@@ -16,7 +16,7 @@ import {uploadImg} from '../../utils/uploadImg';
 import ShengShiQu from '../../components/ShengShiQu';
 import { webConfig } from '../../utils/Constant';
 import { FormValid } from '../../utils/FormValid';
-import AMap from '../../components/AMap';
+import QQMap from '../../components/QQMap';
 
 import Operate from '../../components/Oprs';
 
@@ -163,13 +163,6 @@ export default class DicManagerInfo extends Component {
         assignfoodnpic: {value: ""},
       });
     }
-  }
-  
-  setMap = (lng, lat) => {
-    this.props.form.setFieldsValue({
-      longitude: lng,
-      latitude: lat,
-    });
   }
 
   render() {
@@ -421,8 +414,8 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Input placeholder="请输入" />)}
 
-{/* <Alert type="warning" showIcon message="提示：请点击下面的地图，可自动设置经度和纬度" />
-<AMap form={form} latFieldName='latitude' lngFieldName='longitude' lng={info.longitude} lat={info.latitude} setMap={this.setMap} /> */}
+   <Alert type="warning" showIcon message="提示：请点击下面的地图，可自动设置经度和纬度" />
+<QQMap form={this.props.form} latFieldName='latitude' lngFieldName='longitude'  lng={info.longitude} lat={info.latitude} />
  </FormItem>
           
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
