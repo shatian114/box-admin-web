@@ -19,8 +19,8 @@ class QQMap extends PureComponent {
         // 设置表单的经纬度值++
         if (this.props.form && this.props.latFieldName && this.props.lngFieldName) {
           const latLng = {};
-          latLng[this.props.latFieldName] = pointInfo.latLng.lat;
-          latLng[this.props.lngFieldName] = pointInfo.latLng.lng;
+          latLng[this.props.latFieldName] = String(pointInfo.latLng.lat);
+          latLng[this.props.lngFieldName] = String(pointInfo.latLng.lng);
           this.props.form.setFieldsValue(latLng);
         }
       });
