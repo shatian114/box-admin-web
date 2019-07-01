@@ -219,7 +219,7 @@ export default class DicManagerInfo extends Component {
 
   render() {
     const { submitting, form, loading, base, list } = this.props;
-    const { queryTClzDeliveryclerkList, queryTClzAssignfoodList  } = list;
+    const { queryTClzUserList, queryTClzAssignfoodList  } = list;
     const { getFieldDecorator } = form;
     
   const { info, newInfo } = base;
@@ -249,7 +249,7 @@ export default class DicManagerInfo extends Component {
   ],
  })(<Select showSearch allowClear onChange={this.changeUserid} disabled={this.state.isEdit}>
   {
-    this.props.list.queryTClzUserList.map(v => (
+    queryTClzUserList.map(v => (
       <Option key={v.userid} value={v.userid}>{v.nickname}</Option>
     ))
   }

@@ -172,7 +172,7 @@ export default class DicManagerInfo extends Component {
       message: '小类描述不能缺失!',
     },{ max: 255,message: '小类描述必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<TextArea placeholder="请输入" />)}
  </FormItem>
 
           

@@ -101,7 +101,7 @@ export default {
         },
       });
 
-      if (response) {
+      if (response && response.code.startsWith('2') && response.data) {
         // 之前的api没有data元素，现在的data元素里面都是在上一级，现在提到上一级
         for (let k in response.data) {
           response[k] = response.data[k];
@@ -275,10 +275,10 @@ export default {
         queryTClzDeliveryclerkList: [], //配送员list
         searchqueryTClzDeliveryclerkList: [], //搜索的配送员list
         setqueryTClzDeliveryclerkList: [], //设置的配送员list
-        queryTClzFoodList: [], //菜品list
-        queryTClzOrderList: [], //订单list
-        queryTClzBigtypeList: [], //菜品大类list
-        queryTClzSmalltypeList: [], //菜品小类list
+        queryTClzFoodList: [], // 菜品list
+        queryTClzOrderList: [], // 订单list
+        queryTClzBigtypeList: [], // 菜品大类list
+        queryTClzSmalltypeList: [], // 菜品小类list
         queryTClzUserList: [], // 客户的用户信息list
         queryTClzUseraddressList: [], // 客户的地址list
       };

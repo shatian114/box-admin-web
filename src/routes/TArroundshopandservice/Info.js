@@ -159,7 +159,7 @@ export default class DicManagerInfo extends Component {
       message: '实体店描述不能缺失!',
     },{ max: 255,message: '实体店描述必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<Input multiple placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="图片索引">
 {getFieldDecorator('tagindex', {

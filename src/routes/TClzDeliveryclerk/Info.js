@@ -215,7 +215,7 @@ export default class DicManagerInfo extends Component {
       message: '描述不能缺失!',
     },{ max: 255,message: '描述必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<TextArea placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="配送单价">
 {getFieldDecorator('userprice', {
