@@ -18,10 +18,11 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 import cache from '../../utils/cache';
 import ListButtonGroup from '../../components/ListButtonGroup';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TArroundshopandservice;
@@ -213,7 +214,7 @@ temp = {
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='店铺id'>{getFieldDecorator('t_arroundshopandservice_id',{initialValue: this.props.list.queryMap.t_arroundshopandservice_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='区域标识'>{getFieldDecorator('zone',{initialValue: this.props.list.queryMap.zone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='实体店名称'>{getFieldDecorator('shopname',{initialValue: this.props.list.queryMap.shopname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='实体店描述'>{getFieldDecorator('shopdesc',{initialValue: this.props.list.queryMap.shopdesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='实体店描述'>{getFieldDecorator('shopdesc',{initialValue: this.props.list.queryMap.shopdesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='联系手机'>{getFieldDecorator('mobilephone',{initialValue: this.props.list.queryMap.mobilephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='座机'>{getFieldDecorator('telephone',{initialValue: this.props.list.queryMap.telephone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否审核过'>{getFieldDecorator('ispassed',{initialValue: this.props.list.queryMap.ispassed, })

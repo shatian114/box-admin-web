@@ -23,6 +23,7 @@ import cache from '../../utils/cache';
 import ListButtonGroup from '../../components/ListButtonGroup';
 import { FormValid } from '../../utils/FormValid';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TProduct;

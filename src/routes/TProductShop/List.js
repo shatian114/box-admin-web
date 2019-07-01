@@ -18,10 +18,11 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 import cache from '../../utils/cache';
 import ListButtonGroup from '../../components/ListButtonGroup';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TProductShop;
@@ -232,7 +233,7 @@ temp = {
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='剩余数量(结束)'>{getFieldDecorator('end_num',{initialValue: this.props.list.queryMap.end_num  ? moment(this.props.list.queryMap.end_num): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品描述'>{getFieldDecorator('productdes',{initialValue: this.props.list.queryMap.productdes, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='商品描述'>{getFieldDecorator('productdes',{initialValue: this.props.list.queryMap.productdes, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否显示实时视频(起始)'>{getFieldDecorator('start_ishowvideolink',{initialValue: this.props.list.queryMap.start_ishowvideolink  ? moment(this.props.list.queryMap.start_ishowvideolink): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否显示实时视频(结束)'>{getFieldDecorator('end_ishowvideolink',{initialValue: this.props.list.queryMap.end_ishowvideolink  ? moment(this.props.list.queryMap.end_ishowvideolink): null, })

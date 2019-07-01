@@ -384,7 +384,7 @@ export default class DicManagerInfo extends Component {
       message: '商品描述不能缺失!',
     },{ max: 255,message: '商品描述必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="剩余数量">
 {getFieldDecorator('num', {

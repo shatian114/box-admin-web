@@ -18,11 +18,12 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 import ListButtonGroup from '../../components/ListButtonGroup';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.T1wuyewuye;
@@ -198,7 +199,7 @@ temp = {
               <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业ID'>{getFieldDecorator('t_1wuyewuye_id',{initialValue: this.props.list.queryMap.t_1wuyewuye_id, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业编号'>{getFieldDecorator('wybh',{initialValue: this.props.list.queryMap.wybh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业名称'>{getFieldDecorator('wymc',{initialValue: this.props.list.queryMap.wymc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='物业描述'>{getFieldDecorator('wyms',{initialValue: this.props.list.queryMap.wyms, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 							<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
             </Row>

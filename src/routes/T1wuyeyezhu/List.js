@@ -18,9 +18,10 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 import ListButtonGroup from '../../components/ListButtonGroup';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.T1wuyeyezhu;
@@ -213,12 +214,12 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='楼房编号'>{getFieldDecorator('lfbh',{initialValue: this.props.list.queryMap.lfbh, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='楼房面积'>{getFieldDecorator('lfmj',{initialValue: this.props.list.queryMap.lfmj, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='业主联系方式'>{getFieldDecorator('yzsj',{initialValue: this.props.list.queryMap.yzsj, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='业主描述'>{getFieldDecorator('yzms',{initialValue: this.props.list.queryMap.yzms, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='业主描述'>{getFieldDecorator('yzms',{initialValue: this.props.list.queryMap.yzms, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否正常(起始)'>{getFieldDecorator('start_isnormal',{initialValue: this.props.list.queryMap.start_isnormal  ? moment(this.props.list.queryMap.start_isnormal): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否正常(结束)'>{getFieldDecorator('end_isnormal',{initialValue: this.props.list.queryMap.end_isnormal  ? moment(this.props.list.queryMap.end_isnormal): null, })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='欠费描述'>{getFieldDecorator('qianfeinum',{initialValue: this.props.list.queryMap.qianfeinum, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='欠费描述'>{getFieldDecorator('qianfeinum',{initialValue: this.props.list.queryMap.qianfeinum, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='车闸系统远程链接前缀'>{getFieldDecorator('carstoplink',{initialValue: this.props.list.queryMap.carstoplink, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>

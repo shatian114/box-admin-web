@@ -16,6 +16,7 @@ import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
+import {webConfig} from "../../utils/Constant";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -216,7 +217,7 @@ export default class DicManagerInfo extends Component {
       message: '业主描述不能缺失!',
     },{ max: 255,message: '业主描述必须小于255位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="账户余额">
 {getFieldDecorator('leftamount', {
@@ -252,7 +253,7 @@ export default class DicManagerInfo extends Component {
       message: '欠费描述不能缺失!',
     },{ max: 300,message: '欠费描述必须小于300位!',   },
   ],
- })(<Input placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="车闸系统远程链接前缀">
 {getFieldDecorator('carstoplink', {
