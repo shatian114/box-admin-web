@@ -184,10 +184,14 @@ temp = {
  {  title: '楼房编号',   dataIndex: 'lfbh',     width: 150,     sorter: false,      },
  {  title: '楼房面积',   dataIndex: 'lfmj',     width: 150,     sorter: false,      },
  {  title: '业主联系方式',   dataIndex: 'yzsj',     width: 150,     sorter: false,      },
- {  title: '业主描述',   dataIndex: 'yzms',     width: 150,     sorter: false,      },
+ {  title: '业主描述',   dataIndex: 'yzms',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '账户余额',   dataIndex: 'leftamount',     width: 150,     sorter: false,      },
  {  title: '是否正常',   dataIndex: 'isnormal',     width: 150,     sorter: false,      },
- {  title: '欠费描述',   dataIndex: 'qianfeinum',     width: 150,     sorter: false,      },
+ {  title: '欠费描述',   dataIndex: 'qianfeinum',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '车闸系统远程链接前缀',   dataIndex: 'carstoplink',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 

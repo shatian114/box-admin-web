@@ -179,7 +179,9 @@ temp = {
       {  title: '物业ID',   dataIndex: 't_1wuyewuye_id',     width: 150,     sorter: false,      },
  			{  title: '物业编号',   dataIndex: 'wybh',     width: 150,     sorter: false,      },
  			{  title: '物业名称',   dataIndex: 'wymc',     width: 150,     sorter: false,      },
- 			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,      },
+ 			{  title: '物业描述',   dataIndex: 'wyms',     width: 150,     sorter: false,   render: (val) =>(
+          <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+        )},
       {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];

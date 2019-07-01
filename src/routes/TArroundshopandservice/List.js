@@ -185,7 +185,9 @@ temp = {
             return <img src={`${val}?${Math.random()}`} width={80} height={80} alt="暂无图片" />
         }  },
  {  title: '实体店名称',   dataIndex: 'shopname',     width: 150,     sorter: false,      },
- {  title: '实体店描述',   dataIndex: 'shopdesc',     width: 150,     sorter: false,      },
+ {  title: '实体店描述',   dataIndex: 'shopdesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '地图位置',   dataIndex: 'maplink',     width: 150,     sorter: false,      },
  {  title: '联系手机',   dataIndex: 'mobilephone',     width: 150,     sorter: false,      },
  {  title: '座机',   dataIndex: 'telephone',     width: 150,     sorter: false,      },

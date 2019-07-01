@@ -227,7 +227,9 @@ temp = {
  //   }
  //  }   },
  {  title: '剩余数量',   dataIndex: 'num',     width: 150,     sorter: false,      },
- {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,      },
+ {  title: '商品描述',   dataIndex: 'productdes',     width: 150,     sorter: false,   render: (val) =>(
+   <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '支付的费用',   dataIndex: 'price',     width: 150,     sorter: false,      },
  {  title: '是否显示实时视频',   dataIndex: 'ishowvideolink',     width: 150,     sorter: false,   render: viewBoolean   },
  {  title: '视频链接',   dataIndex: 'videolink',     width: 150,     sorter: false,   render: (val, record, index) => {
