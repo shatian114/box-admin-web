@@ -191,7 +191,9 @@ temp = {
        {  title: '小类编号',   dataIndex: 't_clz_smalltype_id',     width: 150,     sorter: false,      },
  {  title: '关联的大类',   dataIndex: 'bigtypename',     width: 150,     sorter: false,      },
  {  title: '小类名称',   dataIndex: 'typename',     width: 150,     sorter: false,      },
- {  title: '小类描述',   dataIndex: 'typedesc',     width: 150,     sorter: false,      },
+ {  title: '小类描述',   dataIndex: 'typedesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
     ];

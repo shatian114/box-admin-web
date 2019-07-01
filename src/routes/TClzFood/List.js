@@ -208,7 +208,9 @@ temp = {
        {  title: '菜品编号',   dataIndex: 't_clz_food_id',     width: 150,     sorter: false,      },
  {  title: '关联的小类',   dataIndex: 'smalltypename',     width: 150,     sorter: false,      },
  {  title: '菜的名称',   dataIndex: 'foodname',     width: 150,     sorter: false,      },
- {  title: '菜的描述',   dataIndex: 'fooddesc',     width: 150,     sorter: false,      },
+ {  title: '菜的描述',   dataIndex: 'fooddesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '菜的单价',   dataIndex: 'foodprice',     width: 150,     sorter: false,      },
  {  title: '单位',   dataIndex: 'foodunit',     width: 150,     sorter: false,      },
  {  title: '菜的图片',   dataIndex: 'foodpiclink',     width: 150,     sorter: false,   render: (text) => (

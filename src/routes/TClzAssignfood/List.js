@@ -185,7 +185,9 @@ temp = {
  {  title: '经度',   dataIndex: 'longitude',     width: 150,     sorter: false,      },
  {  title: '纬度',   dataIndex: 'latitude',     width: 150,     sorter: false,      },
  {  title: '配菜点名称',   dataIndex: 'assignfoodname',     width: 150,     sorter: false,      },
- {  title: '配菜点描述',   dataIndex: 'assignfooddesc',     width: 150,     sorter: false,      },
+ {  title: '配菜点描述',   dataIndex: 'assignfooddesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '配菜点外景图片',   dataIndex: 'assignfoodnpic',     width: 150,     sorter: false,   render: (text) => (
   <img src={`${text}?${Math.random}`} width={80} height={80} alt="暂无图片" />
  )   },
@@ -194,7 +196,9 @@ temp = {
  {  title: '配菜点对外电话',   dataIndex: 'assignfoodphone',     width: 150,     sorter: false,      },
  {  title: '政府补贴费率',   dataIndex: 'subsideprice',     width: 150,     sorter: false,      },
  {  title: '外墙广告价位',   dataIndex: 'advertisementprice',     width: 150,     sorter: false,      },
- {  title: '外墙广告描述',   dataIndex: 'advertisementpricedesc',     width: 150,     sorter: false,      },
+ {  title: '外墙广告描述',   dataIndex: 'advertisementpricedesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '是否交过保证金',   dataIndex: 'ispaygurantee',     width: 150,     sorter: false,      },
  {  title: '保证金数额',   dataIndex: 'guranteeamount',     width: 150,     sorter: false,      },
  {  title: '预留字段1',   dataIndex: 'yuliu1',     width: 150,     sorter: false,      },

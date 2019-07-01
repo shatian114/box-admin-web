@@ -194,7 +194,9 @@ temp = {
  {  title: '联系电话',   dataIndex: 'userphone',     width: 150,     sorter: false,      },
  {  title: '姓名',   dataIndex: 'username',     width: 150,     sorter: false,      },
  {  title: '地址',   dataIndex: 'deliveryclerkadress',     width: 150,     sorter: false,      },
- {  title: '描述',   dataIndex: 'userdesc',     width: 150,     sorter: false,      },
+ {  title: '描述',   dataIndex: 'userdesc',     width: 150,     sorter: false,   render: (val) =>(
+     <p style={{whiteSpace: 'pre-line'}}>{val}</p>
+   )},
  {  title: '配送单价',   dataIndex: 'userprice',     width: 150,     sorter: false,      },
  {  title: '创建时间',   dataIndex: 'create_date',     width: 150,     sorter: false,      },
 
