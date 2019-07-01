@@ -109,7 +109,7 @@ export default {
 
         const saveinfokey = payload.url.split('/').pop();
         const payload2 = {};
-        payload2[saveinfokey] = response.list;
+        payload2[saveinfokey] = response.list || [];
         yield put({
           type: 'save',
           'payload': payload2,

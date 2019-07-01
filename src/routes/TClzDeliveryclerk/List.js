@@ -215,7 +215,7 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送点'>{getFieldDecorator('assignfood_id',{initialValue: this.props.list.queryMap.assignfood_id, })(<Select allowClear showSearch optionFilterProp="children">
     {
       queryTClzAssignfoodList ? queryTClzAssignfoodList.map(v => (
-        <Option key={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+        <Option key={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
       )
       ) : ''
     }

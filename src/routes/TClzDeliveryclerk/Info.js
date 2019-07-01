@@ -146,7 +146,7 @@ export default class DicManagerInfo extends Component {
  })(<Select dropdownMatchSelectWidth={true}>
   {
     this.props.list.list.map((v, k) => (
-      <Option key={k} value={v.t_clz_assignfood_id}>{v.assignfoodname}</Option>
+      <Option key={k} value={v.t_clz_assignfood_id}>{`${v.assignfoodname}=>${v.address}`}</Option>
     ))
    }
 </Select>)}
