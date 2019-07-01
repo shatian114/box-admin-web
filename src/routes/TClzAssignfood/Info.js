@@ -217,7 +217,7 @@ export default class DicManagerInfo extends Component {
       message: '配菜点描述不能缺失!',
     },{ max: 255,message: '配菜点描述必须小于255位!',   },
   ],
- })(<TextArea placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="负责人名称">
 {getFieldDecorator('assignfoodadminname', {
@@ -305,7 +305,7 @@ export default class DicManagerInfo extends Component {
       message: '外墙广告价位描述不能缺失!',
     },{ max: 255,message: '外墙广告价位描述必须小于255位!', },
   ],
- })(<TextArea placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="是否交过保证金">
 {getFieldDecorator('ispaygurantee', {

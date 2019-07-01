@@ -21,6 +21,7 @@ import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzFood;
@@ -245,7 +246,7 @@ temp = {
    }
 </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='菜的名称'>{getFieldDecorator('foodname',{initialValue: this.props.list.queryMap.foodname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='菜的描述'>{getFieldDecorator('fooddesc',{initialValue: this.props.list.queryMap.fooddesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='菜的描述'>{getFieldDecorator('fooddesc',{initialValue: this.props.list.queryMap.fooddesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='单位'>{getFieldDecorator('foodunit',{initialValue: this.props.list.queryMap.foodunit, })(<Select dropdownMatchSelectWidth={true} disabled={this.props.base.info.tClzSmalltypeId}>
   {
     webConfig.foodunitNameArr.map((v) => (

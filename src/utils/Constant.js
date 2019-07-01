@@ -29,6 +29,7 @@ export const webConfig = {
   Region: 'ap-chengdu',
   tpUriPre: 'http://pet-1252596634.cos.ap-chengdu.myqcloud.com/',
   foodunitNameArr: ['斤', '两', '个', '升'],
+  textAreaAutoSize: {minRows: 1, maxRows: 10},
 }
 
 export const ordergetstatusArr = ['下单成功等调配', '调配好等自提', '自提成功', '自提延期保留', '自提延期过期销毁', '调配好等配送', '配送中等签收', '签收成功', '签收失败退回', '配送签收失败退回过期销毁'];

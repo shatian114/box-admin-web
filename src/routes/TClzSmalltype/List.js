@@ -19,10 +19,11 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzSmalltype;
@@ -216,7 +217,7 @@ temp = {
    }
 </Select>)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小类名称'>{getFieldDecorator('typename',{initialValue: this.props.list.queryMap.typename, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小类描述'>{getFieldDecorator('typedesc',{initialValue: this.props.list.queryMap.typedesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='小类描述'>{getFieldDecorator('typedesc',{initialValue: this.props.list.queryMap.typedesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(起始)'>{getFieldDecorator('start_create_date',{initialValue: this.props.list.queryMap.start_create_date ? moment(this.props.list.queryMap.start_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='创建时间(结束)'>{getFieldDecorator('end_create_date',{initialValue: this.props.list.queryMap.end_create_date? moment(this.props.list.queryMap.end_create_date) : null, })(<DatePicker format={DateFormat} placeholder='请输入' />)} </FormItem> </Col>
               <Col md={12} sm={24}>

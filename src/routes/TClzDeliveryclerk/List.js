@@ -22,6 +22,7 @@ import { webConfig, formItemLayout, formItemGrid } from '../../utils/Constant';
 import cache from '../../utils/cache';
 import Importer from '../../components/Importer';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzDeliveryclerk;
@@ -225,7 +226,7 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='联系电话'>{getFieldDecorator('userphone',{initialValue: this.props.list.queryMap.userphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='姓名'>{getFieldDecorator('username',{initialValue: this.props.list.queryMap.username, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='地址'>{getFieldDecorator('deliveryclerkadress',{initialValue: this.props.list.queryMap.deliveryclerkadress, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='描述'>{getFieldDecorator('userdesc',{initialValue: this.props.list.queryMap.userdesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='描述'>{getFieldDecorator('userdesc',{initialValue: this.props.list.queryMap.userdesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送单价(起始)'>{getFieldDecorator('start_userprice',{initialValue: this.props.list.queryMap.start_userprice  ? moment(this.props.list.queryMap.start_userprice): null, rules: [{ validator: FormValid.jine}] })
  (<InputNumber  placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配送单价(结束)'>{getFieldDecorator('end_userprice',{initialValue: this.props.list.queryMap.end_userprice  ? moment(this.props.list.queryMap.end_userprice): null, rules: [{validator: FormValid.jine}] })

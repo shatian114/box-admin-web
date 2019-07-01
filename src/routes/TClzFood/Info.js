@@ -278,7 +278,7 @@ export default class DicManagerInfo extends Component {
       message: '描述不能缺失!',
     },{ max: 255,message: '菜的描述必须小于255位!',   },
   ],
- })(<TextArea placeholder="请输入" />)}
+ })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
  </FormItem>
  <FormItem {...formItemLayout} hasFeedback label="单价">
 {getFieldDecorator('foodprice', {

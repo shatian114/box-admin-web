@@ -16,6 +16,7 @@ import Operate from '../../components/Oprs';
 
 import '../../utils/utils.less';
 import { isEmpty } from '../../utils/utils';
+import {webConfig} from "../../utils/Constant";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -148,7 +149,7 @@ export default class DicManagerInfo extends Component {
                   message: '大类描述不能缺失!',
                 },{ max: 255,message: '大类描述必须小于255位!',   },
               ],
-             })(<TextArea placeholder="请输入" />)}
+             })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder="请输入" />)}
           </FormItem>
 
           

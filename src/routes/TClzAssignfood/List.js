@@ -19,8 +19,9 @@ import styles from '../../styles/list.less';
 import List from '../../components/List';
 import Operate from '../../components/Oprs';
 import { isEmpty } from '../../utils/utils';
-import { formItemLayout, formItemGrid } from '../../utils/Constant';
+import {formItemLayout, formItemGrid, webConfig} from '../../utils/Constant';
 
+const { TextArea } = Input;
 const FormItem = Form.Item;
 const { Option } = Select;
 //const routerUrl = cache.keysMenu.TClzAssignfood;
@@ -221,12 +222,12 @@ temp = {
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='经度'>{getFieldDecorator('longitude',{initialValue: this.props.list.queryMap.longitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='纬度'>{getFieldDecorator('latitude',{initialValue: this.props.list.queryMap.latitude, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点名称'>{getFieldDecorator('assignfoodname',{initialValue: this.props.list.queryMap.assignfoodname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点描述'>{getFieldDecorator('assignfooddesc',{initialValue: this.props.list.queryMap.assignfooddesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点描述'>{getFieldDecorator('assignfooddesc',{initialValue: this.props.list.queryMap.assignfooddesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 {/* <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点外景图片'>{getFieldDecorator('assignfoodnpic',{initialValue: this.props.list.queryMap.assignfoodnpic, })(<Input placeholder='请输入' />)} </FormItem> </Col> */}
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='负责人名称'>{getFieldDecorator('assignfoodadminname',{initialValue: this.props.list.queryMap.assignfoodadminname, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='负责人联系方式'>{getFieldDecorator('assignfoodadminphone',{initialValue: this.props.list.queryMap.assignfoodadminphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='配菜点对外电话'>{getFieldDecorator('assignfoodphone',{initialValue: this.props.list.queryMap.assignfoodphone, })(<Input placeholder='请输入' />)} </FormItem> </Col>
-<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='外墙广告价位描述'>{getFieldDecorator('advertisementpricedesc',{initialValue: this.props.list.queryMap.advertisementpricedesc, })(<Input placeholder='请输入' />)} </FormItem> </Col>
+<Col {...formItemGrid}>  <FormItem {...formItemLayout} label='外墙广告价位描述'>{getFieldDecorator('advertisementpricedesc',{initialValue: this.props.list.queryMap.advertisementpricedesc, })(<TextArea autosize={webConfig.textAreaAutoSize} placeholder='请输入' />)} </FormItem> </Col>
 <Col {...formItemGrid}>  <FormItem {...formItemLayout} label='是否交过保证金'>{getFieldDecorator('ispaygurantee',{initialValue: this.props.list.queryMap.ispaygurantee  ? moment(this.props.list.queryMap.ispaygurantee): null, })
  (<Select dropdownMatchSelectWidth>
    <Option value="1">是</Option>
