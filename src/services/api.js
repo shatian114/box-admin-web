@@ -45,7 +45,7 @@ export async function getMenuData() {
   // return request(`${SERVER_ADDR}/api/authority/getMenus`);
   return requestModels(`${SERVER_ADDR}/api/authority/getnewMenus`, {
     method: 'POST',
-    body: {'sysid': 'Z2'},
+    body: {'sysid': 'Z4'},
   });
 }
 
