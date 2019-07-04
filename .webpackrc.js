@@ -1,7 +1,7 @@
 const path = require('path');
-var SERVICE_URL = 'http://124.232.150.3:8088';
+var SERVICE_URL = 'http://124.232.150.3:9001';
 export default {
-  outputPath: 'cpzhsqweb',
+  outputPath: 'maijiuweb',
 
   entry: 'src/index.js',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
@@ -15,9 +15,9 @@ export default {
   },
 
   proxy: {
-    '/cpzhsq': {
+    '/maijiu': {
       target: SERVICE_URL,
-      pathRewrite: { '^/cpzhsq': '' },
+      pathRewrite: { '^/maijiu': '' },
       changeOrigin: true,
       secure: false,
     },
@@ -34,6 +34,6 @@ export default {
     template: './src/index.ejs',
   },
   disableDynamicImport: true,
-  publicPath: '/cpzhsqweb/',
+  publicPath: '/maijiuweb/',
   hash: true,
 };

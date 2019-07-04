@@ -3,7 +3,7 @@
   "version": "1.3.0",
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
-  "homepage": "/cpzhsqweb/",
+  "homepage": "/maijiuweb/",
   "scripts": {
     "precommit": "npm run lint-staged",
     "start": "cross-env BROWSER=none HARD_SOURCE=none npm run _start",
