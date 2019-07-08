@@ -24,7 +24,7 @@ import { FormValid } from '../../utils/FormValid';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+const UUID = require('uuidjs');
 const { TextArea } = Input;
 const DateFormat = 'YYYY-MM-DD';
 const url = 'TProduct';
@@ -225,7 +225,7 @@ export default class DicManagerInfo extends Component {
           'info': info,
         },
       });
-			const imgKey = `tproduct_${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}.jpg`;
+			const imgKey = `tproduct-${this.props.base.info.tProductId || this.props.base.newInfo.tProductId}-${UUID.generate()}.jpg`;
 			if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
         this.props.form.setFields({
           mainpic: {value: webConfig.tpUriPre + imgKey},

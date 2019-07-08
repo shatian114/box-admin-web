@@ -24,7 +24,7 @@ import {addobj, deleteobj, newoObj} from "../../services/api";
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+const UUID = require('uuidjs');
 const { TextArea } = Input;
 const DateFormat = 'YYYY-MM-DD';
 const url = 'TArroundshopandservice';
@@ -211,10 +211,10 @@ export default class DicManagerInfo extends Component {
           'info': info,
         },
       });
-      const imgKey = `arroundshopandservice${this.props.base.info.tArroundshopandserviceId || this.props.base.newInfo.tArroundshopandserviceId}.jpg`;
+      const imgKey = `arroundshopandservice-${this.props.base.info.tArroundshopandserviceId || this.props.base.newInfo.tArroundshopandserviceId}-${UUID.generate()}.jpg`;
       if(await uploadImg(file.fileList[0].originFileObj, imgKey)) {
         this.props.form.setFields({
-          mainpic: {value: webConfig.tpUriPre + imgKey}
+          mainpic: {value: webConfig.tpUriPre + imgKey},
         });
         console.log('上传成功');
       }else {
