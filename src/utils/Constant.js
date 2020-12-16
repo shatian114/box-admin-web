@@ -14,7 +14,7 @@ export const formItemLayout = {
 export const formItemGrid = {
 	span: 8
 };
-8
+
 export function geneImportColumn(column){
   let column2 = column;
   column2.shift();
